@@ -1,0 +1,111 @@
+I'll create a comprehensive .gitignore file for Visual Studio that also includes the .idea folder (typically used by JetBrains IDEs):
+
+
+```gitignore
+# Visual Studio files
+## User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+## User-specific files (MonoDevelop/Xamarin Studio)
+*.userprefs
+
+## Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+
+## Visual Studio 2015/2017 cache/options directory
+.vs/
+
+## Visual Studio 2017 auto generated files
+Generated\ Files/
+
+## MSTest test Results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+## NUNIT
+*.VisualState.xml
+TestResult.xml
+
+## Build Results of an ATL Project
+[Dd]ebugPS/
+[Rr]eleasePS/
+dlldata.c
+
+## Benchmark Results
+BenchmarkDotNet.Artifacts/
+
+## .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+## StyleCop
+StyleCopReport.xml
+
+## Files built by Visual Studio
+*_i.c
+*_p.c
+*_h.h
+*.ilk
+*.meta
+*.obj
+*.iobj
+*.pch
+*.pdb
+*.ipdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*_wpftmp.csproj
+*.log
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+*.scc
+
+## JetBrains Rider/IntelliJ IDEA
+.idea/
+*.sln.iml
+
+## macOS
+.DS_Store
+
+## Visual Studio Code
+.vscode/
+
+## Rider
+*.DotSettings.user
+
+```
+
+This .gitignore file covers:
+- Visual Studio-specific files and folders
+- Build artifacts and debug/release directories
+- User-specific settings
+- Test results
+- .idea folder for JetBrains IDEs (Rider, IntelliJ)
+- Additional system-specific files like .DS_Store
+- Visual Studio Code settings
+- Rider-specific files
+
+You can save this as `.gitignore` in the root of your project. It will help keep your repository clean by excluding unnecessary files from version control.
