@@ -41,7 +41,7 @@ public class HtmxController : Controller
 		string triggerValue = trigger.ToString();
 		if (Response.Headers.ContainsKey("hx-trigger"))
 		{
-			Response.Headers["hx-trigger"] = triggerValue;
+			Response.Headers["hx-trigger"] += ", " + triggerValue;
 		}
 		else
 		{
@@ -68,7 +68,7 @@ public class HtmxController : Controller
 		string triggerValue = $"{{\"{trigger}\":\"{value}\"}}";
 		if (Response.Headers.ContainsKey("hx-trigger"))
 		{
-			Response.Headers["hx-trigger"] = triggerValue;
+			Response.Headers["hx-trigger"] += ", " + triggerValue;
 		}
 		else
 		{
