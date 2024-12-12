@@ -4,6 +4,7 @@ public class HtmxController : Controller
 {
 	public void Hx(string target = "this", string swap = "outerHTML", string select = "")
 	{
+		Console.WriteLine("Ensure Ids include #");
 		if (Response.Headers.ContainsKey("hx-retarget"))
 		{
 			Response.Headers["hx-retarget"] = target;
@@ -52,7 +53,7 @@ public class HtmxController : Controller
 	{
 		if (Response.Headers.ContainsKey("hx-trigger"))
 		{
-			Response.Headers["hx-trigger"] = trigger;
+			Response.Headers["hx-trigger"] += ", " + trigger;
 		}
 		else
 		{
