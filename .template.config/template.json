@@ -10,5 +10,16 @@
 	"name": "ASP.NET Core MVC with HTMX",
 	"shortName": "htmx",
 	"sourceName": "ASP.NET_Core_HTMX",
-	"preferNameDirectory": true
+	"preferNameDirectory": true,
+	"sources": [
+		{
+			"exclude": [
+				"**/[Bb]in/**",
+				"**/[Oo]bj/**",
+				"**/.git/**",
+				"**/.vs/**",
+				"**/.template.config/**"
+			]
+		}
+	]
 }
