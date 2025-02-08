@@ -148,4 +148,3 @@ public static partial class ExtensionClasses
 		return new Error(errorMessage);
 	}
 }
-}
