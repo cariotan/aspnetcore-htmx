@@ -1,70 +1,61 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<!-- Main application layout -->
+<html lang="en" class="h-full bg-white">
 
 <head>
+	<!-- Meta tags -->
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	<!-- Site Title -->
 	<title>@ViewData["Title"] - ASP.NET_Core_HTMX</title>
-	<script src="~/css/site.css"></script>
-	<script src="~/js/site.js"></script>
-	<script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
-	<script src="https://unpkg.com/htmx.org@2.0.3" integrity="sha384-0895/pl2MU10Hqc6jd4RvrthNlDiE9U1tWmX7WRESftEDRosgxNsQG/Ze9YMRzHq" crossorigin="anonymous"></script>
+
+	<!-- Styles -->
+	<link rel="stylesheet" href="~/css/tailwind.css" asp-append-version="true">
+
+	<!-- Scripts Section -->
+	<!-- 
+		Includes:
+		- SignalR
+		- jQuery
+		- HTMX core
+		- HTMX preload extension
+	-->
+	<script src="~/js/signalr/dist/browser/signalr.js"></script>
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+	<script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>
 	<script src="https://unpkg.com/htmx-ext-preload@2.0.1/preload.js"></script>
+
+	<!-- HTMX Configuration -->
 	<script>
 		htmx.config.defaultSwapStyle = 'outerHTML';
 		htmx.config.globalViewTransitions = true;
 		htmx.config.scrollBehavior = 'smooth';
 		htmx.config.refreshOnHistoryMiss = true;
 	</script>
-
-	@if (IsDevelopment.Is)
-	{
-		<script src="https://cdn.tailwindcss.com"></script>
-		<script type='module'>
-			import customTheme from "/js/theme.js";
-			tailwind.config = {
-				theme: customTheme,
-			}
-		</script>
-	}
 </head>
 
-<body>
-	<header>
-		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-			<div class="container-fluid">
-				<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ASP.NET_Core_HTMX</a>
-				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon"></span>
-				</button>
-				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-					<ul class="navbar-nav flex-grow-1">
-						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</nav>
-	</header>
-	<div class="container">
-		<main role="main" class="pb-3">
-			@RenderBody()
-		</main>
-	</div>
+<!-- Main Content -->
 
-	<footer class="border-top footer text-muted">
-		<div class="container">
-			&copy; 2024 - ASP.NET_Core_HTMX - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-		</div>
-	</footer>
-	<script src="~/lib/jquery/dist/jquery.min.js"></script>
-	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-	<script src="~/js/site.js" asp-append-version="true"></script>
+<body class='h-full'>
+	<!-- Primary content section -->
+	@RenderBody()
+
+	<!-- Scripts partial -->
 	@await RenderSectionAsync("Scripts", required: false)
+
+	<!-- SignalR Configuration -->
+	<script>
+		var connection = new signalR.HubConnectionBuilder()
+			.withUrl("/ChatHub")
+			.build();
+
+		connection.start();
+
+		connection.on('ReceiveMessage', function (user, message) {
+			console.log(user, message);
+		});
+	</script>
 </body>
 
 </html>

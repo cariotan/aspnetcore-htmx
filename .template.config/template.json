@@ -1,6 +1,6 @@
 {
 	"$schema": "http://json.schemastore.org/template",
-	"author": "Cario Tan",
+	"author": "By the Grace of God",
 	"classifications": [
 		"Common",
 		"Web",
@@ -18,8 +18,15 @@
 				"**/[Oo]bj/**",
 				"**/.git/**",
 				"**/.vs/**",
-				"**/.template.config/**"
+				"**/.template.config/**",
+				"**/node_modules/**"
 			]
 		}
-	]
+	],
+	"tags": {
+		"language": "C#",
+		"type": "project",
+		"platform": "Web",
+		"identity": "ASP.NET"
+	}
 }

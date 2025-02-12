@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-public class IdentityContext : IdentityDbContext<AppUser, AppRole, string>
+public class IdentityContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
 {
 	private string connectionString = "Data Source=C:\\Database\\DefaultIdentityContext.db";
 

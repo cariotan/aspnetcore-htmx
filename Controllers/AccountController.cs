@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 
-public class AccountController : HtmxController
+public class AccountController(ILogger<AccountController> logger) : HtmxController
 {
 	[HttpGet]
-	// /Account/Login
 	public IActionResult Login()
 	{
+		logger.LogInformation("Get /Account/Login");
+
 		return View();
 	}
 }

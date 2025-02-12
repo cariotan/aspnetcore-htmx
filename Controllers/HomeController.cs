@@ -2,16 +2,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [Authorize]
-public class HomeController : HtmxController
+public class HomeController(ILogger<HomeController> logger) : HtmxController
 {
-	public HomeController()
-	{
-	}
-
 	[HttpGet]
-	// /Home
 	public IActionResult Index()
 	{
+		logger.LogInformation("Get /Home");
+
 		return View();
 	}
 }
