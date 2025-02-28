@@ -36,19 +36,6 @@ public class HtmxController : Controller
 		}
 	}
 
-	public void HxTrigger(Strings trigger)
-	{
-		string triggerValue = trigger.ToString();
-		if (Response.Headers.ContainsKey("hx-trigger"))
-		{
-			Response.Headers["hx-trigger"] += ", " + triggerValue;
-		}
-		else
-		{
-			Response.Headers.Append("hx-trigger", triggerValue);
-		}
-	}
-
 	public void HxTrigger(string trigger)
 	{
 		if (Response.Headers.ContainsKey("hx-trigger"))
