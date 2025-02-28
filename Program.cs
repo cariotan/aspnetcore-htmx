@@ -16,6 +16,8 @@ builder.Services.Configure<IdentityOptions>(options => {
 });
 builder.Services.AddSignalR();
 
+TelegramConfig.ChatId = "";
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
