@@ -4,17 +4,34 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
 builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
 	.AddEntityFrameworkStores<IdentityContext>()
 	.AddDefaultTokenProviders();
+
 builder.Services.AddDbContext<IdentityContext>();
+
 builder.Services.Configure<SecurityStampValidatorOptions>(options => options.ValidationInterval = TimeSpan.FromSeconds(0));
+
 builder.Services.ConfigureApplicationCookie(options => options.Cookie.SameSite = SameSiteMode.Strict);
+
 builder.Services.Configure<IdentityOptions>(options => {
 	options.Password.RequireNonAlphanumeric = false;
 	options.Password.RequiredLength = 8;
 });
+
 builder.Services.AddSignalR();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+	options.Cookie.SameSite = SameSiteMode.Strict;
+});
+
+builder.Services.AddAuthorizationBuilder()
+	.SetFallbackPolicy(new AuthorizationPolicyBuilder()
+	.RequireAuthenticatedUser()
+	.Build()
+);
 
 TelegramConfig.ChatId = "";
 
