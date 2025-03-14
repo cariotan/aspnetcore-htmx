@@ -2,6 +2,16 @@ using Microsoft.AspNetCore.Mvc;
 
 public class HtmxController : Controller
 {
+	public void Hx(string target, bool outerHTML, bool? sameSelectAsTarget = null)
+	{
+		Hx(target, outerHTML ? "outerHTML" : "innerHTML", sameSelectAsTarget == true ? target : "");
+	}
+
+	public void Hx(string target, bool outerHTML, string select)
+	{
+		Hx(target, outerHTML ? "outerHTML" : "innerHTML", select);
+	}
+
 	public void Hx(string target = "this", string swap = "outerHTML", string select = "")
 	{
 		Console.WriteLine("Ensure Ids include #");
