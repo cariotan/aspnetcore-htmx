@@ -1,4 +1,12 @@
-﻿<!DOCTYPE html>
+﻿@{
+#if DEBUG
+var isDebug = true;
+#else
+	var isDebug = false;
+#endif
+}
+
+<!DOCTYPE html>
 <!-- Main application layout -->
 <html lang="en" class="h-full bg-white">
 
@@ -9,6 +17,14 @@
 
 	<!-- Site Title -->
 	<title>@ViewData["Title"] - ASP.NET_Core_HTMX</title>
+
+	@if(isDebug)
+	{
+		<script src='https://cdn.tailwindcss.com'></script>
+		<style type='text/tailwindcss'>
+			@File.ReadAllText("Input.css")
+		</style>
+	}
 
 	<!-- Styles -->
 	<link rel="stylesheet" href="~/css/tailwind.css" asp-append-version="true">
