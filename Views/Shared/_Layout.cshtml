@@ -22,7 +22,7 @@ var isDebug = true;
 	{
 		<script src='https://cdn.tailwindcss.com'></script>
 		<style type='text/tailwindcss'>
-			@File.ReadAllText("Input.css")
+			@Html.Raw(File.ReadAllText("Input.css"))
 		</style>
 	}
 
