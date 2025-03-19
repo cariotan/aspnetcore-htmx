@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,7 +34,7 @@ builder.Services.AddAuthorizationBuilder()
 	.Build()
 );
 
-TelegramConfig.ChatId = "";
+// TelegramConfig.ChatId = "";
 
 var app = builder.Build();
 

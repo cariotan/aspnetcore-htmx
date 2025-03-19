@@ -1,5 +1,4 @@
 using System.Net;
-using FeatureRequestDatabase;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.Sqlite;
 
@@ -17,7 +16,7 @@ public class TelegramBackgroundService(TelegramQueue telegramQueue, ILogger<Tele
 
 				logger.LogInformation("Dequeued successfully.");
 
-				await Chat.SendAsync(telegramMessage.Message);
+				// await Chat.SendAsync(telegramMessage.Message);
 			}
 			catch (OperationCanceledException)
 			{
