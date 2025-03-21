@@ -18,12 +18,12 @@ var isDebug = true;
 	<!-- Site Title -->
 	<title>@ViewData["Title"] - ASP.NET_Core_HTMX</title>
 
-	@if(isDebug)
+	@if (isDebug)
 	{
 		<script src='https://cdn.tailwindcss.com'></script>
 		<style type='text/tailwindcss'>
 			@Html.Raw(File.ReadAllText("Input.css"))
-		</style>
+			</style>
 	}
 
 	<!-- Styles -->
@@ -73,6 +73,21 @@ var isDebug = true;
 		connection.on('ReceiveMessage', function (user, message) {
 			console.log(user, message);
 		});
+
+		function disableScrollbar() {
+			const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+			$('body').css({
+				'overflow': 'hidden',
+				'padding-right': scrollBarWidth + 'px'
+			});
+		}
+
+		function enableScrollbar() {
+			$('body').css({
+				'overflow': 'auto',
+				'padding-right': '0'
+			});
+		}
 	</script>
 </body>
 
