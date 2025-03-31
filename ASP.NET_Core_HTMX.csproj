@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>net9.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<RootNamespace>ASP.NET_Core_HTMX</RootNamespace>
@@ -15,6 +15,14 @@
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.10" />
+		<PackageReference Include="Polly.Core" Version="8.5.2" />
+		<PackageReference Include="Polly.Extensions" Version="8.5.2" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Reference Include="SendGrid.Standard">
+	    <HintPath>SendGrid.Standard.dll</HintPath>
+	  </Reference>
 	</ItemGroup>
 
 	<Target Name="RunTailwind" AfterTargets="Build">
