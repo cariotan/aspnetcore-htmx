@@ -40,11 +40,11 @@ builder.Services.ConfigureApplicationCookie(options =>
 	options.Cookie.SameSite = SameSiteMode.Strict;
 });
 
-builder.Services.AddAuthorizationBuilder()
-	.SetFallbackPolicy(new AuthorizationPolicyBuilder()
-	.RequireAuthenticatedUser()
-	.Build()
-);
+// builder.Services.AddAuthorizationBuilder()
+// 	.SetFallbackPolicy(new AuthorizationPolicyBuilder()
+// 	.RequireAuthenticatedUser()
+// 	.Build()
+// );
 
 // Implement Polly ResiliencePipeline
 builder.Services.AddResiliencePipeline("Email", builder =>
