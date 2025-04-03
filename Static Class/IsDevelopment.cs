@@ -1,8 +1,8 @@
-internal static class IsDevelopment
+internal static partial class StaticMethods
 {
 #if DEBUG
-	public static bool Is => true;
+	public static bool IsDevelopment => true;
 #else
-	public static bool Is => false;
+	public static bool IsDevelopment => false;
 #endif
 }

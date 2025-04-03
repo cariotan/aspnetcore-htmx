@@ -7,7 +7,7 @@ public class AccountController(ILogger<AccountController> logger) : HtmxControll
 	[HttpGet]
 	public IActionResult Login()
 	{
-		logger.LogInformation("Get /Account/Login");
+		logger.Endpoint(Get, "/Account/Login");
 
 		return View();
 	}
