@@ -44,6 +44,8 @@ public class DiscordBackgroundService(DiscordQueue DiscordQueue, ILogger<Discord
 				{
 					var response = await httpClient.PostAsJsonAsync(webhook, discordMessage.Message, context.CancellationToken);
 
+					response.EnsureSuccessStatusCode();
+
 					if (response.Headers.TryGetValues("X-RateLimit-Remaining", out var remaining))
 					{
 						var remainingRequests = int.Parse(remaining.First());
