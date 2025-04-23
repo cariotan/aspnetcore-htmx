@@ -1,6 +1,9 @@
 using System.Diagnostics;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using Polly;
 using Polly.Fallback;
 using Polly.Retry;
@@ -39,6 +42,42 @@ builder.Services.ConfigureApplicationCookie(options =>
 {
 	options.Cookie.SameSite = SameSiteMode.Strict;
 });
+
+// builder.Services.AddAuthentication(options =>
+// {
+// 	options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+// 	options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+// })
+// 	.AddJwtBearer(options =>
+// 	{
+// 		options.TokenValidationParameters = new TokenValidationParameters
+// 		{
+// 			IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SigningSecret)),
+// 			ValidateLifetime = true,
+// 			ValidateIssuerSigningKey = true,
+// 			ValidateIssuer = false,
+// 			ValidateAudience = false,
+// 		};
+
+// 		options.Events = new JwtBearerEvents
+// 		{
+// 			OnMessageReceived = context =>
+// 			{
+// 				Console.WriteLine("Message received");
+// 				var accessToken = context.Request.Query["access_token"];
+
+// 				// If the request is for our hub...
+// 				var path = context.HttpContext.Request.Path;
+// 				if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/ChatHub"))
+// 				{
+// 					// Read the token out of the query string
+// 					context.Token = accessToken;
+// 				}
+// 				return Task.CompletedTask;
+// 			}
+// 		};
+// 	}
+// );
 
 // builder.Services.AddAuthorizationBuilder()
 // 	.SetFallbackPolicy(new AuthorizationPolicyBuilder()
