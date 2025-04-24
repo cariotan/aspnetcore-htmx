@@ -63,10 +63,9 @@ builder.Services.ConfigureApplicationCookie(options =>
 // 		options.TokenValidationParameters = new TokenValidationParameters
 // 		{
 // 			IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SigningSecret)),
-// 			ValidateLifetime = true,
 // 			ValidateIssuerSigningKey = true,
-// 			ValidateIssuer = false,
-// 			ValidateAudience = false,
+// 			ValidIssuer = "cario",
+// 			ValidAudience = "cario",
 // 		};
 
 // 		options.Events = new JwtBearerEvents
@@ -87,12 +86,6 @@ builder.Services.ConfigureApplicationCookie(options =>
 // 			}
 // 		};
 // 	}
-// );
-
-// builder.Services.AddAuthorizationBuilder()
-// 	.SetFallbackPolicy(new AuthorizationPolicyBuilder()
-// 	.RequireAuthenticatedUser()
-// 	.Build()
 // );
 
 // Implement Polly ResiliencePipeline
