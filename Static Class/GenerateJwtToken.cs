@@ -14,12 +14,10 @@ static partial class StaticMethods
 			new(ClaimTypes.NameIdentifier, userId),
 		];
 
-		var token = new JwtSecurityToken(
+		return new JwtSecurityTokenHandler().WriteToken(new JwtSecurityToken(
 			claims: claims,
-			expires: DateTime.Now.AddHours(1),
+			expires: DateTime.Now.AddMinutes(60),
 			signingCredentials: new(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SigningSecret)), SecurityAlgorithms.HmacSha256)
-		);
-
-		return new JwtSecurityTokenHandler().WriteToken(token);
+		));
 	}
 }
