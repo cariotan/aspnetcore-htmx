@@ -30,7 +30,6 @@ builder.Services.Configure<SecurityStampValidatorOptions>(options => options.Val
 
 builder.Services.ConfigureApplicationCookie(options => options.Cookie.SameSite = SameSiteMode.Strict);
 
-#if DEBUG
 builder.Services.Configure<IdentityOptions>(options =>
 {
 	options.Password.RequireNonAlphanumeric = false;
@@ -38,13 +37,12 @@ builder.Services.Configure<IdentityOptions>(options =>
 	options.Password.RequireDigit = false;
 	options.Password.RequireUppercase = false;
 });
-#else
-builder.Services.Configure<IdentityOptions>(options =>
-{
-	options.Password.RequireNonAlphanumeric = false;
-	options.Password.RequiredLength = 8;
-});
-#endif
+
+// builder.Services.Configure<IdentityOptions>(options =>
+// {
+// 	options.Password.RequireNonAlphanumeric = false;
+// 	options.Password.RequiredLength = 8;
+// });
 
 builder.Services.AddSignalR();
 
