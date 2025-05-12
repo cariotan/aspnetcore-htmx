@@ -23,7 +23,7 @@ var isDebug = true;
 		<script src='https://cdn.tailwindcss.com'></script>
 		<style type='text/tailwindcss'>
 			@Html.Raw(File.ReadAllText("Input.css"))
-			</style>
+				</style>
 	}
 
 	<!-- Styles -->
@@ -36,11 +36,13 @@ var isDebug = true;
 		- jQuery
 		- HTMX core
 		- HTMX preload extension
+		- Alpine.js
 	-->
 	<script src='~/js/signalr/dist/browser/signalr.js'></script>
 	<script src='https://code.jquery.com/jquery-3.7.1.min.js' integrity='sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=' crossorigin='anonymous'></script>
 	<script src='https://unpkg.com/htmx.org@2.0.4' integrity='sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+' crossorigin='anonymous'></script>
 	<script src='https://unpkg.com/htmx-ext-preload@2.0.1/preload.js'></script>
+	<script defer src='https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js'></script>
 
 	<!-- HTMX Configuration -->
 	<script>
