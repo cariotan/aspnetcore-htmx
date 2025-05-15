@@ -1,11 +1,8 @@
-using System.Net;
 using System.Text.Json;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Data.Sqlite;
 using Polly;
 using Polly.Registry;
 
-public class DiscordBackgroundService(DiscordQueue DiscordQueue, ILogger<DiscordBackgroundService> logger, EmailQueue emailQueue, ResiliencePipelineProvider<string> resiliencePipelineProvider) : BackgroundService
+public class DiscordBackgroundService(DiscordQueue DiscordQueue, ILogger<DiscordBackgroundService> logger, ResiliencePipelineProvider<string> resiliencePipelineProvider) : BackgroundService
 {
 	private static HttpClient httpClient;
 
@@ -27,42 +24,61 @@ public class DiscordBackgroundService(DiscordQueue DiscordQueue, ILogger<Discord
 		{
 			try
 			{
-				var discordMessage = await DiscordQueue.DequeueAsync(stoppingToken);
+				var DiscordMessage = await DiscordQueue.DequeueAsync(stoppingToken);
 
-				logger.LogInformation("Dequeued successfully.");
+				logger.LogInformation("Discord dequeued successfully.");
 
-				var webhook = GetDiscordWebhook(discordMessage.Key);
+				var url = await GetDiscordChannelWebhook(DiscordMessage.Key);
 
 				ResilienceContext context = ResilienceContextPool.Shared.Get(stoppingToken);
 
-				// Attach custom data to the context
-				context.Properties.Set(ResilienceKeys.Discord, discordMessage.Message);
+				context.Properties.Set(ResilienceKeys.Discord, DiscordMessage.Message);
 
 				var pipeline = resiliencePipelineProvider.GetPipeline<Task>("Discord");
 
-				await pipeline.ExecuteAsync(async context =>
+				const int discordCharacterlimit = 2000;
+
+				var chunks = SplitMessageIntoChunks(DiscordMessage.Message, discordCharacterlimit);
+
+				for (int i = 0; i < chunks.Count; i++)
 				{
-					var response = await httpClient.PostAsJsonAsync(webhook, discordMessage.Message, context.CancellationToken);
-
-					response.EnsureSuccessStatusCode();
-
-					if (response.Headers.TryGetValues("X-RateLimit-Remaining", out var remaining))
+					string chunk = chunks[i];
+					if (i == chunks.Count - 1)
 					{
-						var remainingRequests = int.Parse(remaining.First());
-
-						if (remainingRequests == 0)
-						{
-							if (response.Headers.TryGetValues("X-RateLimit-Reset-After", out var resetAfter))
-							{
-								var seconds = double.Parse(resetAfter.First());
-								await Task.Delay((int)(seconds * 1000), context.CancellationToken);
-							}
-						}
+						chunk += "\n---------------------------";
 					}
 
-					return Task.CompletedTask;
-				},
-				context);
+					var content = new { content = chunk };
+
+					await pipeline.ExecuteAsync<Task>(async context =>
+					{
+						var response = await httpClient.PostAsJsonAsync(url, content);
+
+						var data = await response.Content.ReadAsStringAsync();
+
+						response.EnsureSuccessStatusCode();
+
+						if (response.Headers.TryGetValues("X-RateLimit-Remaining", out var remaining))
+						{
+							var remainingRequests = int.Parse(remaining.First());
+
+							if (remainingRequests == 0)
+							{
+								if (response.Headers.TryGetValues("X-RateLimit-Reset-After", out var resetAfter))
+								{
+									var seconds = double.Parse(resetAfter.First());
+
+									await Task.Delay((int)(seconds * 1000));
+								}
+							}
+						}
+
+						return Task.CompletedTask;
+					},
+					context);
+				}
+
+				ResilienceContextPool.Shared.Return(context);
 			}
 			catch (OperationCanceledException)
 			{
@@ -75,21 +91,41 @@ public class DiscordBackgroundService(DiscordQueue DiscordQueue, ILogger<Discord
 		}
 	}
 
-	private string GetDiscordWebhook(string key)
+	private async Task<string> GetDiscordChannelWebhook(string key)
 	{
-		var config = new ConfigurationBuilder()
-			.AddJsonFile("appsettings.json")
-			.Build();
+		var appSettings = await File.ReadAllTextAsync("appsettings.json");
 
-		var webhook = config[$"Discord:{key}"];
+		using JsonDocument document = JsonDocument.Parse(appSettings);
 
-		if (!string.IsNullOrWhiteSpace(webhook))
+		JsonElement root = document.RootElement;
+
+		if (root.TryGetProperty("Discord", out JsonElement discordSection))
 		{
-			return webhook;
+			if (discordSection.TryGetProperty(key, out JsonElement value))
+			{
+				return value.GetString() ?? "";
+			}
+			else
+			{
+				logger.LogError("Key '{key}' not found in the Discord section.", key);
+				throw new KeyNotFoundException($"Key '{key}' not found in the Discord section.");
+			}
 		}
 		else
 		{
-			throw new Exception($"Cannot find {key} from appsettings.json");
+			logger.LogError("Discord section not found in appsettings.json");
+			throw new InvalidOperationException("Discord section not found in appsettings.json.");
 		}
+	}
+
+	private List<string> SplitMessageIntoChunks(string message, int maxChunkSize)
+	{
+		var result = new List<string>();
+		for (int i = 0; i < message.Length; i += maxChunkSize)
+		{
+			int length = Math.Min(maxChunkSize, message.Length - i);
+			result.Add(message.Substring(i, length));
+		}
+		return result;
 	}
 }
