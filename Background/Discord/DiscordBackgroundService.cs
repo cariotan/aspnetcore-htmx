@@ -38,7 +38,7 @@ public class DiscordBackgroundService(DiscordQueue DiscordQueue, ILogger<Discord
 				// Attach custom data to the context
 				context.Properties.Set(ResilienceKeys.Discord, discordMessage.Message);
 
-				var pipeline = resiliencePipelineProvider.GetPipeline("Discord");
+				var pipeline = resiliencePipelineProvider.GetPipeline<Task>("Discord");
 
 				await pipeline.ExecuteAsync(async context =>
 				{
@@ -59,6 +59,8 @@ public class DiscordBackgroundService(DiscordQueue DiscordQueue, ILogger<Discord
 							}
 						}
 					}
+
+					return Task.CompletedTask;
 				},
 				context);
 			}
