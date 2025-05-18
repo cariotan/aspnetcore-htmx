@@ -8,11 +8,29 @@ using Polly;
 using Polly.Fallback;
 using Polly.Retry;
 using Polly.Simmy;
+using Serilog;
 
 EmailRequest emailRequest = new();
 Debug.Assert(emailRequest.From != null, "Please provide a default value to EmailRequest");
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure Serilog
+_ = Directory.CreateDirectory("""C:/inetpub/Ripple Logs""");
+
+Log.Logger = new LoggerConfiguration()
+   .MinimumLevel.Information() // Set minimum log level
+   .WriteTo.File(
+	   path: "C:/inetpub/Ripple Logs/Ripple-.txt",
+	   rollingInterval: RollingInterval.Day, // Log to file with daily rolling
+	   fileSizeLimitBytes: 104857600,        // Set maximum file size to 50 MB
+	   rollOnFileSizeLimit: true,           // Roll to a new file when size limit is reached
+	   outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level:u3}] {Message:lj}{NewLine}{Exception}" // Custom format
+   )
+   .CreateLogger();
+
+// Replace default logging with Serilog
+builder.Host.UseSerilog();
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
