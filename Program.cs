@@ -15,6 +15,7 @@ Debug.Assert(emailRequest.From != null, "Please provide a default value to Email
 
 var builder = WebApplication.CreateBuilder(args);
 
+#if !DEBUG
 // Configure Serilog
 _ = Directory.CreateDirectory("""C:/inetpub/Ripple Logs""");
 
@@ -28,6 +29,7 @@ Log.Logger = new LoggerConfiguration()
 	   outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level:u3}] {Message:lj}{NewLine}{Exception}" // Custom format
    )
    .CreateLogger();
+#endif
 
 // Replace default logging with Serilog
 builder.Host.UseSerilog();
