@@ -8,7 +8,6 @@ public class HomeController(ILogger<HomeController> logger) : HtmxController
 	public IActionResult Index()
 	{
 		logger.Endpoint(Get, "/Home");
-
 		return View();
 	}
 }
