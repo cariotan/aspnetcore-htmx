@@ -94,3 +94,5 @@ StyleCopReport.xml
 
 ## Node.js
 node_modules/
+
+.env
