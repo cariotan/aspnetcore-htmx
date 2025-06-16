@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Text;
+using JasperFx;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -9,6 +10,7 @@ using Polly.Fallback;
 using Polly.Retry;
 using Polly.Simmy;
 using Serilog;
+using Wolverine;
 
 EmailRequest emailRequest = new();
 Debug.Assert(emailRequest.From != null, "Please provide a default value to EmailRequest");
@@ -33,8 +35,9 @@ if (false)
 	   .CreateLogger();
 }
 
-// Replace default logging with Serilog
+builder.Host.UseWolverine();
 
+// Replace default logging with Serilog
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
@@ -171,4 +174,4 @@ app.MapControllerRoute(
 
 app.MapHub<ChatHub>("/ChatHub");
 
-app.Run();
+await app.RunJasperFxCommands(args);
