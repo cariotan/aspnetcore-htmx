@@ -4,6 +4,8 @@ public class EmailNotification : EmailRequest
 	{
 		Subject = subject;
 		Body = body;
-		To = new SendGrid.Standard.EmailAddress("ctan@trucell.com.au", "Cario Tan");
+		To = new EmailAddress("ctan@trucell.com.au", "Cario Tan");
 	}
 }
+
+public record EmailAddress(string Email, string Name);
