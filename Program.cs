@@ -12,6 +12,8 @@ using Polly.Simmy;
 using Serilog;
 using Wolverine;
 
+DotNetEnv.Env.Load();
+
 EmailRequest emailRequest = new();
 Debug.Assert(emailRequest.From != null, "Please provide a default value to EmailRequest");
 
