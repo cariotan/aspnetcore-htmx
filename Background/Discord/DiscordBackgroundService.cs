@@ -1,6 +1,5 @@
-using System.Text.Json;
-using Polly;
 using Polly.Registry;
+using System.Text.Json;
 
 public class DiscordBackgroundService(DiscordQueue DiscordQueue, ILogger<DiscordBackgroundService> logger, ResiliencePipelineProvider<string> resiliencePipelineProvider) : BackgroundService
 {

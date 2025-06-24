@@ -1,7 +1,7 @@
+using Polly.Registry;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using Polly.Registry;
 
 public class EmailBackgroundService(EmailQueue emailQueue, ILogger<EmailBackgroundService> logger, ResiliencePipelineProvider<string> resiliencePipelineProvider) : BackgroundService
 {

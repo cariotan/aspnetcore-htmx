@@ -15,8 +15,8 @@ public class IdentityContext : IdentityDbContext<ApplicationUser, ApplicationRol
 		this.connectionString = connectionString;
 	}
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
+	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+	{
 		optionsBuilder.UseSqlite(connectionString);
-    }
+	}
 }

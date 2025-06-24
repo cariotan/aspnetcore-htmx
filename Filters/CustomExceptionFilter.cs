@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 public class CustomExceptionFilter(ILogger<CustomExceptionFilter> logger, DiscordQueue discordQueue) : IAsyncExceptionFilter

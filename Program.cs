@@ -1,11 +1,7 @@
-using System.Diagnostics;
-using System.Text;
 using JasperFx;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
 using Serilog;
+using System.Diagnostics;
 
 DotNetEnv.Env.Load();
 
