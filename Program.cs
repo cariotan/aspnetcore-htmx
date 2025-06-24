@@ -5,12 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
-using Polly;
-using Polly.Fallback;
-using Polly.Retry;
-using Polly.Simmy;
 using Serilog;
-using Wolverine;
 
 DotNetEnv.Env.Load();
 
@@ -38,6 +33,15 @@ if (false)
 }
 
 builder.Host.UseWolverine();
+builder.Services.AddMarten(options =>
+{
+	options.Connection("Host=localhost;Port=5432;Database=;Username=;Password=");
+	options.UseSystemTextJsonForSerialization();
+	if (builder.Environment.IsDevelopment())
+	{
+		options.AutoCreateSchemaObjects = AutoCreate.All;
+	}
+});
 
 // Replace default logging with Serilog
 builder.Logging.ClearProviders();
