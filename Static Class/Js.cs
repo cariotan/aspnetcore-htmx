@@ -3,12 +3,12 @@ using System.Text.Json;
 
 static partial class StaticMethods
 {
-	public static string Js(object @object)
+	public static void Js(object @object)
 	{
-		return JsonSerializer.Serialize(@object, new JsonSerializerOptions
+		Console.WriteLine(JsonSerializer.Serialize(@object, new JsonSerializerOptions
 		{
 			WriteIndented = true,
 			Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
-		});
+		}));
 	}
 }
