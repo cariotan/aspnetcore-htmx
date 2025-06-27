@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 
 public class HtmxController : Controller
@@ -46,26 +47,27 @@ public class HtmxController : Controller
 		}
 	}
 
-	public void HxTrigger(string trigger)
+	public void HxTrigger(string trigger, object? value = null)
 	{
+		value ??= "";
+
+		// Serialize the key-value pair into JSON
+		Dictionary<string, object> payload = new()
+		{
+			[trigger] = value
+		};
+
+		string triggerValue = JsonSerializer.Serialize(payload);
+
 		if (Response.Headers.ContainsKey("hx-trigger"))
 		{
-			Response.Headers["hx-trigger"] += ", " + trigger;
-		}
-		else
-		{
-			Response.Headers.Append("hx-trigger", trigger);
-		}
+			payload = JsonSerializer.Deserialize<Dictionary<string, object>>(Response.Headers["hx-trigger"]!)!;
 
-		Console.WriteLine("Don't forget to listen for the event from:body");
-	}
+			payload.Add(trigger, value);
 
-	public void HxTrigger(string trigger, string value)
-	{
-		string triggerValue = $"{{\"{trigger}\":\"{value}\"}}";
-		if (Response.Headers.ContainsKey("hx-trigger"))
-		{
-			Response.Headers["hx-trigger"] += ", " + triggerValue;
+			var json = JsonSerializer.Serialize(payload);
+
+			Response.Headers["hx-trigger"] = json;
 		}
 		else
 		{
