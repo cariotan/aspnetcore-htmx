@@ -23,7 +23,7 @@ var isDebug = true;
 		<script src='https://cdn.tailwindcss.com'></script>
 		<style type='text/tailwindcss'>
 			@Html.Raw(File.ReadAllText("Input.css"))
-				</style>
+						</style>
 	}
 
 	<!-- Styles -->
@@ -53,6 +53,13 @@ var isDebug = true;
 	</script>
 
 	@RenderSection("Head", required: false)
+	<script>
+		const connection = new signalR.HubConnectionBuilder()
+			.withUrl('/ChatHub')
+			.build()
+
+		connection.start()
+	</script>
 </head>
 
 <!-- Main Content -->
@@ -66,16 +73,6 @@ var isDebug = true;
 
 	<!-- SignalR Configuration -->
 	<script>
-		var connection = new signalR.HubConnectionBuilder()
-			.withUrl('/ChatHub')
-			.build();
-
-		connection.start();
-
-		connection.on('ReceiveMessage', function (user, message) {
-			console.log(user, message);
-		});
-
 		function disableScrollbar() {
 			const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
 			$('body').css({

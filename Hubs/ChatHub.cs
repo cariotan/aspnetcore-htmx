@@ -2,8 +2,9 @@ using Microsoft.AspNetCore.SignalR;
 
 public class ChatHub : Hub
 {
-	public async Task SendMessage(string user, string message)
+	public override Task OnConnectedAsync()
 	{
-		await Clients.All.SendAsync("ReceiveMessage", user, message);
+		System.Console.WriteLine($"Connection connected: {Context.ConnectionId} ");
+		return base.OnConnectedAsync();
 	}
 }
