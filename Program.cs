@@ -54,8 +54,6 @@ builder.Services.AddDbContext<IdentityContext>();
 
 builder.Services.Configure<SecurityStampValidatorOptions>(options => options.ValidationInterval = TimeSpan.FromSeconds(0));
 
-builder.Services.ConfigureApplicationCookie(options => options.Cookie.SameSite = SameSiteMode.Strict);
-
 builder.Services.Configure<IdentityOptions>(options =>
 {
 	options.Password.RequireNonAlphanumeric = false;
