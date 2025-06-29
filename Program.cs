@@ -1,7 +1,10 @@
 using JasperFx;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Diagnostics;
+using System.Text;
 
 DotNetEnv.Env.Load();
 
@@ -10,34 +13,30 @@ Debug.Assert(emailRequest.From != null, "Please provide a default value to Email
 
 var builder = WebApplication.CreateBuilder(args);
 
-if (false)
-{
-	// Configure Serilog
-	_ = Directory.CreateDirectory("""C:/inetpub/Ripple Logs""");
+_ = Directory.CreateDirectory("""C:/inetpub/Ripple Logs""");
 
-	builder.Host.UseSerilog();
-	Log.Logger = new LoggerConfiguration()
-	   .MinimumLevel.Information() // Set minimum log level
-	   .WriteTo.File(
-		   path: "C:/inetpub/Ripple Logs/Ripple-.txt",
-		   rollingInterval: RollingInterval.Day, // Log to file with daily rolling
-		   fileSizeLimitBytes: 104857600,        // Set maximum file size to 50 MB
-		   rollOnFileSizeLimit: true,           // Roll to a new file when size limit is reached
-		   outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level:u3}] {Message:lj}{NewLine}{Exception}" // Custom format
-	   )
-	   .CreateLogger();
-}
+// builder.Host.UseSerilog();
+// Log.Logger = new LoggerConfiguration()
+//    .MinimumLevel.Information()
+//    .WriteTo.File(
+// 	   path: "C:/inetpub/Ripple Logs/Ripple-.txt",
+// 	   rollingInterval: RollingInterval.Day,
+// 	   fileSizeLimitBytes: 104857600,
+// 	   rollOnFileSizeLimit: true,
+// 	   outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level:u3}] {Message:lj}{NewLine}{Exception}" // Custom format
+//    )
+//    .CreateLogger();
 
 builder.Host.UseWolverine();
-builder.Services.AddMarten(options =>
-{
-	options.Connection("Host=localhost;Port=5432;Database=;Username=;Password=");
-	options.UseSystemTextJsonForSerialization();
-	if (builder.Environment.IsDevelopment())
-	{
-		options.AutoCreateSchemaObjects = AutoCreate.All;
-	}
-});
+// builder.Services.AddMarten(options =>
+// {
+// 	options.Connection("Host=localhost;Port=5432;Database=;Username=;Password=");
+// 	options.UseSystemTextJsonForSerialization();
+// 	if (builder.Environment.IsDevelopment())
+// 	{
+// 		options.AutoCreateSchemaObjects = AutoCreate.All;
+// 	}
+// });
 
 // Replace default logging with Serilog
 builder.Logging.ClearProviders();
@@ -46,69 +45,67 @@ builder.Logging.AddConsole();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
+// Database setup
+builder.Services
+	.AddDbContext<IdentityContext>()
+	.AddIdentity<ApplicationUser, ApplicationRole>()
 	.AddEntityFrameworkStores<IdentityContext>()
 	.AddDefaultTokenProviders();
 
-builder.Services.AddDbContext<IdentityContext>();
+// Authentication configuration setup
+builder.Services
+	.Configure<SecurityStampValidatorOptions>(options => options.ValidationInterval = TimeSpan.FromSeconds(0))
+	.Configure<IdentityOptions>(options =>
+	{
+		options.Password.RequireNonAlphanumeric = false;
+		options.Password.RequiredLength = 3;
+		options.Password.RequireDigit = false;
+		options.Password.RequireUppercase = false;
+	})
+	// // .Configure<IdentityOptions>(options =>
+	// // {
+	// // 	options.Password.RequireNonAlphanumeric = false;
+	// // 	options.Password.RequiredLength = 8;
+	// // })
+	.ConfigureApplicationCookie(options =>
+	{
+		options.Cookie.SameSite = SameSiteMode.Strict;
+	})
+	.AddAuthentication(options =>
+	{
+		options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+		options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+	});
+	// .AddJwtBearer(options =>
+	// {
+	// 	options.TokenValidationParameters = new TokenValidationParameters
+	// 	{
+	// 		IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SigningSecret)),
+	// 		ValidateIssuerSigningKey = true,
+	// 		ValidIssuer = "cario",
+	// 		ValidAudience = "cario",
+	// 	};
 
-builder.Services.Configure<SecurityStampValidatorOptions>(options => options.ValidationInterval = TimeSpan.FromSeconds(0));
+// 	options.Events = new JwtBearerEvents
+// 	{
+// 		OnMessageReceived = context =>
+// 		{
+// 			Console.WriteLine("Message received");
+// 			var accessToken = context.Request.Query["access_token"];
 
-builder.Services.Configure<IdentityOptions>(options =>
-{
-	options.Password.RequireNonAlphanumeric = false;
-	options.Password.RequiredLength = 3;
-	options.Password.RequireDigit = false;
-	options.Password.RequireUppercase = false;
-});
-
-// builder.Services.Configure<IdentityOptions>(options =>
-// {
-// 	options.Password.RequireNonAlphanumeric = false;
-// 	options.Password.RequiredLength = 8;
+// 			// If the request is for our hub...
+// 			var path = context.HttpContext.Request.Path;
+// 			if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/ChatHub"))
+// 			{
+// 				// Read the token out of the query string
+// 				context.Token = accessToken;
+// 			}
+// 			return Task.CompletedTask;
+// 		}
+// 	};
 // });
 
 builder.Services.AddSignalR();
-
-builder.Services.ConfigureApplicationCookie(options =>
-{
-	options.Cookie.SameSite = SameSiteMode.Strict;
-});
-
-// builder.Services.AddAuthentication(options =>
-// {
-// 	options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-// 	options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-// })
-// 	.AddJwtBearer(options =>
-// 	{
-// 		options.TokenValidationParameters = new TokenValidationParameters
-// 		{
-// 			IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SigningSecret)),
-// 			ValidateIssuerSigningKey = true,
-// 			ValidIssuer = "cario",
-// 			ValidAudience = "cario",
-// 		};
-
-// 		options.Events = new JwtBearerEvents
-// 		{
-// 			OnMessageReceived = context =>
-// 			{
-// 				Console.WriteLine("Message received");
-// 				var accessToken = context.Request.Query["access_token"];
-
-// 				// If the request is for our hub...
-// 				var path = context.HttpContext.Request.Path;
-// 				if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/ChatHub"))
-// 				{
-// 					// Read the token out of the query string
-// 					context.Token = accessToken;
-// 				}
-// 				return Task.CompletedTask;
-// 			}
-// 		};
-// 	}
-// );
 
 // Implement Polly ResiliencePipeline
 builder.Services.AddResiliencePipeline("Email", builder =>
@@ -148,11 +145,8 @@ builder.Services.AddResiliencePipeline<string, Task>("Discord", (builder, contex
 		});
 });
 
-// TelegramConfig.ChatId = "";
-
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
 	app.UseExceptionHandler("/Home/Error");
