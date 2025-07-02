@@ -1,6 +1,11 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
+/*
+dotnet ef migrations add InitialMigration -c IdentityContext
+dotnet ef database update -c IdentityContext
+*/
+
 public class IdentityContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
 {
 	private string connectionString = $"Data Source={DatabasePath}DefaultIdentityContext.db";
