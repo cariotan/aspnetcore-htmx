@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 public class IdentityContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
 {
-	private string connectionString = "Data Source=C:\\Database\\DefaultIdentityContext.db";
+	private string connectionString = $"Data Source={DatabasePath}DefaultIdentityContext.db";
 
 	public IdentityContext()
 	{
