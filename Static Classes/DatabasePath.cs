@@ -1,4 +1,4 @@
 static partial class StaticMethods
 {
-	public const string DatabasePath = "C:\\Database";
+	public const string DatabasePath = "C:\\Database\\";
 }
