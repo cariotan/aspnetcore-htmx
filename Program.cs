@@ -29,13 +29,14 @@ _ = Directory.CreateDirectory("""C:/inetpub/Ripple Logs""");
 //    .CreateLogger();
 
 builder.Host.UseWolverine();
-// builder.Services.AddMarten(options =>
+// builder.Services.AddMarten(x =>
 // {
-// 	options.Connection("Host=localhost;Port=5432;Database=;Username=;Password=");
-// 	options.UseSystemTextJsonForSerialization();
+// 	x.Connection("Host=localhost;Port=5432;Database=;Username=;Password=");
+// 	x.UseSystemTextJsonForSerialization();
 // 	if (builder.Environment.IsDevelopment())
 // 	{
-// 		options.AutoCreateSchemaObjects = AutoCreate.All;
+// 		x.AutoCreateSchemaObjects = AutoCreate.All;
+// 		x.DisableNpgsqlLogging = true;
 // 	}
 // }).IntegrateWithWolverine();
 
@@ -71,12 +72,12 @@ builder.Services
 	.ConfigureApplicationCookie(options =>
 	{
 		options.Cookie.SameSite = SameSiteMode.Strict;
-	})
-	.AddAuthentication(options =>
-	{
-		options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-		options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 	});
+	// .AddAuthentication(options =>
+	// {
+	// 	options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+	// 	options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+	// })
 	// .AddJwtBearer(options =>
 	// {
 	// 	options.TokenValidationParameters = new TokenValidationParameters
