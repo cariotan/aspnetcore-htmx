@@ -1,32 +1,16 @@
 using JasperFx;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
-using Serilog;
-using System.Diagnostics;
-using System.Text;
-using Wolverine.Marten;
 
 DotNetEnv.Env.Load();
 
-EmailRequest emailRequest = new();
-Debug.Assert(emailRequest.From != null, "Please provide a default value to EmailRequest");
-
 var builder = WebApplication.CreateBuilder(args);
 
-_ = Directory.CreateDirectory("""C:/inetpub/Ripple Logs""");
-
-// builder.Host.UseSerilog();
-// Log.Logger = new LoggerConfiguration()
-//    .MinimumLevel.Information()
-//    .WriteTo.File(
-// 	   path: "C:/inetpub/Ripple Logs/Ripple-.txt",
-// 	   rollingInterval: RollingInterval.Day,
-// 	   fileSizeLimitBytes: 104857600,
-// 	   rollOnFileSizeLimit: true,
-// 	   outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level:u3}] {Message:lj}{NewLine}{Exception}" // Custom format
-//    )
-//    .CreateLogger();
+builder.Services.AddSignalR();
+builder.Services.SetupPolly();
+builder.Services.AddHttpClient();
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Services.AddControllersWithViews();
 
 builder.Host.UseWolverine(x =>
 {
@@ -43,13 +27,6 @@ builder.Host.UseWolverine(x =>
 // 		x.DisableNpgsqlLogging = true;
 // 	}
 // }).IntegrateWithWolverine();
-
-// Replace default logging with Serilog
-builder.Logging.ClearProviders();
-builder.Logging.AddConsole();
-
-// Add services to the container.
-builder.Services.AddControllersWithViews();
 
 // Database setup
 builder.Services
@@ -77,20 +54,20 @@ builder.Services
 	{
 		options.Cookie.SameSite = SameSiteMode.Strict;
 	});
-	// .AddAuthentication(options =>
-	// {
-	// 	options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-	// 	options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-	// })
-	// .AddJwtBearer(options =>
-	// {
-	// 	options.TokenValidationParameters = new TokenValidationParameters
-	// 	{
-	// 		IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SigningSecret)),
-	// 		ValidateIssuerSigningKey = true,
-	// 		ValidIssuer = "cario",
-	// 		ValidAudience = "cario",
-	// 	};
+// .AddAuthentication(options =>
+// {
+// 	options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+// 	options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+// })
+// .AddJwtBearer(options =>
+// {
+// 	options.TokenValidationParameters = new TokenValidationParameters
+// 	{
+// 		IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SigningSecret)),
+// 		ValidateIssuerSigningKey = true,
+// 		ValidIssuer = "cario",
+// 		ValidAudience = "cario",
+// 	};
 
 // 	options.Events = new JwtBearerEvents
 // 	{
@@ -111,45 +88,17 @@ builder.Services
 // 	};
 // });
 
-builder.Services.AddSignalR();
-
-// Implement Polly ResiliencePipeline
-builder.Services.AddResiliencePipeline("Email", builder =>
-{
-	builder.AddRetry(new RetryStrategyOptions
-	{
-		MaxRetryAttempts = 3,
-		Delay = TimeSpan.FromSeconds(2),
-		BackoffType = DelayBackoffType.Constant
-	});
-});
-
-builder.Services.AddResiliencePipeline<string, Task>("Discord", (builder, context) =>
-{
-	builder
-		.AddChaosFault(1, () => new Exception("Chaos fault"))
-		.AddFallback(new FallbackStrategyOptions<Task>
-		{
-			FallbackAction = async args =>
-			{
-				if (args.Context.Properties.TryGetValue(ResilienceKeys.Discord, out var discordMessage))
-				{
-					var emailQueue = context.ServiceProvider.GetRequiredService<EmailQueue>();
-					EmailNotification emailRequest = new("Discord failed. Falling back to email", discordMessage);
-					await emailQueue.EnqueueAsync(emailRequest);
-				}
-
-				return Outcome.FromResult(Task.CompletedTask);
-			}
-		})
-		.AddRetry(new RetryStrategyOptions<Task>
-		{
-			ShouldHandle = new PredicateBuilder<Task>().Handle<HttpRequestException>(),
-			MaxRetryAttempts = 3,
-			Delay = TimeSpan.FromSeconds(2),
-			BackoffType = DelayBackoffType.Constant
-		});
-});
+// builder.Host.UseSerilog();
+// Log.Logger = new LoggerConfiguration()
+//    .MinimumLevel.Information()
+//    .WriteTo.File(
+// 	   path: "C:/Ripple-.txt",
+// 	   rollingInterval: RollingInterval.Day,
+// 	   fileSizeLimitBytes: 104857600,
+// 	   rollOnFileSizeLimit: true,
+// 	   outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level:u3}] {Message:lj}{NewLine}{Exception}"
+//    )
+//    .CreateLogger();
 
 var app = builder.Build();
 

@@ -1,13 +1,12 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 
-public class CustomExceptionFilter(ILogger<CustomExceptionFilter> logger, DiscordQueue discordQueue) : IAsyncExceptionFilter
+public class CustomExceptionFilter(ILogger<CustomExceptionFilter> logger, IMessageBus mb) : IAsyncExceptionFilter
 {
 	public async Task OnExceptionAsync(ExceptionContext context)
 	{
 		logger.LogError(context.Exception, "Unhandled Halo Dashboard exception occurred");
 
-		DiscordUnhandledException telegramErrorNotification = new(context.Exception);
-		await discordQueue.EnqueueAsync(telegramErrorNotification);
+		await mb.PublishAsync(SendEmail.Exception(context.Exception));
 
 		context.HttpContext.Response.Headers.Append("hx-reswap", "none");
 
