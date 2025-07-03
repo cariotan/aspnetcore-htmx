@@ -28,7 +28,10 @@ _ = Directory.CreateDirectory("""C:/inetpub/Ripple Logs""");
 //    )
 //    .CreateLogger();
 
-builder.Host.UseWolverine();
+builder.Host.UseWolverine(x =>
+{
+	x.Policies.AutoApplyTransactions();
+});
 // builder.Services.AddMarten(x =>
 // {
 // 	x.Connection("Host=localhost;Port=5432;Database=;Username=;Password=");
