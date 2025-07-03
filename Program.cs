@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Diagnostics;
 using System.Text;
+using Wolverine.Marten;
 
 DotNetEnv.Env.Load();
 
@@ -36,7 +37,7 @@ builder.Host.UseWolverine();
 // 	{
 // 		options.AutoCreateSchemaObjects = AutoCreate.All;
 // 	}
-// });
+// }).IntegrateWithWolverine();
 
 // Replace default logging with Serilog
 builder.Logging.ClearProviders();
