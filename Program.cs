@@ -2,6 +2,8 @@ using JasperFx;
 
 DotNetEnv.Env.Load();
 
+Directory.CreateDirectory(DatabasePath);
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddHttpClient();
