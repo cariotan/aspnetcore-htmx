@@ -7,15 +7,11 @@ var isDebug = true;
 }
 
 <!DOCTYPE html>
-<!-- Main application layout -->
 <html lang='en'>
 
 <head>
-	<!-- Meta tags -->
 	<meta charset='utf-8' />
 	<meta name='viewport' content='width=device-width, initial-scale=1.0' />
-
-	<!-- Site Title -->
 	<title>@ViewData["Title"] - ASP.NET_Core_HTMX</title>
 
 	@if (isDebug)
@@ -23,72 +19,36 @@ var isDebug = true;
 		<script src='https://cdn.tailwindcss.com'></script>
 		<style type='text/tailwindcss'>
 			@Html.Raw(File.ReadAllText("Input.css"))
-						</style>
+		</style>
 	}
 
-	<!-- Styles -->
 	<link rel='stylesheet' href='~/css/tailwind.css' asp-append-version='true'>
-
-	<!-- Scripts Section -->
-	<!-- 
-		Includes:
-		- SignalR
-		- jQuery
-		- HTMX core
-		- HTMX preload extension
-		- Alpine.js
-	-->
-	<script src='~/js/signalr/dist/browser/signalr.js'></script>
-	<script src='https://code.jquery.com/jquery-3.7.1.min.js' integrity='sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=' crossorigin='anonymous'></script>
 	<script src='https://unpkg.com/htmx.org@2.0.4' integrity='sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+' crossorigin='anonymous'></script>
-	<script src='https://unpkg.com/htmx-ext-preload@2.0.1/preload.js'></script>
 	<script defer src='https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js'></script>
+	<script src='~/js/signalr/dist/browser/signalr.js'></script>
 
-	<!-- HTMX Configuration -->
+	@* <script src='https://unpkg.com/htmx-ext-preload@2.0.1/preload.js'></script>
+	<script src='https://code.jquery.com/jquery-3.7.1.min.js' integrity='sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=' crossorigin='anonymous'></script> *@
+
 	<script>
-		htmx.config.defaultSwapStyle = 'outerHTML';
-		htmx.config.globalViewTransitions = true;
-		htmx.config.scrollBehavior = 'smooth';
-		htmx.config.refreshOnHistoryMiss = true;
+		htmx.config.defaultSwapStyle = 'outerHTML'
+		htmx.config.scrollBehavior = 'smooth'
+		htmx.config.refreshOnHistoryMiss = true
 		htmx.config.disableInheritance = true
 	</script>
 
 	@RenderSection("Head", required: false)
+
 	<script>
 		const connection = new signalR.HubConnectionBuilder()
 			.withUrl('/ChatHub')
 			.build()
-
-		connection.start()
 	</script>
 </head>
 
-<!-- Main Content -->
-
 <body>
-	<!-- Primary content section -->
 	@RenderBody()
-
-	<!-- Scripts partial -->
 	@await RenderSectionAsync("Scripts", required: false)
-
-	<!-- SignalR Configuration -->
-	<script>
-		function disableScrollbar() {
-			const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
-			$('body').css({
-				'overflow': 'hidden',
-				'padding-right': scrollBarWidth + 'px'
-			});
-		}
-
-		function enableScrollbar() {
-			$('body').css({
-				'overflow': 'auto',
-				'padding-right': '0'
-			});
-		}
-	</script>
 </body>
 
 </html>
