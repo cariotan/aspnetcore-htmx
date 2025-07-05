@@ -19,7 +19,7 @@ var isDebug = true;
 		<script src='https://cdn.tailwindcss.com'></script>
 		<style type='text/tailwindcss'>
 			@Html.Raw(File.ReadAllText("Input.css"))
-		</style>
+				</style>
 	}
 
 	<link rel='stylesheet' href='~/css/tailwind.css' asp-append-version='true'>
@@ -40,8 +40,15 @@ var isDebug = true;
 	@RenderSection("Head", required: false)
 
 	<script>
+		class ForeverRetryPolicy {
+			nextRetryDelayInMilliseconds() {
+				return 1000;
+			}
+		}
+
 		const connection = new signalR.HubConnectionBuilder()
 			.withUrl('/ChatHub')
+			.withAutomaticReconnect(new ForeverRetryPolicy())
 			.build()
 	</script>
 </head>

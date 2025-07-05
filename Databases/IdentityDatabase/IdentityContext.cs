@@ -8,7 +8,7 @@ dotnet ef database update -c IdentityContext
 
 public class IdentityContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
 {
-	private string connectionString = $"Data Source={DatabasePath}\\DefaultIdentityContext.db";
+	private string connectionString = $"Data Source={DatabasePath}\\IdentityContext.db";
 
 	public IdentityContext()
 	{
