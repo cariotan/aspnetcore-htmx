@@ -34,7 +34,7 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 		else
 		{
 			ModelState.AddModelError("Error", "Invalid email or password");
-			return View();
+			return View(loginModel);
 		}
 	}
 }

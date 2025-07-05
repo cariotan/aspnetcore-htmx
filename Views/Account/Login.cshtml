@@ -22,6 +22,7 @@
 						<input type='email'
 							   asp-for='Email'
 							   autocomplete='email'
+							   value='@Model?.Email'
 							   class='block rounded-md outline outline-1 outline-gray-300 -outline-offset-1 w-full bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-2 focus:outline-indigo-600 focus:-outline-offset-2 sm:text-sm/6'>
 						@Html.ValidationMessageFor(x => x.Email)
 					</div>
@@ -42,6 +43,7 @@
 						<input type='password'
 							   asp-for='Password'
 							   autocomplete='current-password'
+							   value='@Model?.Password'
 							   class='block rounded-md outline outline-1 outline-gray-300 -outline-offset-1 w-full bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-2 focus:outline-indigo-600 focus:-outline-offset-2 sm:text-sm/6'>
 						@Html.ValidationMessageFor(x => x.Password)
 					</div>
