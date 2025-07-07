@@ -75,7 +75,7 @@ public class SendDiscordHandler(
 	}
 }
 
-// The key is set in appsettings.cs. It corresponds to a discord webhook url.
+// The key is set in Environment variables. It corresponds to a discord webhook url.
 public record SendDiscord(string Key, string Message)
 {
 	public static SendDiscord Exception(Exception e)
