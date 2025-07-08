@@ -6,3 +6,4 @@ indent_size = 4
 quote_type = single
 insert_final_newline = false
 max_line_length = 9999
+dotnet_diagnostic.IDE0051.severity = warning
