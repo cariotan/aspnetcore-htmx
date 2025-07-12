@@ -1,6 +1,3 @@
-using Akka.Actor;
-using Akka.Hosting;
-
 static partial class StaticMethods
 {
 	public static void Tell<T>(this IRequiredActor<T> actorRef, object message)
