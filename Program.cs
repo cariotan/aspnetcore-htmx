@@ -6,11 +6,15 @@ Directory.CreateDirectory(DatabasePath);
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllersWithViews(x =>
+{
+	x.Conventions.Add(new GlobalControllerAttributeConvention());
+});
+
 builder.Services.AddHttpClient();
 builder.SetupWolverineAndMarten();
 builder.Services.AddSignalR();
 builder.Services.SetupPolly();
-builder.Services.AddControllersWithViews();
 builder.Services.SetupIdentity();
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
