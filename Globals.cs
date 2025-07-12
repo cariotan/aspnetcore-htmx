@@ -7,5 +7,5 @@ global using Wolverine;
 global using static Method;
 global using static StaticMethods;
 global using static Partials;
-using Akka.Actor;
-using Akka.Hosting;
+global using Akka.Actor;
+global using Akka.Hosting;
