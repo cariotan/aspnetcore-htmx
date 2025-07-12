@@ -4,6 +4,7 @@ static partial class StaticMethods
 {
 	public static void SetupSerilog(this WebApplicationBuilder builder)
 	{
+#if DEBUG
 		builder.Host.UseSerilog();
 		Log.Logger = new LoggerConfiguration()
 		   .MinimumLevel.Information()
@@ -15,5 +16,6 @@ static partial class StaticMethods
 			   outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level:u3}] {Message:lj}{NewLine}{Exception}"
 		   )
 		   .CreateLogger();
+#endif
 	}
 }
