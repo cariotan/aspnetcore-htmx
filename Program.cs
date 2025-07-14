@@ -16,6 +16,7 @@ builder.SetupWolverineAndMarten();
 builder.Services.AddSignalR();
 builder.Services.SetupPolly();
 builder.Services.SetupIdentity();
+builder.Services.SetupAkka();
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 // builder.SetupSerilog();
