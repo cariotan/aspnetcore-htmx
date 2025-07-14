@@ -7,7 +7,7 @@ static partial class StaticMethods
 			builder.AddRetry(new RetryStrategyOptions
 			{
 				MaxRetryAttempts = 3,
-				Delay = TimeSpan.FromSeconds(2),
+				Delay = 2.Seconds(),
 				BackoffType = DelayBackoffType.Constant
 			});
 		});
@@ -33,7 +33,7 @@ static partial class StaticMethods
 				{
 					ShouldHandle = new PredicateBuilder<Task>().Handle<HttpRequestException>(),
 					MaxRetryAttempts = 3,
-					Delay = TimeSpan.FromSeconds(2),
+					Delay = 2.Seconds(),
 					BackoffType = DelayBackoffType.Constant
 				});
 		});

@@ -11,7 +11,7 @@ static partial class StaticMethods
 			.AddDefaultTokenProviders();
 
 		serviceCollection
-			.Configure<SecurityStampValidatorOptions>(options => options.ValidationInterval = TimeSpan.FromSeconds(0))
+			.Configure<SecurityStampValidatorOptions>(options => options.ValidationInterval = 0.Seconds())
 			.Configure<IdentityOptions>(options =>
 			{
 				options.Password.RequireNonAlphanumeric = false;
