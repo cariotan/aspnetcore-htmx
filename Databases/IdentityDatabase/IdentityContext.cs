@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,5 +24,33 @@ public class IdentityContext : IdentityDbContext<ApplicationUser, ApplicationRol
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 	{
 		optionsBuilder.UseSqlite(connectionString);
+	}
+}
+
+public class ApplicationUser : IdentityUser
+{
+	public ApplicationUser()
+	{
+
+	}
+
+	public ApplicationUser(string userName)
+		: base(userName)
+	{
+		Email = userName;
+	}
+}
+
+public class ApplicationRole : IdentityRole
+{
+	public ApplicationRole()
+	{
+
+	}
+
+	public ApplicationRole(string role)
+		: base(role)
+	{
+
 	}
 }
