@@ -1,5 +1,5 @@
 module.exports = {
-    content: ['controllers/*.cs', 'views/**/*.{cshtml,html}', 'wwwroot/**/*.{css,html,js}', 'Static Classes/*.cs'],
+    content: ['3 C/*.cs', '2 V/**/*.{cshtml,html}', 'wwwroot/**/*.{css,html,js}', 'Static Classes/*.cs'],
     theme: {
         extend: {
             colors: {
