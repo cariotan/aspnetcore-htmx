@@ -17,8 +17,8 @@ builder.Services.AddControllersWithViews(x =>
 builder.Services.Configure<RazorViewEngineOptions>(x =>
 {
 	x.ViewLocationFormats.Clear();
-	x.ViewLocationFormats.Add("/ControllerViews/{1}/{0}.cshtml");
-	x.ViewLocationFormats.Add("/ControllerViews/Shared/{0}.cshtml");
+	x.ViewLocationFormats.Add("/2 V/{1}/{0}.cshtml");
+	x.ViewLocationFormats.Add("/2 V/Shared/{0}.cshtml");
 });
 
 builder.Services.AddHttpClient();
