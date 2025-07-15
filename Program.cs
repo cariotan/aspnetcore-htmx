@@ -1,14 +1,24 @@
 using JasperFx;
+using Microsoft.AspNetCore.Mvc.Razor;
+
+_ = GetDatabasePath();
 
 DotNetEnv.Env.Load();
 
-Directory.CreateDirectory(DatabasePath);
+Directory.CreateDirectory(GetDatabasePath());
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews(x =>
 {
 	x.Conventions.Add(new GlobalControllerAttributeConvention());
+});
+
+builder.Services.Configure<RazorViewEngineOptions>(x =>
+{
+	x.ViewLocationFormats.Clear();
+	x.ViewLocationFormats.Add("/ControllerViews/{1}/{0}.cshtml");
+	x.ViewLocationFormats.Add("/ControllerViews/Shared/{0}.cshtml");
 });
 
 builder.Services.AddHttpClient();

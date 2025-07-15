@@ -3,18 +3,20 @@ using System.IO;
 
 static partial class StaticMethods
 {
-    public static readonly string DatabasePath;
-
-    static StaticMethods()
+	public static string GetDatabasePath()
     {
+		throw new NotImplementedException();
+
+		string folderName = "";
+
         if (OperatingSystem.IsWindows())
         {
-            DatabasePath = @"C:\Database\ccTimerNet";
+            return $"""C:\Database\{folderName}""";
         }
         else
         {
             var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-            DatabasePath = Path.Combine(home, "Database", "ccTimerNet");
+            return Path.Combine(home, "Database", folderName);
         }
     }
 }
