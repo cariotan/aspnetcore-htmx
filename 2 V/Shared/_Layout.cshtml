@@ -54,6 +54,8 @@ var isDebug = true;
 </head>
 
 <body>
+	<partial name='_ErrorModal' />
+
 	@RenderBody()
 	@await RenderSectionAsync("Scripts", required: false)
 </body>
