@@ -6,11 +6,20 @@ public class Brain : ReceiveActor
 
 	public Brain()
 	{
-		Receive<Start>(msg =>
+		Receive<IUserSessionActorCommand>(msg =>
 		{
-			
+			var name = nameof(UserSessionActor) + msg.SessionId;
+
+			var actor = Context.Child(name);
+			if (actor.IsNobody())
+			{
+				actor = Context.ActorOf(
+					Props.Create(() => new UserSessionActor()),
+					name
+				);
+			}
+
+			actor.Forward(msg);
 		});
 	}
-
-	public record Start();
 }

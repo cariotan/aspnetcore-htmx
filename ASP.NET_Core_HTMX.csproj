@@ -9,25 +9,24 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Akka" Version="1.5.44" />
-		<PackageReference Include="Akka.Hosting" Version="1.5.42" />
+		<PackageReference Include="Akka" Version="1.5.45" />
+		<PackageReference Include="Akka.Hosting" Version="1.5.45" />
 		<PackageReference Include="DotNetEnv" Version="3.1.1" />
-		<PackageReference Include="Marten" Version="8.3.1" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.5" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"
-			Version="9.0.5" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.5" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.5">
+		<PackageReference Include="Marten" Version="8.3.3" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.7" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.7" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.7" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.7">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.5" />
-		<PackageReference Include="Polly.Core" Version="8.5.2" />
-		<PackageReference Include="Polly.Extensions" Version="8.5.2" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.7" />
+		<PackageReference Include="Polly.Core" Version="8.6.2" />
+		<PackageReference Include="Polly.Extensions" Version="8.6.2" />
 		<PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
 		<PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
-		<PackageReference Include="WolverineFx" Version="4.5.1" />
-		<PackageReference Include="WolverineFx.Marten" Version="4.5.1" />
+		<PackageReference Include="WolverineFx" Version="4.5.3" />
+		<PackageReference Include="WolverineFx.Marten" Version="4.5.3" />
 	</ItemGroup>
 
 	<Target Name="RunTailwind" AfterTargets="Build">
