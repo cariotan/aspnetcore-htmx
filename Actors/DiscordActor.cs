@@ -1,10 +1,13 @@
 using Akka.Event;
 
-public record SendDiscord(string Key, string Message, string SessionId) : IDiscordMessage
+public record SendDiscord(string Key, string Message, string SessionId) : IDiscordMessage;
+
+public record SendDiscordException : SendDiscord
 {
-	public static SendDiscord Exception(Exception e, string sessionId)
+	public SendDiscordException(Exception e, string sessionId)
+		: base("Exception", e.ToString(), sessionId)
 	{
-		return new SendDiscord("Exception", e.ToString(), sessionId);
+
 	}
 }
 
@@ -16,8 +19,6 @@ public class DiscordActor : ReceiveActor
 
 	public DiscordActor(HttpClient httpClient)
 	{
-		var emailActor = Context.ActorOf(Props.Create(() => new EmailActor(httpClient)));
-
 		ReceiveAsync<SendDiscord>(async msg =>
 		{
 			try
@@ -37,8 +38,6 @@ public class DiscordActor : ReceiveActor
 					}
 
 					var content = new { content = chunk };
-
-					throw new Exception("Discord Execption");
 
 					var response = await httpClient.PostAsJsonAsync(url, content);
 
@@ -64,7 +63,7 @@ public class DiscordActor : ReceiveActor
 			}
 			catch (Exception e)
 			{
-				emailActor.Tell(SendEmail.Exception(e));
+				Context.Parent.Tell(new SendEmailException(e));
 
 				SendEmail sendEmail = new()
 				{
@@ -73,7 +72,7 @@ public class DiscordActor : ReceiveActor
 					Body = msg.Message,
 				};
 
-				emailActor.Tell(sendEmail);
+				Context.Parent.Tell(sendEmail);
 			}
 		});
 	}

@@ -2,33 +2,35 @@ using System.Text;
 using System.Text.Json;
 using Akka.Event;
 
-public class SendEmail
+public class SendEmail : IEmailMessage
 {
 	public EmailAddress? From { get; init; } = new("noreply@ripplenetworks.com.au", "Ripple Networks");
 	public EmailAddress? To { get; init; }
 	public string? Subject { get; init; }
 	public string? Body { get; init; }
+}
 
-	public static SendEmail Exception(Exception e)
+public class SendEmailException : SendEmail
+{
+	public SendEmailException(Exception e)
 	{
-		return new()
-		{
-			To = new("ctan@trucell.com.au", "Cario Tan"),
-			Subject = "An exception has occured for DicomTest",
-			Body = e.ToString(),
-		};
-	}
-
-	public static SendEmail Notification(string title, string notification)
-	{
-		return new()
-		{
-			To = new("ctan@trucell.com.au", "Cario Tan"),
-			Subject = title,
-			Body = notification,
-		};
+		To = new("ctan@trucell.com.au", "Cario Tan");
+		Subject = "An exception has occured for DicomTest";
+		Body = e.ToString();
 	}
 }
+
+public class SendEmailNotification : SendEmail
+{
+	public SendEmailNotification(string title, string notification)
+	{
+		To = new("ctan@trucell.com.au", "Cario Tan");
+		Subject = title;
+		Body = notification;
+	}
+}
+
+public interface IEmailMessage;
 
 public record EmailAddress(string Email, string Name);
 

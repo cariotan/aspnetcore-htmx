@@ -1,4 +1,3 @@
-using JasperFx;
 using Microsoft.AspNetCore.Mvc.Razor;
 
 _ = GetDatabasePath();
@@ -12,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews(x =>
 {
 	x.Conventions.Add(new GlobalControllerAttributeConvention());
+	x.Filters.Add<CustomExceptionFilter>();
 });
 
 builder.Services.Configure<RazorViewEngineOptions>(x =>
@@ -22,7 +22,6 @@ builder.Services.Configure<RazorViewEngineOptions>(x =>
 });
 
 builder.Services.AddHttpClient();
-builder.SetupWolverineAndMarten();
 builder.Services.AddSignalR();
 builder.Services.SetupPolly();
 builder.Services.SetupIdentity();
@@ -54,4 +53,4 @@ app.MapControllerRoute(
 
 app.MapHub<ChatHub>("/ChatHub");
 
-await app.RunJasperFxCommands(args);
+app.Run();

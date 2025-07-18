@@ -1,12 +1,12 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 
-public class CustomExceptionFilter(ILogger<CustomExceptionFilter> logger, IMessageBus mb) : IAsyncExceptionFilter
+public class CustomExceptionFilter(ILogger<CustomExceptionFilter> logger, IRequiredActor<Brain> brain) : IExceptionFilter
 {
-	public async Task OnExceptionAsync(ExceptionContext context)
+	public void OnException(ExceptionContext context)
 	{
 		logger.LogError(context.Exception, "Unhandled Halo Dashboard exception occurred");
 
-		await mb.PublishAsync(SendEmail.Exception(context.Exception));
+		brain.Tell(new SendEmailException(context.Exception));
 
 		context.HttpContext.Response.Headers.Append("hx-reswap", "none");
 
