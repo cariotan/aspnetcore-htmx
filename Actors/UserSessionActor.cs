@@ -16,20 +16,7 @@ public class UserSessionActor : ReceiveActor
 
 	public UserSessionActor(HttpClient httpClient)
 	{
-		Receive<IDiscordMessage>(msg =>
-		{
-			var name = nameof(DiscordActor) + msg.SessionId;
-			var discordActor = Context.Child(name);
-			if (discordActor.IsNobody())
-			{
-				discordActor = Context.ActorOf(
-					Props.Create(() => new DiscordActor(httpClient)),
-					name);
-			}
-			discordActor.Forward(msg);
-		});
-
-		Receive<IEmailMessage>(msg =>
+		Receive<IEmailCommand>(msg =>
 		{
 			Context.Parent.Forward(msg);
 		});

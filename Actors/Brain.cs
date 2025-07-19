@@ -8,6 +8,7 @@ public class Brain : ReceiveActor
 	public Brain(HttpClient httpClient)
 	{
 		var emailActor = Context.ActorOf(Props.Create(() => new EmailActor(httpClient)).WithRouter(new SmallestMailboxPool(10)));
+		var discordActor = Context.ActorOf(Props.Create(() => new DiscordActor(httpClient)).WithRouter(new SmallestMailboxPool(10)));
 
 		Receive<IUserSessionCommand>(msg =>
 		{
@@ -25,9 +26,14 @@ public class Brain : ReceiveActor
 			actor.Forward(msg);
 		});
 
-		Receive<IEmailMessage>(msg =>
+		Receive<IEmailCommand>(msg =>
 		{
 			emailActor.Forward(msg);
+		});
+
+		Receive<IDiscordCommand>(msg =>
+		{
+			discordActor.Forward(msg);
 		});
 	}
 }

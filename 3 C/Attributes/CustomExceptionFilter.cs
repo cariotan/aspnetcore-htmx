@@ -6,7 +6,7 @@ public class CustomExceptionFilter(ILogger<CustomExceptionFilter> logger, IRequi
 	{
 		logger.LogError(context.Exception, "Unhandled exception occurred");
 
-		brain.Tell(new SendEmailException(context.Exception));
+		brain.Tell(new SendDiscordException(context.Exception));
 
 		context.HttpContext.Response.Headers.Append("hx-reswap", "none");
 
