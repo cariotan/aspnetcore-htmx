@@ -9,7 +9,7 @@ public class Brain : ReceiveActor
 	{
 		var emailActor = Context.ActorOf(Props.Create(() => new EmailActor(httpClient)).WithRouter(new SmallestMailboxPool(10)));
 
-		Receive<IUserSessionActorCommand>(msg =>
+		Receive<IUserSessionCommand>(msg =>
 		{
 			var name = nameof(UserSessionActor) + msg.SessionId;
 

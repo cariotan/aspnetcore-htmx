@@ -11,7 +11,7 @@ public record SendDiscordException : SendDiscord
 	}
 }
 
-public interface IDiscordMessage : IUserSessionActorCommand;
+public interface IDiscordMessage : IUserSessionCommand;
 
 public class DiscordActor : ReceiveActor
 {
