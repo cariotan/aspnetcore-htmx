@@ -10,7 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews(x =>
 {
-	x.Conventions.Add(new GlobalControllerAttributeConvention());
+	x.Conventions.Add(new SetUserConvention());
+	x.Conventions.Add(new SetSessionIdConvention());
 	x.Filters.Add<CustomExceptionFilter>();
 });
 

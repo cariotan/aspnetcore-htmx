@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 
-public class GlobalControllerAttributeConvention : IApplicationModelConvention
+public class SetUserConvention : IApplicationModelConvention
 {
 	public void Apply(ApplicationModel application)
 	{
