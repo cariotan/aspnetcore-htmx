@@ -7,6 +7,9 @@ public class Brain : ReceiveActor
 
 	public Brain(HttpClient httpClient)
 	{
+		var errorActor = Context.ActorOf(Props.Create(() => new ErrorActor(Self)).WithRouter(new SmallestMailboxPool(10)));
+		Context.System.EventStream.Subscribe(errorActor, typeof(Akka.Event.Error));
+
 		var emailActor = Context.ActorOf(Props.Create(() => new EmailActor(httpClient)).WithRouter(new SmallestMailboxPool(10)));
 		var discordActor = Context.ActorOf(Props.Create(() => new DiscordActor(httpClient)).WithRouter(new SmallestMailboxPool(10)));
 
