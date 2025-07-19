@@ -14,12 +14,9 @@ public class UserSessionActor : ReceiveActor
 		Context.SetReceiveTimeout(2.Minutes());
 	}
 
-	public UserSessionActor(HttpClient httpClient)
+	public UserSessionActor()
 	{
-		Receive<IEmailCommand>(msg =>
-		{
-			Context.Parent.Forward(msg);
-		});
+		Receive<IEmailCommand>(Context.Parent.Forward);
 
 		Receive<ReceiveTimeout>(msg =>
 		{

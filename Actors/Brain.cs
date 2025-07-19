@@ -21,7 +21,7 @@ public class Brain : ReceiveActor
 			if (actor.IsNobody())
 			{
 				actor = Context.ActorOf(
-					Props.Create(() => new UserSessionActor(httpClient)),
+					Props.Create(() => new UserSessionActor()),
 					name
 				);
 			}
