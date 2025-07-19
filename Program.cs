@@ -23,7 +23,6 @@ builder.Services.Configure<RazorViewEngineOptions>(x =>
 
 builder.Services.AddHttpClient();
 builder.Services.AddSignalR();
-builder.Services.SetupPolly();
 builder.Services.SetupIdentity();
 builder.Services.SetupAkka();
 builder.Logging.ClearProviders();
