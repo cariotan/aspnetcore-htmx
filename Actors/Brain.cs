@@ -7,9 +7,13 @@ public class Brain : ReceiveActor
 
 	public Brain(HttpClient httpClient)
 	{
-		var emailActor = Context.ActorOf(Props.Create(() => new EmailActor(httpClient)).WithRouter(new SmallestMailboxPool(10)));
+		var errorActor = Context.ActorOf(Props.Create(() => new ErrorActor(Self)).WithRouter(new SmallestMailboxPool(10)));
+		Context.System.EventStream.Subscribe(errorActor, typeof(Akka.Event.Error));
 
-		Receive<IUserSessionActorCommand>(msg =>
+		var emailActor = Context.ActorOf(Props.Create(() => new EmailActor(httpClient)).WithRouter(new SmallestMailboxPool(10)));
+		var discordActor = Context.ActorOf(Props.Create(() => new DiscordActor(httpClient)).WithRouter(new SmallestMailboxPool(10)));
+
+		Receive<IUserSessionCommand>(msg =>
 		{
 			var name = nameof(UserSessionActor) + msg.SessionId;
 
@@ -17,7 +21,7 @@ public class Brain : ReceiveActor
 			if (actor.IsNobody())
 			{
 				actor = Context.ActorOf(
-					Props.Create(() => new UserSessionActor(httpClient)),
+					Props.Create(() => new UserSessionActor()),
 					name
 				);
 			}
@@ -25,9 +29,14 @@ public class Brain : ReceiveActor
 			actor.Forward(msg);
 		});
 
-		Receive<IEmailMessage>(msg =>
+		Receive<IEmailCommand>(msg =>
 		{
 			emailActor.Forward(msg);
+		});
+
+		Receive<IDiscordCommand>(msg =>
+		{
+			discordActor.Forward(msg);
 		});
 	}
 }

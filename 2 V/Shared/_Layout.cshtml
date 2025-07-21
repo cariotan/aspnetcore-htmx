@@ -19,7 +19,7 @@ var isDebug = true;
 		<script src='https://cdn.tailwindcss.com'></script>
 		<style type='text/tailwindcss'>
 			@Html.Raw(File.ReadAllText("Input.css"))
-				</style>
+						</style>
 	}
 
 	<link rel='stylesheet' href='~/css/tailwind.css' asp-append-version='true'>
@@ -34,7 +34,6 @@ var isDebug = true;
 		htmx.config.defaultSwapStyle = 'outerHTML'
 		htmx.config.scrollBehavior = 'smooth'
 		htmx.config.refreshOnHistoryMiss = true
-		htmx.config.disableInheritance = true
 	</script>
 
 	@RenderSection("Head", required: false)
@@ -53,11 +52,16 @@ var isDebug = true;
 	</script>
 </head>
 
-<body>
+<body hx-history='false'
+	  hx-target='#wrapper'
+	  hx-select='#wrapper'>
+
 	<partial name='_ErrorModal' />
 
-	@RenderBody()
-	@await RenderSectionAsync("Scripts", required: false)
+	<div id='wrapper'>
+		@RenderBody()
+		@await RenderSectionAsync("Scripts", required: false)
+	</div>
 </body>
 
 </html>

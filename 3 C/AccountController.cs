@@ -12,7 +12,6 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 	public IActionResult Login()
 	{
 		logger.Endpoint(Get, "/Account/Login");
-
 		return View();
 	}
 

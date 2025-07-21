@@ -2,7 +2,7 @@ using System.Text;
 using System.Text.Json;
 using Akka.Event;
 
-public class SendEmail : IEmailMessage
+public class SendEmail : IEmailCommand
 {
 	public EmailAddress? From { get; init; } = new("noreply@ripplenetworks.com.au", "Ripple Networks");
 	public EmailAddress? To { get; init; }
@@ -30,7 +30,7 @@ public class SendEmailNotification : SendEmail
 	}
 }
 
-public interface IEmailMessage;
+public interface IEmailCommand;
 
 public record EmailAddress(string Email, string Name);
 

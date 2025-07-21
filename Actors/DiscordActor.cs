@@ -1,17 +1,17 @@
 using Akka.Event;
 
-public record SendDiscord(string Key, string Message, string SessionId) : IDiscordMessage;
+public record SendDiscord(string Key, string Message) : IDiscordCommand;
 
 public record SendDiscordException : SendDiscord
 {
-	public SendDiscordException(Exception e, string sessionId)
-		: base("Exception", e.ToString(), sessionId)
+	public SendDiscordException(Exception e)
+		: base("Exception", e.ToString())
 	{
 
 	}
 }
 
-public interface IDiscordMessage : IUserSessionActorCommand;
+public interface IDiscordCommand;
 
 public class DiscordActor : ReceiveActor
 {
@@ -23,7 +23,11 @@ public class DiscordActor : ReceiveActor
 		{
 			try
 			{
+				#if DEBUG
+				var url = GetEnvironmentVariable("Test");
+				#else
 				var url = GetEnvironmentVariable(msg.Key);
+				#endif
 
 				const int discordCharacterlimit = 2000;
 

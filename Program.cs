@@ -10,7 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews(x =>
 {
-	x.Conventions.Add(new GlobalControllerAttributeConvention());
+	x.Conventions.Add(new SetUserConvention());
+	x.Conventions.Add(new SetSessionIdConvention());
 	x.Filters.Add<CustomExceptionFilter>();
 });
 
@@ -23,7 +24,6 @@ builder.Services.Configure<RazorViewEngineOptions>(x =>
 
 builder.Services.AddHttpClient();
 builder.Services.AddSignalR();
-builder.Services.SetupPolly();
 builder.Services.SetupIdentity();
 builder.Services.SetupAkka();
 builder.Logging.ClearProviders();

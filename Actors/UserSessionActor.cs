@@ -1,6 +1,6 @@
 using Akka.Event;
 
-public interface IUserSessionActorCommand
+public interface IUserSessionCommand
 {
 	string SessionId { get; }
 }
@@ -14,25 +14,9 @@ public class UserSessionActor : ReceiveActor
 		Context.SetReceiveTimeout(2.Minutes());
 	}
 
-	public UserSessionActor(HttpClient httpClient)
+	public UserSessionActor()
 	{
-		Receive<IDiscordMessage>(msg =>
-		{
-			var name = nameof(DiscordActor) + msg.SessionId;
-			var discordActor = Context.Child(name);
-			if (discordActor.IsNobody())
-			{
-				discordActor = Context.ActorOf(
-					Props.Create(() => new DiscordActor(httpClient)),
-					name);
-			}
-			discordActor.Forward(msg);
-		});
-
-		Receive<IEmailMessage>(msg =>
-		{
-			Context.Parent.Forward(msg);
-		});
+		Receive<IEmailCommand>(Context.Parent.Forward);
 
 		Receive<ReceiveTimeout>(msg =>
 		{
