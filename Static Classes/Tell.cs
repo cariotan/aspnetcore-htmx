@@ -9,4 +9,9 @@ static partial class StaticMethods
 	{
 		return await actorRef.ActorRef.Ask<T>(message, timeout ?? 10.Seconds());
 	}
+
+	public static async Task Ask(this IRequiredActor<Brain> actorRef, object message, TimeSpan? timeout = null)
+	{
+		await actorRef.ActorRef.Ask(message, timeout ?? 10.Seconds());
+	}
 }
