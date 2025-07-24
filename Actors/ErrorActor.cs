@@ -12,12 +12,6 @@ public class ErrorActor : ReceiveActor
 			{
 				Context.Parent.Tell(new SendDiscordException(msg.Cause, "Developer"));
 			}
-			else
-			{
-				var exception = new Exception(msg.Message.ToString());
-
-				Context.Parent.Tell(new SendDiscordException(exception, "Developer"));
-			}
 		});
 	}
 }
