@@ -9,8 +9,6 @@ public class Brain : ReceiveActor
 	{
 		base.PreStart();
 
-		logger.Info("Brain started");
-
 		var errorActor = Context.ActorOf(
 			Props.Create(() => new ErrorActor(Self)),
 			nameof(ErrorActor)
