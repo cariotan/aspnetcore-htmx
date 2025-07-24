@@ -32,9 +32,7 @@ public class DiscordActor : ReceiveActor
 
 					var response = await httpClient.PostAsJsonAsync(url, content);
 
-					var data = await response.Content.ReadAsStringAsync();
-
-					response.EnsureSuccessStatusCode();
+					var data = await response.EnsureSuccessStatusCode().Content.ReadAsStringAsync();
 
 					if (response.Headers.TryGetValues("X-RateLimit-Remaining", out var remaining))
 					{
@@ -54,9 +52,9 @@ public class DiscordActor : ReceiveActor
 			}
 			catch (Exception e)
 			{
-				Context.Parent.Tell(new SendEmailException(e, "Developer"));
+				Context.Parent.Tell(new SendEmailException(e, msg.SessionId));
 
-				Context.Parent.Tell(new SendEmail("Developer")
+				Context.Parent.Tell(new SendEmail(msg.SessionId)
 				{
 					To = new EmailAddress("ctan@trucell.com.au", "Cario Tan"),
 					Subject = "Discord Message",
