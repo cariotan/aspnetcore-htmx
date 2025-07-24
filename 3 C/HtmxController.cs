@@ -15,7 +15,6 @@ public class HtmxController : Controller
 
 	public void Hx(string target = "this", string swap = "outerHTML", string select = "")
 	{
-		Console.WriteLine("Ensure Ids include #");
 		if (Response.Headers.ContainsKey("hx-retarget"))
 		{
 			Response.Headers["hx-retarget"] = target;
@@ -73,8 +72,6 @@ public class HtmxController : Controller
 		{
 			Response.Headers.Append("hx-trigger", triggerValue);
 		}
-
-		Console.WriteLine("Don't forget to listen for the event from:body");
 	}
 
 	public void HxRedirect(string localPath)

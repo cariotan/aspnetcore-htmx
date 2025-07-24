@@ -54,39 +54,38 @@ public class DiscordActor : ReceiveActor
 			}
 			catch (Exception e)
 			{
-				Context.Parent.Tell(new SendEmailException(e));
+				Context.Parent.Tell(new SendEmailException(e, "Developer"));
 
-#warning Set email subject
-				SendEmail sendEmail = new()
+				Context.Parent.Tell(new SendEmail("Developer")
 				{
 					To = new EmailAddress("ctan@trucell.com.au", "Cario Tan"),
 					Subject = "Discord Message",
 					Body = msg.Message,
-				};
-
-				Context.Parent.Tell(sendEmail);
+				});
 			}
 		});
 	}
 
-	private List<string> SplitMessageIntoChunks(string message, int maxChunkSize)
+	private static List<string> SplitMessageIntoChunks(string message, int maxChunkSize)
 	{
-		var result = new List<string>();
+		List<string> result = [];
+
 		for (int i = 0; i < message.Length; i += maxChunkSize)
 		{
 			int length = Math.Min(maxChunkSize, message.Length - i);
 			result.Add(message.Substring(i, length));
 		}
+
 		return result;
 	}
 }
 
-public record SendDiscord(string Key, string Message) : IDiscordCommand;
+public record SendDiscord(string Key, string Message, string SessionId) : IDiscordCommand;
 
 public record SendDiscordException : SendDiscord
 {
-	public SendDiscordException(Exception e)
-		: base("Exception", e.ToString())
+	public SendDiscordException(Exception e, string sessionId)
+		: base("Exception", e.ToString(), sessionId)
 	{
 
 	}

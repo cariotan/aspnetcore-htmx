@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using Akka.Event;
@@ -12,14 +13,37 @@ public class EmailActor : ReceiveActor
 		{
 			var emailRequest = msg;
 
-			if (emailRequest?.From?.Email != null &&
-						emailRequest?.To?.Email != null &&
-						emailRequest?.Subject != null &&
-						emailRequest?.Body != null)
+			if (!string.IsNullOrWhiteSpace(emailRequest?.From?.Email) &&
+				!string.IsNullOrWhiteSpace(emailRequest?.To?.Email) &&
+				!string.IsNullOrWhiteSpace(emailRequest?.Subject) &&
+				!string.IsNullOrWhiteSpace(emailRequest?.Body))
 			{
-				await SendEmailAsync(emailRequest.From.Email, emailRequest.From.Name,
-					emailRequest.To.Email, emailRequest.To.Name,
-					emailRequest.Subject, emailRequest.Body, httpClient);
+				int maxRetries = 3;
+				int delayMilliseconds = 1000;
+
+				for (int attempt = 1; attempt <= maxRetries; attempt++)
+				{
+					try
+					{
+						await SendEmailAsync(
+							emailRequest.From.Email, emailRequest.From.Name,
+							emailRequest.To.Email, emailRequest.To.Name,
+							emailRequest.Subject, emailRequest.Body, httpClient);
+
+						return;
+					}
+					catch (Exception ex)
+					{
+						if (attempt == maxRetries)
+						{
+							logger.Error($"SendEmail failed after {maxRetries} attempts: {ex}");
+						}
+						else
+						{
+							await Task.Delay(delayMilliseconds);
+						}
+					}
+				}
 			}
 			else
 			{
@@ -98,6 +122,7 @@ public class EmailActor : ReceiveActor
 		if (!response.IsSuccessStatusCode)
 		{
 			var errorContent = await response.Content.ReadAsStringAsync();
+
 			throw new HttpRequestException($"Failed to send email: {response.StatusCode}, {errorContent}");
 		}
 	}
@@ -109,23 +134,31 @@ public class SendEmail : IEmailCommand
 	public EmailAddress? To { get; init; }
 	public string? Subject { get; init; }
 	public string? Body { get; init; }
-	public required string SessionId { get; set; }
+	public string SessionId { get; init; }
+
+	public SendEmail(string sessionId)
+	{
+		SessionId = sessionId;
+	}
 }
 
 public class SendEmailException : SendEmail
 {
-	public SendEmailException(Exception e)
+	public SendEmailException(Exception e, string sessionId)
+		: base(sessionId)
 	{
-		#warning Write a subject for send exception email
 		To = new("ctan@trucell.com.au", "Cario Tan");
-		Subject = "";
+
+		Subject = $"{GetAssemblyName()} Exception: {e.Message}";
+
 		Body = e.ToString();
 	}
 }
 
 public class SendEmailNotification : SendEmail
 {
-	public SendEmailNotification(string title, string notification)
+	public SendEmailNotification(string title, string notification, string sessionId)
+		: base(sessionId)
 	{
 		To = new("ctan@trucell.com.au", "Cario Tan");
 		Subject = title;

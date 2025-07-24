@@ -10,7 +10,7 @@ public class ErrorActor : ReceiveActor
 		{
 			if (msg.Cause is not null)
 			{
-				brain.Tell(new SendDiscordException(msg.Cause));	
+				brain.Tell(new SendDiscordException(msg.Cause, "Developer"));	
 			}
 		});
 	}

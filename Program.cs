@@ -28,7 +28,7 @@ builder.Services.SetupIdentity();
 builder.Services.SetupAkka();
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
-// builder.SetupSerilog();
+builder.SetupSerilog();
 
 var app = builder.Build();
 
