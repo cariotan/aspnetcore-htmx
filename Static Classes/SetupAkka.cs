@@ -11,6 +11,19 @@ static partial class StaticMethods
 				akka {
 					loglevel = DEBUG
 					loggers = ["Akka.Logger.Serilog.SerilogLogger, Akka.Logger.Serilog"]
+					actor {
+						ask-timeout = 5s
+					}
+				}
+				"""), HoconAddMode.Prepend);
+#endif
+
+#if DEBUG
+			x.AddHocon(ConfigurationFactory.ParseString("""
+				akka {
+					actor {
+						ask-timeout = 5s
+					}
 				}
 				"""), HoconAddMode.Prepend);
 #endif

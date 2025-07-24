@@ -5,13 +5,13 @@ static partial class StaticMethods
 		actorRef.ActorRef.Tell(message);
 	}
 
-	public static async Task<T> Ask<T>(this IRequiredActor<Brain> actorRef, object message, TimeSpan? timeout = null)
+	public static async Task<T> Ask<T>(this IRequiredActor<Brain> actorRef, object message, TimeSpan? timeout)
 	{
-		return await actorRef.ActorRef.Ask<T>(message, timeout ?? 10.Seconds());
+		return await actorRef.ActorRef.Ask<T>(message, timeout);
 	}
 
-	public static async Task Ask(this IRequiredActor<Brain> actorRef, object message, TimeSpan? timeout = null)
+	public static async Task Ask(this IRequiredActor<Brain> actorRef, object message, TimeSpan? timeout)
 	{
-		await actorRef.ActorRef.Ask(message, timeout ?? 10.Seconds());
+		await actorRef.ActorRef.Ask(message, timeout);
 	}
 }
