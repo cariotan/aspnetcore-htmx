@@ -2,38 +2,6 @@ using System.Text;
 using System.Text.Json;
 using Akka.Event;
 
-public class SendEmail : IEmailCommand
-{
-	public EmailAddress? From { get; init; } = new("noreply@ripplenetworks.com.au", "Ripple Networks");
-	public EmailAddress? To { get; init; }
-	public string? Subject { get; init; }
-	public string? Body { get; init; }
-}
-
-public class SendEmailException : SendEmail
-{
-	public SendEmailException(Exception e)
-	{
-		To = new("ctan@trucell.com.au", "Cario Tan");
-		Subject = "An exception has occured for DicomTest";
-		Body = e.ToString();
-	}
-}
-
-public class SendEmailNotification : SendEmail
-{
-	public SendEmailNotification(string title, string notification)
-	{
-		To = new("ctan@trucell.com.au", "Cario Tan");
-		Subject = title;
-		Body = notification;
-	}
-}
-
-public interface IEmailCommand;
-
-public record EmailAddress(string Email, string Name);
-
 public class EmailActor : ReceiveActor
 {
 	readonly ILoggingAdapter logger = Context.GetLogger();
@@ -135,3 +103,36 @@ public class EmailActor : ReceiveActor
 	}
 }
 
+public class SendEmail : IEmailCommand
+{
+	public EmailAddress? From { get; init; } = new("noreply@ripplenetworks.com.au", "Ripple Networks");
+	public EmailAddress? To { get; init; }
+	public string? Subject { get; init; }
+	public string? Body { get; init; }
+	public required string SessionId { get; set; }
+}
+
+public class SendEmailException : SendEmail
+{
+	public SendEmailException(Exception e)
+	{
+		#warning Write a subject for send exception email
+		To = new("ctan@trucell.com.au", "Cario Tan");
+		Subject = "";
+		Body = e.ToString();
+	}
+}
+
+public class SendEmailNotification : SendEmail
+{
+	public SendEmailNotification(string title, string notification)
+	{
+		To = new("ctan@trucell.com.au", "Cario Tan");
+		Subject = title;
+		Body = notification;
+	}
+}
+
+public interface IEmailCommand : IUserSessionCommand;
+
+public record EmailAddress(string Email, string Name);

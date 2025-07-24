@@ -1,18 +1,5 @@
 using Akka.Event;
 
-public record SendDiscord(string Key, string Message) : IDiscordCommand;
-
-public record SendDiscordException : SendDiscord
-{
-	public SendDiscordException(Exception e)
-		: base("Exception", e.ToString())
-	{
-
-	}
-}
-
-public interface IDiscordCommand;
-
 public class DiscordActor : ReceiveActor
 {
 	readonly ILoggingAdapter logger = Context.GetLogger();
@@ -23,11 +10,11 @@ public class DiscordActor : ReceiveActor
 		{
 			try
 			{
-				#if DEBUG
+#if DEBUG
 				var url = GetEnvironmentVariable("Test");
-				#else
+#else
 				var url = GetEnvironmentVariable(msg.Key);
-				#endif
+#endif
 
 				const int discordCharacterlimit = 2000;
 
@@ -69,6 +56,7 @@ public class DiscordActor : ReceiveActor
 			{
 				Context.Parent.Tell(new SendEmailException(e));
 
+#warning Set email subject
 				SendEmail sendEmail = new()
 				{
 					To = new EmailAddress("ctan@trucell.com.au", "Cario Tan"),
@@ -92,3 +80,16 @@ public class DiscordActor : ReceiveActor
 		return result;
 	}
 }
+
+public record SendDiscord(string Key, string Message) : IDiscordCommand;
+
+public record SendDiscordException : SendDiscord
+{
+	public SendDiscordException(Exception e)
+		: base("Exception", e.ToString())
+	{
+
+	}
+}
+
+public interface IDiscordCommand : IUserSessionCommand;

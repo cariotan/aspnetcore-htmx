@@ -5,14 +5,20 @@ public class Brain : ReceiveActor
 {
 	readonly ILoggingAdapter logger = Context.GetLogger();
 
+	protected override void PreStart()
+	{
+		base.PreStart();
+
+		var errorActor = Context.ActorOf(
+			Props.Create(() => new ErrorActor(Self)).WithRouter(new SmallestMailboxPool(10)),
+			nameof(ErrorActor)
+		);
+
+		Context.System.EventStream.Subscribe(errorActor, typeof(Akka.Event.Error));
+	}
+
 	public Brain(HttpClient httpClient)
 	{
-		var errorActor = Context.ActorOf(Props.Create(() => new ErrorActor(Self)).WithRouter(new SmallestMailboxPool(10)));
-		Context.System.EventStream.Subscribe(errorActor, typeof(Akka.Event.Error));
-
-		var emailActor = Context.ActorOf(Props.Create(() => new EmailActor(httpClient)).WithRouter(new SmallestMailboxPool(10)));
-		var discordActor = Context.ActorOf(Props.Create(() => new DiscordActor(httpClient)).WithRouter(new SmallestMailboxPool(10)));
-
 		Receive<IUserSessionCommand>(msg =>
 		{
 			var name = nameof(UserSessionActor) + msg.SessionId;
@@ -21,22 +27,12 @@ public class Brain : ReceiveActor
 			if (actor.IsNobody())
 			{
 				actor = Context.ActorOf(
-					Props.Create(() => new UserSessionActor()),
+					Props.Create(() => new UserSessionActor(httpClient)),
 					name
 				);
 			}
 
 			actor.Forward(msg);
-		});
-
-		Receive<IEmailCommand>(msg =>
-		{
-			emailActor.Forward(msg);
-		});
-
-		Receive<IDiscordCommand>(msg =>
-		{
-			discordActor.Forward(msg);
 		});
 	}
 }
