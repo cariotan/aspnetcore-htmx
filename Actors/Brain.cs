@@ -5,20 +5,15 @@ public class Brain : ReceiveActor
 {
 	readonly ILoggingAdapter logger = Context.GetLogger();
 
-	protected override void PreStart()
+	public Brain(HttpClient httpClient)
 	{
-		base.PreStart();
-
 		var errorActor = Context.ActorOf(
 			Props.Create(() => new ErrorActor(Self)),
 			nameof(ErrorActor)
 		);
 
 		Context.System.EventStream.Subscribe(errorActor, typeof(Akka.Event.Error));
-	}
 
-	public Brain(HttpClient httpClient)
-	{
 		Receive<IUserSessionCommand>(msg =>
 		{
 			var name = nameof(UserSessionActor) + msg.SessionId;

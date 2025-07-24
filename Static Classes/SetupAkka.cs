@@ -6,12 +6,14 @@ static partial class StaticMethods
 	{
 		services.AddAkka(nameof(ActorSystem), x =>
 		{
+#if !DEBUG
 			x.AddHocon(ConfigurationFactory.ParseString("""
 				akka {
 					loglevel = DEBUG
 					loggers = ["Akka.Logger.Serilog.SerilogLogger, Akka.Logger.Serilog"]
 				}
 				"""), HoconAddMode.Prepend);
+#endif
 
 			x.WithActors((system, register, resolver) =>
 			{
