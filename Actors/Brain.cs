@@ -12,7 +12,7 @@ public class Brain : ReceiveActor
 		logger.Info("Brain started");
 
 		var errorActor = Context.ActorOf(
-			Props.Create(() => new ErrorActor(Self)).WithRouter(new SmallestMailboxPool(10)),
+			Props.Create(() => new ErrorActor(Self)),
 			nameof(ErrorActor)
 		);
 
