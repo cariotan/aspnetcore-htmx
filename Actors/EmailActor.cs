@@ -47,7 +47,7 @@ public class EmailActor : ReceiveActor
 			}
 			else
 			{
-				logger.Info("Email not sent due to missing required fields (From, To, Subject, or Body)");
+				logger.Error("Email not sent due to missing required fields (From, To, Subject, or Body)");
 			}
 		});
 	}
