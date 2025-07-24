@@ -14,6 +14,13 @@ public class Brain : ReceiveActor
 
 		Context.System.EventStream.Subscribe(errorActor, typeof(Akka.Event.Error));
 
+		var deadLetterActor = Context.ActorOf(
+			Props.Create(() => new DeadLetterActor()),
+			nameof(DeadLetterActor)
+		);
+
+		Context.System.EventStream.Subscribe(deadLetterActor, typeof(AllDeadLetters));
+
 		Receive<IUserSessionCommand>(msg =>
 		{
 			var name = nameof(UserSessionActor) + msg.SessionId;
