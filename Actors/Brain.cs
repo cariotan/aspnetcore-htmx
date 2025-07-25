@@ -7,19 +7,21 @@ public class Brain : ReceiveActor
 
 	public Brain(HttpClient httpClient)
 	{
-		var errorActor = Context.ActorOf(
-			Props.Create(() => new ErrorActor(Self)),
-			nameof(ErrorActor)
+		Context.System.EventStream.Subscribe(
+			Context.ActorOf(
+				Props.Create(() => new ErrorActor(Self)),
+				nameof(ErrorActor)
+			),
+			typeof(Akka.Event.Error)
 		);
 
-		Context.System.EventStream.Subscribe(errorActor, typeof(Akka.Event.Error));
-
-		var deadLetterActor = Context.ActorOf(
-			Props.Create(() => new DeadLetterActor()),
-			nameof(DeadLetterActor)
+		Context.System.EventStream.Subscribe(
+			Context.ActorOf(
+				Props.Create(() => new DeadLetterActor()),
+				nameof(DeadLetterActor)
+			),
+			typeof(AllDeadLetters)
 		);
-
-		Context.System.EventStream.Subscribe(deadLetterActor, typeof(AllDeadLetters));
 
 		Receive<IUserSessionCommand>(msg =>
 		{
