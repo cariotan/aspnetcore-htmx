@@ -20,7 +20,7 @@
       ],
       "modifiers": [
         {
-          "copyOnly": [ "**/*" ]
+          "copyOnly": [ "**/*.cs" ]
         }
       ]
     }
