@@ -5,8 +5,7 @@ static partial class StaticMethods
 {
 	public static string GetDatabasePath()
     {
-		#warning Set folder name for database
-		string folderName = "";
+		string folderName = GetAssemblyName();
 
         if (OperatingSystem.IsWindows())
         {
