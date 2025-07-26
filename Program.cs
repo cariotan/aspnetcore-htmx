@@ -1,10 +1,14 @@
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.EntityFrameworkCore;
 
 _ = GetDatabasePath();
 
 DotNetEnv.Env.Load();
 
 Directory.CreateDirectory(GetDatabasePath());
+
+IdentityContext identityContext = new();
+identityContext.Database.Migrate();
 
 var builder = WebApplication.CreateBuilder(args);
 
