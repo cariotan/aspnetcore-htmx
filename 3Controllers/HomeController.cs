@@ -13,6 +13,8 @@ public class HomeController(ILogger<HomeController> logger) : HtmxController, IH
 	{
 		logger.Endpoint(Get, "/Home");
 
+		throw new Exception($"This is my ");
+
 		return View();
 	}
 }

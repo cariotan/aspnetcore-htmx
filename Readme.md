@@ -1,1 +1,2 @@
-dotnet new install .
+git clone --quiet https://github.com/cariotan/aspnetcore-htmx.git "$env:USERPROFILE\Documents\aspnetcore-htmx"; `
+dotnet new install "$env:USERPROFILE\Documents\aspnetcore-htmx"
