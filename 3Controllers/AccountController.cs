@@ -16,6 +16,48 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 		return View();
 	}
 
+	[AllowAnonymous]
+	[HttpGet]
+	public IActionResult Register()
+	{
+		logger.Endpoint(Get, "/Account/Register");
+
+		return View();
+	}
+
+	[HttpPost]
+	public async Task<IActionResult> Register(RegisterModel registerModel)
+	{
+		logger.Endpoint(Post, "/Account/Register");
+
+		if (!ModelState.IsValid)
+		{
+			return View(registerModel);
+		}
+
+		var email = registerModel.Email.Trim();
+
+		Js(registerModel);
+
+		if (registerModel.Password != registerModel.ConfirmPassword)
+		{
+			ModelState.AddModelError(nameof(registerModel.Password), "Passwords do not match");
+			return View(registerModel);
+		}
+
+		var result = await userManager.CreateAsync(new(email), registerModel.Password);
+
+		if (result.Succeeded)
+		{
+			return RedirectToAction("Login");
+		}
+		else
+		{
+			ModelState.AddModelError("Error", result.Errors.First().Description);
+			return View(registerModel);
+		}
+	}
+
 	public async Task<IActionResult> Login(LoginModel loginModel)
 	{
 		logger.Endpoint(Get, "/Account/Login");
@@ -29,6 +71,7 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 
 		if (result.Succeeded)
 		{
+
 			return RedirectToAction("Index", "Home");
 		}
 		else

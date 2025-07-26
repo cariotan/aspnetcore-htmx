@@ -1,0 +1,3 @@
+using System.ComponentModel.DataAnnotations;
+
+public record RegisterModel([Display(Name = "email")] string Email, [Display(Name = "password")]  string Password, [Display(Name = "confirm password")]  string ConfirmPassword);
