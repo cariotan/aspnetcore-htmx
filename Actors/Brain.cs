@@ -25,18 +25,10 @@ public class Brain : ReceiveActor
 
 		Receive<IUserSessionCommand>(msg =>
 		{
-			var name = nameof(UserSessionActor) + msg.SessionId;
-
-			var actor = Context.Child(name);
-			if (actor.IsNobody())
-			{
-				actor = Context.ActorOf(
-					Props.Create(() => new UserSessionActor(httpClient)),
-					name
-				);
-			}
-
-			actor.Forward(msg);
+			Context.GetOrCreateChild(
+				Props.Create(() => new UserSessionActor(httpClient)),
+				nameof(UserSessionActor) + msg.SessionId
+			).Forward(msg);
 		});
 	}
 }
