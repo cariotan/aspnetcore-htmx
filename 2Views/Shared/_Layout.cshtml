@@ -19,16 +19,18 @@ var isDebug = true;
 		<script src='https://cdn.tailwindcss.com'></script>
 		<style type='text/tailwindcss'>
 			@Html.Raw(File.ReadAllText("Input.css"))
-						</style>
+							</style>
 	}
 
 	<link rel='stylesheet' href='~/css/tailwind.css' asp-append-version='true'>
-	<script src='https://unpkg.com/htmx.org@2.0.4' integrity='sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+' crossorigin='anonymous'></script>
-	<script defer src='https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js'></script>
-	<script src='~/js/signalr/dist/browser/signalr.js'></script>
 
-	@* <script src='https://unpkg.com/htmx-ext-preload@2.0.1/preload.js'></script>
-	<script src='https://code.jquery.com/jquery-3.7.1.min.js' integrity='sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=' crossorigin='anonymous'></script> *@
+	<!-- 2.0.4 -->
+	<script src='~/js/htmx.js'></script>
+
+	<!-- 3.14.8 -->
+	<script src='~/js/alpine.js' defer></script>
+
+	<script src='~/js/signalr/dist/browser/signalr.js'></script>
 
 	<script>
 		htmx.config.defaultSwapStyle = 'outerHTML'
@@ -39,16 +41,19 @@ var isDebug = true;
 	@RenderSection("Head", required: false)
 
 	<script>
-		class ForeverRetryPolicy {
-			nextRetryDelayInMilliseconds() {
-				return 1000;
-			}
-		}
+		function buildSignalRConnection(url) {
+			// 
+			const connection = new signalR.HubConnectionBuilder()
+				.withUrl(url)
+				.withAutomaticReconnect({
+					nextRetryDelayInMilliseconds() {
+						return 1000
+					}
+				})
+				.build()
 
-		const connection = new signalR.HubConnectionBuilder()
-			.withUrl('/ChatHub')
-			.withAutomaticReconnect(new ForeverRetryPolicy())
-			.build()
+			return connection
+		}
 	</script>
 </head>
 

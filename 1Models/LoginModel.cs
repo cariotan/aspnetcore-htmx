@@ -1,3 +1,1 @@
-using System.ComponentModel.DataAnnotations;
-
-public record LoginModel([Display(Name = "email")] string Email, [Display(Name = "password")] string Password);
+public record LoginModel([Display(Name = "email")] string Email, [Display(Name = "password")] string Password, bool RequireTwoFactor = false);

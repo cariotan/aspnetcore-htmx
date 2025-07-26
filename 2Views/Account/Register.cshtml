@@ -1,5 +1,11 @@
 @model RegisterModel
 
+@{
+	ViewData["Title"] = "Register";
+}
+
+<title>@ViewData["Title"]</title>
+
 <div class='h-screen'>
 
 	<div class='flex flex-col justify-center min-h-full px-6 py-12 lg:px-8'>
@@ -29,13 +35,12 @@
 							   asp-for='Email'
 							   autocomplete='email'
 							   value='@Model?.Email'
-							   class='block rounded-md outline outline-1 outline-gray-300 -outline-offset-1 w-full bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-2 focus:outline-indigo-600 focus:-outline-offset-2 sm:text-sm/6'>
+							   class='block rounded-md outline outline-1 outline-gray-300 -outline-offset-1 w-full bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-2 focus:outline-indigo-600 focus:-outline-offset-2 sm:text-sm/6' />
 						@Html.ValidationMessageFor(x => x.Email)
 					</div>
 				</div>
 
 				<div>
-
 					<div class='flex justify-between items-center'>
 
 						<label for='password' class='block text-gray-900 text-sm/6 font-medium'>
@@ -48,18 +53,16 @@
 						<input type='password'
 							   asp-for='Password'
 							   value='@Model?.Password'
-							   class='block rounded-md outline outline-1 outline-gray-300 -outline-offset-1 w-full bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-2 focus:outline-indigo-600 focus:-outline-offset-2 sm:text-sm/6'>
+							   class='block rounded-md outline outline-1 outline-gray-300 -outline-offset-1 w-full bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-2 focus:outline-indigo-600 focus:-outline-offset-2 sm:text-sm/6' />
 						@Html.ValidationMessageFor(x => x.Password)
 					</div>
 				</div>
 
 				<div>
-
 					<div class='flex justify-between items-center'>
 						<label for='password' class='block text-gray-900 text-sm/6 font-medium'>
 							Confirm Password
 						</label>
-
 					</div>
 
 					<div class='mt-2'>
@@ -72,13 +75,32 @@
 					</div>
 				</div>
 
-				<div>
+				<!-- 2FA opt-in -->
+				<div class='flex items-start'>
+					<div class='h-6 flex items-center'>
+						<input asp-for='RequireTwoFactor'
+							   type='checkbox'
+							   class='h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600' />
+					</div>
 
+					<div class='ml-3 text-sm/6'>
+						<label asp-for='RequireTwoFactor'
+							   class='text-gray-900 font-medium'>
+
+							Enable two‑factor authentication
+						</label>
+
+						<p class='text-gray-500'>
+							If selected, you’ll be prompted to set it up after registering.
+						</p>
+					</div>
+				</div>
+
+				<div>
 					<button type='submit'
 							class='rounded-md flex justify-center w-full bg-indigo-600 px-3 py-1.5 text-sm/6 text-white font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-600 focus-visible:outline-offset-2 shadow-sm hover:bg-indigo-500'>
 						Sign in
 					</button>
-
 					@Html.ValidationMessage("Error")
 				</div>
 			</form>

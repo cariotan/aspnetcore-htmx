@@ -1,7 +1,7 @@
-@model LoginModel
+@model TwoFactorModel
 
 @{
-	ViewData["Title"] = "Login";
+	ViewData["Title"] = "2FA";
 }
 
 <title>@ViewData["Title"]</title>
@@ -17,43 +17,47 @@
 
 		<div class='mt-10 sm:mx-auto sm:w-full sm:max-w-sm'>
 			<form asp-controller='Account'
-				  asp-action='Login'
+				  asp-action='TwoFactor'
 				  class='space-y-6'>
 
 				<div>
-					<label for='email' class='block text-gray-900 text-sm/6 font-medium'>
-						Email address
+					<label asp-for='@Model.Code'
+						   class='block text-gray-900 text-sm/6 font-medium'>
+
+						Code
 					</label>
+
 					<div class='mt-2'>
-						<input type='email'
-							   asp-for='Email'
+						<input asp-for='@Model.Code'
 							   autocomplete='email'
-							   value='@Model?.Email'
-							   class='block rounded-md outline outline-1 outline-gray-300 -outline-offset-1 w-full bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-2 focus:outline-indigo-600 focus:-outline-offset-2 sm:text-sm/6' />
-						@Html.ValidationMessageFor(x => x.Email)
+							   value='@Model?.Code'
+							   class='block rounded-md outline outline-1 outline-gray-300 -outline-offset-1 w-full bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-2 focus:outline-indigo-600 focus:-outline-offset-2 sm:text-sm/6'>
+						@Html.ValidationMessageFor(x => x.Code)
 					</div>
 				</div>
 
-				<div>
-					<div class='flex justify-between items-center'>
-						<label for='password' class='block text-gray-900 text-sm/6 font-medium'>
-							Password
-						</label>
-						<div class='text-sm'>
-							<a href='#' class='text-indigo-600 font-semibold hover:text-indigo-500'>
-								Forgot password?
-							</a>
-						</div>
+				<!-- Remember this device -->
+				<div class='flex items-start'>
+
+					<div class='flex items-center h-6'>
+
+						<input type='checkbox'
+							   asp-for='RememberClient'
+							   class='rounded border-gray-300 w-4 h-4 text-indigo-600 focus:ring-indigo-600'>
 					</div>
-					<div class='mt-2'>
-						<input type='password'
-							   asp-for='Password'
-							   autocomplete='current-password'
-							   value='@Model?.Password'
-							   class='block rounded-md outline outline-1 outline-gray-300 -outline-offset-1 w-full bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-2 focus:outline-indigo-600 focus:-outline-offset-2 sm:text-sm/6' />
-						@Html.ValidationMessageFor(x => x.Password)
+
+					<div class='ml-3 text-sm/6'>
+
+						<label asp-for='RememberClient' class='text-gray-900 font-medium'>
+							Remember this device
+						</label>
+
+						<p class='text-gray-500'>
+							Skip 2FA on this browser next time
+						</p>
 					</div>
 				</div>
+				@Html.ValidationMessageFor(x => x.RememberClient)
 
 				<div>
 					<button type='submit'
