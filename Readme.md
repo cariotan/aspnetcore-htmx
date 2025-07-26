@@ -1,1 +1,1 @@
-dotnet new -i .
+dotnet new install .
