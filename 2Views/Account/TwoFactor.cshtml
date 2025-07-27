@@ -16,14 +16,15 @@
 		</div>
 
 		<div class='mt-10 sm:mx-auto sm:w-full sm:max-w-sm'>
-			<form asp-controller='Account'
+
+			<form x-data='{ enable2fa: null }'
+				  asp-controller='Account'
 				  asp-action='TwoFactor'
 				  class='space-y-6'>
 
 				<div>
 					<label asp-for='@Model.Code'
 						   class='block text-gray-900 text-sm/6 font-medium'>
-
 						Code
 					</label>
 
@@ -42,6 +43,7 @@
 					<div class='flex items-center h-6'>
 
 						<input type='checkbox'
+							   x-model='enable2fa'
 							   asp-for='RememberClient'
 							   class='rounded border-gray-300 w-4 h-4 text-indigo-600 focus:ring-indigo-600'>
 					</div>

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-public class AccountController(ILogger<AccountController> logger, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager) : HtmxController, IHasUser
+public class AccountController(ILogger<AccountController> logger, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IUserStore<ApplicationUser> userStore) : HtmxController, IHasUser
 {
 	public ApplicationUser CurrentUser { get; set; } = null!;
 
@@ -41,19 +41,52 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 
 		if (result.Succeeded)
 		{
+			await signInManager.SignInAsync(newUser, true);
+
 			if (registerModel.RequireTwoFactor)
 			{
-				await userManager.SetTwoFactorEnabledAsync(newUser, true);
-				await userManager.ResetAuthenticatorKeyAsync(newUser);
+				return LocalRedirect("/Account/Enable2fa");
 			}
-
-			return LocalRedirect("/Login");
+			else
+			{
+				return LocalRedirect("/");
+			}
 		}
 		else
 		{
 			ModelState.AddModelError("Error", result.Errors.First().Description);
 
 			return View(registerModel);
+		}
+	}
+
+	[HttpGet]
+	public async Task<IActionResult> Enable2fa()
+	{
+		var user = await userManager.GetUserAsync(User);
+		if (user is { })
+		{
+			var enabled = await userManager.GetTwoFactorEnabledAsync(user);
+			if (!enabled)
+			{
+				IUserAuthenticatorKeyStore<ApplicationUser> store = (IUserAuthenticatorKeyStore<ApplicationUser>)userStore;
+
+				var authenticatorKey = userManager.GenerateNewAuthenticatorKey();
+
+				await store.SetAuthenticatorKeyAsync(user, authenticatorKey, CancellationToken.None);
+
+				await userManager.UpdateAsync(user);
+
+				return View(new Enable2faModel(authenticatorKey!));
+			}
+			else
+			{
+				return LocalRedirect("/");
+			}
+		}
+		else
+		{
+			return Unauthorized();
 		}
 	}
 

@@ -1,0 +1,1 @@
+public record Enable2faModel(string AuthenticatorKey);
