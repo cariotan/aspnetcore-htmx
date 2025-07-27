@@ -71,10 +71,13 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 			if (!enabled)
 			{
 				await userManager.ResetAuthenticatorKeyAsync(user);
-				await signInManager.SignInAsync(user, true);
+
 				var authenticatorKey = await userManager.GetAuthenticatorKeyAsync(user);
+
 				var otpUri = $"otpauth://totp:{user.Email}?secret={authenticatorKey}";
 				var qrBase64 = GetBase64QrCode(otpUri);
+
+				await signInManager.SignInAsync(user, true);
 
 				return View(new Enable2faModel(authenticatorKey!, qrBase64));
 			}
@@ -105,8 +108,11 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 		if (verified)
 		{
 			await userManager.SetTwoFactorEnabledAsync(user, true);
+
 			await signInManager.SignInAsync(user, true);
+
 			HxRedirect("/");
+
 			return Ok();
 		}
 		else
