@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-public class AccountController(ILogger<AccountController> logger, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IUserStore<ApplicationUser> userStore) : HtmxController, IHasUser
+public class AccountController(ILogger<AccountController> logger, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager) : HtmxController, IHasUser
 {
 	public ApplicationUser CurrentUser { get; set; } = null!;
 
@@ -61,6 +61,7 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 	}
 
 	[HttpGet]
+	[Authorize]
 	public async Task<IActionResult> Enable2fa()
 	{
 		var user = await userManager.GetUserAsync(User);
@@ -69,15 +70,13 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 			var enabled = await userManager.GetTwoFactorEnabledAsync(user);
 			if (!enabled)
 			{
-				IUserAuthenticatorKeyStore<ApplicationUser> store = (IUserAuthenticatorKeyStore<ApplicationUser>)userStore;
+				await userManager.ResetAuthenticatorKeyAsync(user);
+				await signInManager.SignInAsync(user, true);
+				var authenticatorKey = await userManager.GetAuthenticatorKeyAsync(user);
+				var otpUri = $"otpauth://totp:{user.Email}?secret={authenticatorKey}";
+				var qrBase64 = GetBase64QrCode(otpUri);
 
-				var authenticatorKey = userManager.GenerateNewAuthenticatorKey();
-
-				await store.SetAuthenticatorKeyAsync(user, authenticatorKey, CancellationToken.None);
-
-				await userManager.UpdateAsync(user);
-
-				return View(new Enable2faModel(authenticatorKey!));
+				return View(new Enable2faModel(authenticatorKey!, qrBase64));
 			}
 			else
 			{
@@ -87,6 +86,33 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 		else
 		{
 			return Unauthorized();
+		}
+	}
+
+	[HttpPost]
+	[Authorize]
+	public async Task<IActionResult> Enable2fa(string code)
+	{
+		if (!ModelState.IsValid)
+		{
+			return View();
+		}
+
+		var user = await userManager.GetUserAsync(User) ?? throw new Exception($"This won't be null");
+
+		var verified = await userManager.VerifyTwoFactorTokenAsync(user, userManager.Options.Tokens.AuthenticatorTokenProvider, code);
+
+		if (verified)
+		{
+			await userManager.SetTwoFactorEnabledAsync(user, true);
+			await signInManager.SignInAsync(user, true);
+			HxRedirect("/");
+			return Ok();
+		}
+		else
+		{
+			ModelState.AddModelError(nameof(code), "Code is not correct.");
+			return View();
 		}
 	}
 

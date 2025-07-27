@@ -1,1 +1,1 @@
-public record Enable2faModel(string AuthenticatorKey);
+public record Enable2faModel(string AuthenticatorKey, string qrBase64);
