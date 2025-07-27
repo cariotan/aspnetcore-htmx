@@ -31,4 +31,12 @@
 		<Exec Command="npx tailwindcss@3 -i input.css -o wwwroot/css/tailwind.css" />
 	</Target>
 
+	<Target Name="NpmInstall" BeforeTargets="Restore"
+		Inputs="package.json"
+		Outputs="node_modules/.install-stamp">
+		<Exec Command="npm ci" Condition="Exists('package-lock.json')" />
+		<Exec Command="npm install" Condition="!Exists('package-lock.json')" />
+		<Touch Files="node_modules/.install-stamp" AlwaysCreate="true" />
+	</Target>
+
 </Project>
