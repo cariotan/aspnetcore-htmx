@@ -9,13 +9,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Akka" Version="1.5.45" />
-		<PackageReference Include="Akka.Hosting" Version="1.5.45" />
+		<PackageReference Include="Akka" Version="1.5.46" />
+		<PackageReference Include="Akka.Cluster" Version="1.5.46" />
+		<PackageReference Include="Akka.Hosting" Version="1.5.46" />
 		<PackageReference Include="Akka.Logger.Serilog" Version="1.5.25" />
 		<PackageReference Include="DotNetEnv" Version="3.1.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.7" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"
-			Version="9.0.7" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.7" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.7" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.7">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -31,9 +31,7 @@
 		<Exec Command="npx tailwindcss@3 -i input.css -o wwwroot/css/tailwind.css" />
 	</Target>
 
-	<Target Name="NpmInstall" BeforeTargets="Restore"
-		Inputs="package.json"
-		Outputs="node_modules/.install-stamp">
+	<Target Name="NpmInstall" BeforeTargets="Restore" Inputs="package.json" Outputs="node_modules/.install-stamp">
 		<Exec Command="npm ci" Condition="Exists('package-lock.json')" />
 		<Exec Command="npm install" Condition="!Exists('package-lock.json')" />
 		<Touch Files="node_modules/.install-stamp" AlwaysCreate="true" />

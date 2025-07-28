@@ -8,16 +8,39 @@ static partial class StaticMethods
 		{
 			string log = "";
 
-			#if !DEBUG
+#if !DEBUG
 			log = """
 				loglevel = DEBUG
 				loggers = ["Akka.Logger.Serilog.SerilogLogger, Akka.Logger.Serilog"]
 				""";
-			#endif
+#endif
+
+			string cluster = "";
+
+			// cluster = """
+			// 	actor {
+			// 		provider = cluster
+			// 		deployment {
+			// 			/Brain/LogActor {
+			// 				remote = "akka.tcp://ActorSystem@localhost:8082"
+			// 			}
+			// 		}
+			// 	}
+			// 	remote {
+			// 		dot-netty.tcp {
+			// 			port = 8081
+			// 			hostname = localhost
+			// 		}
+			// 	}
+			// 	cluster {
+			// 		seed-nodes = ["akka.tcp://ActorSystem@localhost:8081"]
+			// 	}
+			// """;
 
 			x.AddHocon(ConfigurationFactory.ParseString($$"""
 				{{log}}
 				akka {
+					{{cluster}}
 					actor {
 						ask-timeout = 5s
 					}
