@@ -24,7 +24,6 @@ static partial class StaticMethods
 				}
 				"""), HoconAddMode.Prepend);
 
-
 			x.WithActors((system, register, resolver) =>
 			{
 				var brain = system.ActorOf(resolver.Props<Brain>(), nameof(Brain));
