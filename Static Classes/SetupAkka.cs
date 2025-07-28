@@ -6,27 +6,24 @@ static partial class StaticMethods
 	{
 		services.AddAkka(nameof(ActorSystem), x =>
 		{
-#if !DEBUG
-			x.AddHocon(ConfigurationFactory.ParseString("""
-				akka {
-					loglevel = DEBUG
-					loggers = ["Akka.Logger.Serilog.SerilogLogger, Akka.Logger.Serilog"]
-					actor {
-						ask-timeout = 5s
-					}
-				}
-				"""), HoconAddMode.Prepend);
-#endif
+			string log = "";
 
-#if DEBUG
-			x.AddHocon(ConfigurationFactory.ParseString("""
+			#if !DEBUG
+			log = """
+				loglevel = DEBUG
+				loggers = ["Akka.Logger.Serilog.SerilogLogger, Akka.Logger.Serilog"]
+				""";
+			#endif
+
+			x.AddHocon(ConfigurationFactory.ParseString($$"""
+				{{log}}
 				akka {
 					actor {
 						ask-timeout = 5s
 					}
 				}
 				"""), HoconAddMode.Prepend);
-#endif
+
 
 			x.WithActors((system, register, resolver) =>
 			{
