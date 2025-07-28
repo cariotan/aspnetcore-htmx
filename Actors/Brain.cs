@@ -20,7 +20,7 @@ public class Brain : ReceiveActor
 				Props.Create(() => new DeadLetterActor()),
 				nameof(DeadLetterActor)
 			),
-			typeof(AllDeadLetters)
+			typeof(UnhandledMessage)
 		);
 
 		Receive<IUserSessionCommand>(msg =>
