@@ -16,7 +16,8 @@
         "**/.git/**",
         "**/.vs/**",
         "**/.template.config/**",
-        "**/node_modules/**"
+        "**/node_modules/**",
+        "**.sln"
       ],
       "modifiers": [
         {
