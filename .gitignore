@@ -96,3 +96,5 @@ StyleCopReport.xml
 node_modules/
 
 .env
+
+/wwwroot/css/tailwind.css
