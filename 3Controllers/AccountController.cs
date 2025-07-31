@@ -235,4 +235,10 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 
 		return RedirectToAction("Login");
 	}
+
+	[HttpGet]
+	public IActionResult AccessDenied()
+	{
+		return View();
+	}
 }

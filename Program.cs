@@ -3,8 +3,6 @@ using Microsoft.EntityFrameworkCore;
 
 _ = GetDatabasePath();
 
-#error No test webhook for discord.
-
 DotNetEnv.Env.Load();
 
 Directory.CreateDirectory(GetDatabasePath());
