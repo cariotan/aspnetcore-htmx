@@ -19,7 +19,7 @@ var isDebug = true;
 		<script src='https://cdn.tailwindcss.com'></script>
 		<style type='text/tailwindcss'>
 			@Html.Raw(File.ReadAllText("Input.css"))
-							</style>
+								</style>
 	}
 
 	<link rel='stylesheet' href='~/css/tailwind.css' asp-append-version='true'>
@@ -59,7 +59,10 @@ var isDebug = true;
 
 <body hx-history='false'
 	  hx-target='#wrapper'
-	  hx-select='#wrapper'>
+	  hx-select='#wrapper'
+	  x-data='{ isLoading: false }'
+	  x-on:htmx:before-request='isLoading = true'
+	  x-on:htmx:after-request='isLoading = false'>
 
 	<partial name='_ErrorModal' />
 
