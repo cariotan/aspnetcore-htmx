@@ -19,13 +19,6 @@ builder.Services.AddControllersWithViews(x =>
 	x.Filters.Add<CustomExceptionFilter>();
 });
 
-builder.Services.Configure<RazorViewEngineOptions>(x =>
-{
-	x.ViewLocationFormats.Clear();
-	x.ViewLocationFormats.Add("/2Views/{1}/{0}.cshtml");
-	x.ViewLocationFormats.Add("/2Views/Shared/{0}.cshtml");
-});
-
 builder.Services.AddHttpClient();
 builder.Services.AddSignalR();
 builder.Services.SetupIdentity();
