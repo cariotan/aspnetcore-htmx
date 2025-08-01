@@ -1,5 +1,20 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.Filters;
+
+public class SetUserConvention : IApplicationModelConvention
+{
+	public void Apply(ApplicationModel application)
+	{
+		foreach (var controller in application.Controllers)
+		{
+			if (typeof(IHasUser).IsAssignableFrom(controller.ControllerType))
+			{
+				controller.Filters.Add(new SetUserAttribute());
+			}
+		}
+	}
+}
 
 public class SetUserAttribute : ActionFilterAttribute
 {
