@@ -97,14 +97,4 @@ public class HtmxController : Controller
 			Response.Headers.Append("hx-reswap", "none");
 		}
 	}
-
-	public IActionResult PartialView(Partials partials, object model)
-	{
-		return base.PartialView(partials.ToString(), model);
-	}
-
-	public IActionResult PartialView(Partials partials)
-	{
-		return base.PartialView(partials.ToString());
-	}
 }
