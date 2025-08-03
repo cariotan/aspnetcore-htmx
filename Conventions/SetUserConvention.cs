@@ -30,10 +30,6 @@ public class SetUserAttribute : ActionFilterAttribute
 			{
 				controller.CurrentUser = user;
 			}
-			else
-			{
-				controller.CurrentUser = new();
-			}
 		}
 	}
 }
