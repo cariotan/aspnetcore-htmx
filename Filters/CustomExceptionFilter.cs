@@ -27,7 +27,7 @@ public class CustomExceptionFilter(ILogger<CustomExceptionFilter> logger, IRequi
 
 		context.HttpContext.Response.Headers.Append("hx-trigger", triggerValue);
 
-		context.Result = new ObjectResult(payload)
+		context.Result = new ObjectResult(payload.First().Value)
 		{
 			StatusCode = StatusCodes.Status500InternalServerError
 		};
