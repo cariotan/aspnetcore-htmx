@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +20,7 @@ builder.Services.AddControllersWithViews(x =>
 	x.Filters.Add<CustomExceptionFilter>();
 });
 
+builder.Services.SetupSwagger();
 builder.Services.AddHttpClient();
 builder.Services.AddSignalR();
 builder.Services.SetupIdentity();
@@ -28,6 +30,17 @@ builder.Logging.AddConsole();
 builder.SetupSerilog();
 
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+	app.UseSwagger();
+	app.UseSwaggerUI(c =>
+	{
+		c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
+		c.RoutePrefix = "api/swagger";
+		c.ConfigObject.PersistAuthorization = true;
+	});
+}
 
 if (!app.Environment.IsDevelopment())
 {
