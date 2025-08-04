@@ -13,7 +13,7 @@ public class WeatherController : ControllerBase
 	[ProducesResponseType(typeof(WeatherResponse), StatusCodes.Status200OK)]
 	[ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
 	[Route("")]
-	public IActionResult Get([Required] int integer, string test)
+	public IActionResult Get([Required] int integer, string? test)
 	{
 		if (integer % 2 == 0)
 		{
