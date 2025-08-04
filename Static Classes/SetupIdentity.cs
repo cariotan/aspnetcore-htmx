@@ -1,4 +1,7 @@
 using Microsoft.AspNetCore.Identity;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 static partial class StaticMethods
 {
@@ -43,6 +46,7 @@ static partial class StaticMethods
 		// 		ValidAudience = "cario",
 		// 	};
 
+		//	// This is used for endpoints where the authentication headers cannot be supplied for whatever reason like signal r. In which case it will extract it from access_token query parameter.
 		// 	options.Events = new JwtBearerEvents
 		// 	{
 		// 		OnMessageReceived = context =>
@@ -52,7 +56,7 @@ static partial class StaticMethods
 
 		// 			// If the request is for our hub...
 		// 			var path = context.HttpContext.Request.Path;
-		// 			if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/ChatHub"))
+		// 			if (!string.IsNullOrEmpty(accessToken))
 		// 			{
 		// 				// Read the token out of the query string
 		// 				context.Token = accessToken;
