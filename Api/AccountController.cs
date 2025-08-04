@@ -7,18 +7,16 @@ namespace Api;
 [Route("Api/[controller]")]
 [ApiController]
 [AllowAnonymous]
-public class AccountController(ILogger<AccountController> logger, UserManager<ApplicationUser> userManager) : ControllerBase
+public class AuthenticationController(UserManager<ApplicationUser> userManager) : ControllerBase
 {
 	[HttpPost]
-	[ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
-	[ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-	public async Task<IActionResult> Login([Required] string email, [Required] string password)
+	[ProducesResponseType(typeof(string), 200)]
+	[ProducesResponseType(typeof(ProblemDetails), 400)]
+	public async Task<ActionResult<string>> Login([Required] string email, [Required] string password)
 	{
 #if !DEBUG
 #error Use OAuth in production.
 #endif
-
-		logger.Endpoint(Get, "/Account");
 
 		var user = await userManager.FindByEmailAsync(email);
 
@@ -27,7 +25,7 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 		if (verified && user is { })
 		{
 			var token = GenerateJwtToken(user.Id, email);
-			return Ok(new LoginResponse(token));
+			return token;
 		}
 		else
 		{
@@ -35,5 +33,3 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 		}
 	}
 }
-
-public record LoginResponse(string AccessToken);

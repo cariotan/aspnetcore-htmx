@@ -20,8 +20,8 @@ builder.Services.AddControllersWithViews(x =>
 	x.Filters.Add<CustomExceptionFilter>();
 });
 
-// builder.Services.AddSwagger();
-builder.Services.AddOpenApi();
+builder.Services.AddSwagger();
+// builder.Services.AddOpenApi();
 builder.Services.AddHttpClient();
 builder.Services.AddSignalR();
 builder.Services.AddIdentity();
@@ -34,22 +34,22 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-	// app.UseSwagger(c =>
-	// {
-	// 	c.RouteTemplate = "openapi/{documentName}.json";
-	// });
+	app.UseSwagger(c =>
+	{
+		c.RouteTemplate = "openapi/{documentName}.json";
+	});
 
-	// app.UseSwaggerUI(c =>
-	// {
-	// 	c.SwaggerEndpoint("/openapi/v1.json", "API V1");
-	// 	c.RoutePrefix = "swagger"; // Swagger UI at /swagger
-	// 	c.ConfigObject.PersistAuthorization = true;
-	// });
-	app.MapOpenApi();
-	app.MapScalarApiReference(options => options
-		.AddPreferredSecuritySchemes(JwtBearerDefaults.AuthenticationScheme)
-		 .AddHttpAuthentication("Bearer", _ => { })
-		.WithPersistentAuthentication());
+	app.UseSwaggerUI(c =>
+	{
+		c.SwaggerEndpoint("/openapi/v1.json", "API V1");
+		c.RoutePrefix = "swagger"; // Swagger UI at /swagger
+		c.ConfigObject.PersistAuthorization = true;
+	});
+	// app.MapOpenApi();
+	// app.MapScalarApiReference(options => options
+	// 	.AddPreferredSecuritySchemes(JwtBearerDefaults.AuthenticationScheme)
+	// 	 .AddHttpAuthentication("Bearer", _ => { })
+	// 	.WithPersistentAuthentication());
 }
 
 if (!app.Environment.IsDevelopment())
