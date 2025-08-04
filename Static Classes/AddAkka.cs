@@ -2,7 +2,7 @@ using Akka.Configuration;
 
 static partial class StaticMethods
 {
-	public static void SetupAkka(this IServiceCollection services)
+	public static void AddAkka(this IServiceCollection services)
 	{
 		services.AddAkka(nameof(ActorSystem), x =>
 		{

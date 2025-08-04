@@ -11,9 +11,9 @@ public class WeatherController : ControllerBase
 {
 	[HttpGet]
 	[ProducesResponseType(typeof(WeatherResponse), StatusCodes.Status200OK)]
-	[ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+	[ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
 	[Route("")]
-	public IActionResult Get(int integer, string test)
+	public IActionResult Get([Required] int integer, string test)
 	{
 		if (integer % 2 == 0)
 		{
@@ -21,8 +21,17 @@ public class WeatherController : ControllerBase
 		}
 		else
 		{
-			return BadRequest("Integer must be an even number.");
+			return Problem("Integer must be an even number.", statusCode: 200);
 		}
+	}
+
+	[HttpPost]
+	[ProducesResponseType(typeof(WeatherResponse), StatusCodes.Status200OK)]
+	[ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+	[Route("Post")]
+	public IActionResult Post([FromForm] PostRequest postRequest)
+	{
+		return Problem("This is my dictionary", statusCode: 200);
 	}
 }
 

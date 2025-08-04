@@ -1,10 +1,11 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 static partial class StaticMethods
 {
-	public static void SetupSwagger(this IServiceCollection services)
+	public static void AddSwagger(this IServiceCollection services)
 	{
 		services.AddEndpointsApiExplorer();
 		services.AddSwaggerGen(options =>
@@ -14,7 +15,7 @@ static partial class StaticMethods
 				Version = "v1",
 			});
 
-			options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+			options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
 			{
 				Description = "JWT Authorization header using the Bearer scheme. Example: Bearer {token}",
 				Name = "Authorization",

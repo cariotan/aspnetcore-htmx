@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -5,12 +6,13 @@ namespace Api;
 
 [Route("Api/[controller]")]
 [ApiController]
+[AllowAnonymous]
 public class AccountController(ILogger<AccountController> logger, UserManager<ApplicationUser> userManager) : ControllerBase
 {
 	[HttpPost]
 	[ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
-	[ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-	public async Task<IActionResult> Login(string email, string password)
+	[ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+	public async Task<IActionResult> Login([Required] string email, [Required] string password)
 	{
 #if !DEBUG
 #error Use OAuth in production.
@@ -29,7 +31,7 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 		}
 		else
 		{
-			return BadRequest("Failed to authenticate");
+			return Problem("Failed to authenticate.", statusCode: 400);
 		}
 	}
 }

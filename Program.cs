@@ -1,6 +1,6 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Scalar.AspNetCore;
 
 _ = GetDatabasePath();
 
@@ -20,26 +20,36 @@ builder.Services.AddControllersWithViews(x =>
 	x.Filters.Add<CustomExceptionFilter>();
 });
 
-builder.Services.SetupSwagger();
+// builder.Services.AddSwagger();
+builder.Services.AddOpenApi();
 builder.Services.AddHttpClient();
 builder.Services.AddSignalR();
-builder.Services.SetupIdentity();
-builder.Services.SetupAkka();
+builder.Services.AddIdentity();
+builder.Services.AddAkka();
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
-builder.SetupSerilog();
+builder.AddSerilog();
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-	app.UseSwagger();
-	app.UseSwaggerUI(c =>
-	{
-		c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
-		c.RoutePrefix = "api/swagger";
-		c.ConfigObject.PersistAuthorization = true;
-	});
+	// app.UseSwagger(c =>
+	// {
+	// 	c.RouteTemplate = "openapi/{documentName}.json";
+	// });
+
+	// app.UseSwaggerUI(c =>
+	// {
+	// 	c.SwaggerEndpoint("/openapi/v1.json", "API V1");
+	// 	c.RoutePrefix = "swagger"; // Swagger UI at /swagger
+	// 	c.ConfigObject.PersistAuthorization = true;
+	// });
+	app.MapOpenApi();
+	app.MapScalarApiReference(options => options
+		.AddPreferredSecuritySchemes(JwtBearerDefaults.AuthenticationScheme)
+		 .AddHttpAuthentication("Bearer", _ => { })
+		.WithPersistentAuthentication());
 }
 
 if (!app.Environment.IsDevelopment())

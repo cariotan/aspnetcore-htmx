@@ -3,7 +3,7 @@ using Serilog;
 
 static partial class StaticMethods
 {
-	public static void SetupSerilog(this WebApplicationBuilder builder)
+	public static void AddSerilog(this WebApplicationBuilder builder)
 	{
 #if !DEBUG
 		Console.WriteLine("\nUsing Serilog for logging. Refer to the logging folder for logs.");

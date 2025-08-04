@@ -5,7 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 
 static partial class StaticMethods
 {
-	public static void SetupIdentity(this IServiceCollection services)
+	public static void AddIdentity(this IServiceCollection services)
 	{
 		services
 			.AddDbContext<IdentityContext>()
