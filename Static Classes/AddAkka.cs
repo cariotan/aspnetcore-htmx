@@ -38,8 +38,8 @@ static partial class StaticMethods
 			// """;
 
 			x.AddHocon(ConfigurationFactory.ParseString($$"""
-				{{log}}
 				akka {
+					{{log}}
 					{{cluster}}
 					actor {
 						ask-timeout = 5s
