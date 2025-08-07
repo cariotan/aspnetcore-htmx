@@ -22,7 +22,7 @@ function dr {
     dotnet run @args
 }
 
-function dw {
+function d {
     dotnet watch @args
 }
 
