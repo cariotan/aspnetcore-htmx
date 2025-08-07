@@ -9,7 +9,7 @@ public class Brain : ReceiveActor
 	{
 		Context.System.EventStream.Subscribe(
 			Context.ActorOf(
-				Props.Create(() => new ErrorActor(Self)),
+				Props.Create(() => new ErrorActor()),
 				nameof(ErrorActor)
 			),
 			typeof(Akka.Event.Error)

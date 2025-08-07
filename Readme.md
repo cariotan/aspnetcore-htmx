@@ -10,3 +10,30 @@ git clone --quiet https://github.com/cariotan/aspnetcore-htmx.git "$env:USERPROF
 
 dotnet list package --outdated
 dotnet outdated -u
+
+notepad $profile
+. $profile
+
+function db {
+    dotnet build @args
+}
+
+function dr {
+    dotnet run @args
+}
+
+function dw {
+    dotnet watch @args
+}
+
+function dbr {
+    dotnet build -c Release
+}
+
+function drr {
+    dotnet run -c Release
+}
+
+function dwr {
+    dotnet watch -c Release
+}
