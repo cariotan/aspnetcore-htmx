@@ -9,7 +9,7 @@ public class CustomExceptionFilter(ILogger<CustomExceptionFilter> logger, IRequi
 	{
 		logger.LogError(context.Exception, "Unhandled exception occurred");
 
-		brain.Tell(new SendDiscordException(context.Exception, "Developer"));
+		brain.Tell(new SendDiscordException(new ActorException(context.Exception), "Developer"));
 
 		context.HttpContext.Response.Headers.Append("hx-reswap", "none");
 
