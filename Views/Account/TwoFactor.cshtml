@@ -17,7 +17,7 @@
 
 		<div class='mt-10 sm:mx-auto sm:w-full sm:max-w-sm'>
 
-			<form x-data='{ enable2fa: null }'
+			<form x-data='{ two_factor_enable2fa: null }'
 				  asp-controller='Account'
 				  asp-action='TwoFactor'
 				  class='space-y-6'>
@@ -43,7 +43,7 @@
 					<div class='flex items-center h-6'>
 
 						<input type='checkbox'
-							   x-model='enable2fa'
+							   x-model='two_factor_enable2fa'
 							   asp-for='RememberClient'
 							   class='rounded border-gray-300 w-4 h-4 text-indigo-600 focus:ring-indigo-600'>
 					</div>
