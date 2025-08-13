@@ -29,7 +29,7 @@ public class AuthenticationController(UserManager<ApplicationUser> userManager) 
 		}
 		else
 		{
-			return Problem("Failed to authenticate.", statusCode: 400);
+			return Problem("Failed to authenticate.", statusCode: 401);
 		}
 	}
 }
