@@ -12,6 +12,7 @@ public class AuthenticationController(UserManager<ApplicationUser> userManager) 
 	[HttpPost]
 	[ProducesResponseType(typeof(string), 200)]
 	[ProducesResponseType(typeof(ProblemDetails), 400)]
+	[ProducesResponseType(typeof(ProblemDetails), 401)]
 	public async Task<ActionResult<string>> Login([Required] string email, [Required] string password)
 	{
 #if !DEBUG
