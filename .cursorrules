@@ -18,6 +18,10 @@
 1. **Storing user data in application memory** - When you need to persist user state/session data in memory
 2. **Fire and forget operations** - For asynchronous operations that don't require a response
 
+## JavaScript Style Rule
+
+**JavaScript code should NOT end with semicolons. Use single quotes for strings and HTML attributes.**
+
 ### Structure:
 ```csharp
 static partial class StaticMethods
