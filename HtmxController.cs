@@ -3,17 +3,17 @@ using Microsoft.AspNetCore.Mvc;
 
 public class HtmxController : Controller
 {
-	public void Hx(string target, bool outerHTML, bool? sameSelectAsTarget = null)
+	protected void Hx(string target, bool outerHTML, bool? sameSelectAsTarget = null)
 	{
 		Hx(target, outerHTML ? "outerHTML" : "innerHTML", sameSelectAsTarget == true ? target : "");
 	}
 
-	public void Hx(string target, bool outerHTML, string select)
+	protected void Hx(string target, bool outerHTML, string select)
 	{
 		Hx(target, outerHTML ? "outerHTML" : "innerHTML", select);
 	}
 
-	public void Hx(string target = "this", string swap = "outerHTML", string select = "")
+	protected void Hx(string target = "this", string swap = "outerHTML", string select = "")
 	{
 		if (Response.Headers.ContainsKey("hx-retarget"))
 		{
@@ -46,7 +46,7 @@ public class HtmxController : Controller
 		}
 	}
 
-	public void HxTrigger(string trigger, object? value = null)
+	protected void HxTrigger(string trigger, object? value = null)
 	{
 		value ??= "";
 
@@ -74,7 +74,7 @@ public class HtmxController : Controller
 		}
 	}
 
-	public void HxRedirect(string localPath)
+	protected void HxRedirect(string localPath)
 	{
 		if (Response.Headers.ContainsKey("hx-redirect"))
 		{
@@ -86,7 +86,7 @@ public class HtmxController : Controller
 		}
 	}
 
-	public void HxNone()
+	protected void HxNone()
 	{
 		if (Response.Headers.ContainsKey("hx-reswap"))
 		{
