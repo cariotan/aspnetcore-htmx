@@ -12,6 +12,12 @@
 
 **Use Tailwind CSS for most styling, but place custom CSS like font faces and animation keyframes in `input.css`.**
 
+## Akka.NET Actor Usage
+
+**Use Akka.NET actors for two specific purposes:**
+1. **Storing user data in application memory** - When you need to persist user state/session data in memory
+2. **Fire and forget operations** - For asynchronous operations that don't require a response
+
 ### Structure:
 ```csharp
 static partial class StaticMethods
