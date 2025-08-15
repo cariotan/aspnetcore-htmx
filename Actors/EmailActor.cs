@@ -128,7 +128,7 @@ public class EmailActor : ReceiveActor
 	}
 }
 
-public class SendEmail : IEmailCommand
+public class SendEmail : IEmailMsg
 {
 	public EmailAddress? From { get; init; } = new("noreply@ripplenetworks.com.au", "Ripple Networks");
 	public EmailAddress? To { get; init; }
@@ -158,6 +158,6 @@ public class SendEmailNotification : SendEmail
 	}
 }
 
-public interface IEmailCommand;
+public interface IEmailMsg;
 
 public record EmailAddress(string Email, string Name);

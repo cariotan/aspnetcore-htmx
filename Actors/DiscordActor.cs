@@ -78,7 +78,7 @@ public class DiscordActor : ReceiveActor
 	}
 }
 
-public record SendDiscord(string Key, string Message) : IDiscordCommand;
+public record SendDiscord(string Key, string Message) : IDiscordMsg;
 
 public record SendDiscordException : SendDiscord
 {
@@ -89,4 +89,4 @@ public record SendDiscordException : SendDiscord
 	}
 }
 
-public interface IDiscordCommand;
+public interface IDiscordMsg;

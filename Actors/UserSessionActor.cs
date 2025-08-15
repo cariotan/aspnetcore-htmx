@@ -1,6 +1,6 @@
 using Akka.Event;
 
-public interface IUserSessionCommand
+public interface IUserSessionMsg
 {
 	string SessionId { get; }
 }
