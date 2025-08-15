@@ -1,0 +1,71 @@
+# Cursor Rules for ASP.NET Core HTMX Project
+
+## Static Class Organization Rule
+
+**ALL static classes, including extension classes, must be organized under a single partial class called `StaticMethods`.**
+
+## Field Naming Convention
+
+**NEVER use underscore (_) convention to mark fields. Use camelCase for private fields without underscores.**
+
+## CSS Organization Rule
+
+**Use Tailwind CSS for most styling, but place custom CSS like font faces and animation keyframes in `input.css`.**
+
+### Structure:
+```csharp
+static partial class StaticMethods
+{
+    // All static methods, properties, and extension methods go here
+}
+```
+
+### Examples:
+
+#### Static Methods:
+```csharp
+static partial class StaticMethods
+{
+    public static void AddIdentity(this IServiceCollection services)
+    {
+        // Implementation
+    }
+    
+    public static void AddAkka(this IServiceCollection services)
+    {
+        // Implementation
+    }
+}
+```
+
+#### Extension Methods:
+```csharp
+static partial class StaticMethods
+{
+    public static TimeSpan Second(this int value) => TimeSpan.FromSeconds(value);
+    public static TimeSpan Minute(this int value) => TimeSpan.FromMinutes(value);
+    // ... other extensions
+}
+```
+
+#### Static Properties/Constants:
+```csharp
+static partial class StaticMethods
+{
+    public static string Button => "rounded-lg flex justify-center items-center gap-2 px-4 py-2 font-medium disabled:cursor-not-allowed disabled:opacity-50";
+    
+    public static string SigningSecret => "your-secret-here";
+}
+```
+
+### File Organization:
+- Each logical group of functionality can be in its own file
+- All files must use `static partial class StaticMethods`
+- No standalone static classes or extension classes
+- This ensures all static functionality is accessible from a single namespace
+
+### Benefits:
+- Consistent organization
+- Single entry point for all static functionality
+- Easier to discover and maintain
+- Follows the existing project pattern

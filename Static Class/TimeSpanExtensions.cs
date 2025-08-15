@@ -1,6 +1,6 @@
 using System;
 
-public static class TimeSpanExtensions
+static partial class StaticMethods
 {
     // Integer overloads
     public static TimeSpan Second(this int value) => TimeSpan.FromSeconds(value);
