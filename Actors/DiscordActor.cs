@@ -52,9 +52,9 @@ public class DiscordActor : ReceiveActor
 			}
 			catch (Exception e)
 			{
-				Context.Parent.Tell(new SendEmailException(e, msg.SessionId));
+				Context.Parent.Tell(new SendEmailException(e));
 
-				Context.Parent.Tell(new SendEmail(msg.SessionId)
+				Context.Parent.Tell(new SendEmail()
 				{
 					To = new EmailAddress("ctan@trucell.com.au", "Cario Tan"),
 					Subject = "Discord Message",
@@ -78,15 +78,15 @@ public class DiscordActor : ReceiveActor
 	}
 }
 
-public record SendDiscord(string Key, string Message, string SessionId) : IDiscordCommand;
+public record SendDiscord(string Key, string Message) : IDiscordCommand;
 
 public record SendDiscordException : SendDiscord
 {
-	public SendDiscordException(Exception e, string sessionId)
-		: base("Exception", e.ToString(), sessionId)
+	public SendDiscordException(Exception e)
+		: base("Exception", e.ToString())
 	{
 
 	}
 }
 
-public interface IDiscordCommand : IUserSessionCommand;
+public interface IDiscordCommand;

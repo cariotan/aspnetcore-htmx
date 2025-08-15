@@ -134,18 +134,11 @@ public class SendEmail : IEmailCommand
 	public EmailAddress? To { get; init; }
 	public string? Subject { get; init; }
 	public string? Body { get; init; }
-	public string SessionId { get; init; }
-
-	public SendEmail(string sessionId)
-	{
-		SessionId = sessionId;
-	}
 }
 
 public class SendEmailException : SendEmail
 {
-	public SendEmailException(Exception e, string sessionId)
-		: base(sessionId)
+	public SendEmailException(Exception e)
 	{
 		To = new("ctan@trucell.com.au", "Cario Tan");
 
@@ -157,8 +150,7 @@ public class SendEmailException : SendEmail
 
 public class SendEmailNotification : SendEmail
 {
-	public SendEmailNotification(string title, string notification, string sessionId)
-		: base(sessionId)
+	public SendEmailNotification(string title, string notification)
 	{
 		To = new("ctan@trucell.com.au", "Cario Tan");
 		Subject = title;
@@ -166,6 +158,6 @@ public class SendEmailNotification : SendEmail
 	}
 }
 
-public interface IEmailCommand : IUserSessionCommand;
+public interface IEmailCommand;
 
 public record EmailAddress(string Email, string Name);

@@ -7,6 +7,22 @@ public class Brain : ReceiveActor
 
 	public Brain(HttpClient httpClient)
 	{
+		Receive<IDiscordCommand>(msg =>
+		{
+			Context.GetOrCreateChild(
+				Props.Create(() => new DiscordActor(httpClient)),
+				nameof(DiscordActor)
+			).Forward(msg);
+		});
+
+		Receive<IEmailCommand>(msg =>
+		{
+			Context.GetOrCreateChild(
+				Props.Create(() => new EmailActor(httpClient)),
+				nameof(EmailActor)
+			).Forward(msg);
+		});
+
 		Receive<IUserSessionCommand>(msg =>
 		{
 			Context.GetOrCreateChild(
@@ -15,22 +31,11 @@ public class Brain : ReceiveActor
 			).Forward(msg);
 		});
 
-		Receive<IDiscordCommand>(msg =>
-		{
-			Context.GetOrCreateChild(
-				Props.Create(() => new DiscordActor(httpClient)),
-				nameof(DiscordActor) + msg.SessionId
-			).Forward(msg);
-		});
+		Events();
+	}
 
-		Receive<IEmailCommand>(msg =>
-		{
-			Context.GetOrCreateChild(
-				Props.Create(() => new EmailActor(httpClient)),
-				nameof(EmailActor) + msg.SessionId
-			).Forward(msg);
-		});
-
+	private void Events()
+	{
 		Context.System.EventStream.Subscribe(
 			Context.ActorOf(
 				Props.Create(() => new ErrorActor()),

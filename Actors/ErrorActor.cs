@@ -10,11 +10,11 @@ public class ErrorActor : ReceiveActor
 		{
 			if (msg.Cause is not null)
 			{
-				Context.Parent.Tell(new SendDiscordException(new ActorException(msg.Cause), "Developer"));
+				Context.Parent.Tell(new SendDiscordException(new ActorException(msg.Cause)));
 			}
 			else
 			{
-				Context.Parent.Tell(new SendDiscordException(new ActorException(msg.ToString()), "Developer"));
+				Context.Parent.Tell(new SendDiscordException(new ActorException(msg.ToString())));
 			}
 		});
 	}
