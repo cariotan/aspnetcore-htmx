@@ -11,8 +11,10 @@ git clone --quiet https://github.com/cariotan/aspnetcore-htmx.git "$env:USERPROF
 dotnet list package --outdated
 dotnet outdated -u
 
+New-Item -Type File -Path $profile -Force
 notepad $profile
 . $profile
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 
 function db {
     dotnet build @args
