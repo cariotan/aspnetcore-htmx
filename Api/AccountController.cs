@@ -39,7 +39,7 @@ public class AuthenticationController(UserManager<ApplicationUser> userManager, 
 	}
 
 	[HttpPost("RequestAccessToken")]
-	public async Task<ActionResult<AuthenticationResponse>> RequestAccessToken(string refresh_token)
+	public async Task<ActionResult<AuthenticationResponse>> RequestAccessToken([FromForm] string refresh_token)
 	{
 		var hash = GenerateHash(refresh_token);
 

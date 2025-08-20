@@ -45,6 +45,7 @@ static partial class StaticMethods
 				ValidateIssuerSigningKey = true,
 				ValidIssuer = "cario",
 				ValidAudience = "cario",
+				ClockSkew = 0.Seconds(),
 			};
 
 			// This is used for endpoints where the authentication headers cannot be supplied for whatever reason like signal r. In which case it will extract it from access_token query parameter.
