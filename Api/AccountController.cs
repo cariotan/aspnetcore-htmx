@@ -1,19 +1,20 @@
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Api;
 
 [Route("Api/[controller]")]
 [ApiController]
 [AllowAnonymous]
-public class AuthenticationController(UserManager<ApplicationUser> userManager) : ControllerBase
+public class AuthenticationController(UserManager<ApplicationUser> userManager, IdentityContext identityContext) : ControllerBase
 {
 	[HttpPost]
-	[ProducesResponseType(typeof(string), 200)]
-	[ProducesResponseType(typeof(ProblemDetails), 400)]
-	[ProducesResponseType(typeof(ProblemDetails), 401)]
-	public async Task<ActionResult<string>> Login([Required] string email, [Required] string password)
+	[ProducesResponseType(typeof(AuthenticationResponse), 200)]
+	public async Task<ActionResult<AuthenticationResponse>> Login([FromForm][Required] string email, [FromForm][Required] string password)
 	{
 #if !DEBUG
 #error Use OAuth in production.
@@ -25,12 +26,40 @@ public class AuthenticationController(UserManager<ApplicationUser> userManager) 
 
 		if (verified && user is { })
 		{
-			var token = GenerateJwtToken(user.Id, email);
-			return token;
+			var refresh_token = await GenerateRefreshToken(user.Id, identityContext);
+
+			var access_token = GenerateJwtToken(user.Id, email);
+
+			return new AuthenticationResponse(access_token, refresh_token);
 		}
 		else
 		{
 			return Problem("Failed to authenticate.", statusCode: 401);
 		}
 	}
+
+	[HttpPost("RequestAccessToken")]
+	public async Task<ActionResult<AuthenticationResponse>> RequestAccessToken(string refresh_token)
+	{
+		var hash = GenerateHash(refresh_token);
+
+		var refreshToken = await identityContext.RefreshTokens
+			.Include(x => x.User)
+			.FirstOrDefaultAsync(x => x.Hash256ShaToken == hash && x.Purpose == "web" && x.RevokedReason == null && x.DateExpires > DateTime.UtcNow);
+
+		if (refreshToken is { })
+		{
+			refreshToken.RevokedReason = "RequestAccessToken";
+			await identityContext.SaveChangesAsync();
+
+			var access_token = GenerateJwtToken(refreshToken.UserId, refreshToken.User!.Email!);
+			refresh_token = await GenerateRefreshToken(refreshToken.UserId, identityContext);
+
+			return new AuthenticationResponse(access_token, refresh_token);
+		}
+
+		return Unauthorized();
+	}
+
+	public record AuthenticationResponse([property: JsonPropertyName("access_token")] string AccessToken, [property: JsonPropertyName("refresh_token")] string RefreshToken);
 }
