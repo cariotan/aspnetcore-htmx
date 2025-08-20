@@ -29,6 +29,7 @@ builder.Services.AddAkka();
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.AddSerilog();
+builder.Services.AddCors();
 
 var app = builder.Build();
 
@@ -61,6 +62,12 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+app.UseCors(x => x
+	.WithOrigins("http://127.0.0.1:5500")
+	.AllowAnyMethod()
+	.AllowAnyHeader()
+	.AllowCredentials());
 
 app.UseRouting();
 
