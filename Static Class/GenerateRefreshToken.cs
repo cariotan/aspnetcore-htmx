@@ -9,7 +9,7 @@ static partial class StaticMethods
 		RefreshToken refreshToken = new()
 		{
 			DateCreated = DateTime.UtcNow,
-			DateExpires = DateTime.UtcNow.AddDays(14),
+			DateExpires = DateTime.UtcNow.AddYears(1),
 			Hash256ShaToken = hash,
 			Purpose = "web",
 
