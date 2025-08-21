@@ -64,7 +64,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseCors(x => x
-	.WithOrigins("http://127.0.0.1:5500")
+	.WithOrigins(builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? new string[0])
 	.AllowAnyMethod()
 	.AllowAnyHeader()
 	.AllowCredentials());

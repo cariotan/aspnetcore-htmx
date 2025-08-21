@@ -12,30 +12,41 @@ namespace Api;
 [AllowAnonymous]
 public class AuthenticationController(UserManager<ApplicationUser> userManager, IdentityContext identityContext) : ControllerBase
 {
+	static string DummyHash;
+
+	static AuthenticationController()
+	{
+		DummyHash = new PasswordHasher<ApplicationUser>().HashPassword(new ApplicationUser(), "DummyPassword!123");
+	}
+
 	[HttpPost]
 	[ProducesResponseType(typeof(AuthenticationResponse), 200)]
 	public async Task<ActionResult<AuthenticationResponse>> Login([FromForm][Required] string email, [FromForm][Required] string password)
 	{
 #if !DEBUG
-#error Use OAuth in production.
+#warning Use OAuth in production.
 #endif
-
 		var user = await userManager.FindByEmailAsync(email);
 
-		var verified = await userManager.CheckPasswordAsync(user ?? new(), password);
-
-		if (verified && user is { })
+		if (user is { })
 		{
-			var refresh_token = await GenerateRefreshToken(user.Id, identityContext);
+			var verified = await userManager.CheckPasswordAsync(user, password);
 
-			var access_token = GenerateJwtToken(user.Id, email);
+			if (verified)
+			{
+				var refresh_token = await GenerateRefreshToken(user.Id, identityContext);
 
-			return new AuthenticationResponse(access_token, refresh_token);
+				var access_token = GenerateJwtToken(user.Id, email);
+
+				return new AuthenticationResponse(access_token, refresh_token);
+			}
 		}
 		else
 		{
-			return Problem("Failed to authenticate.", statusCode: 401);
+			_ = userManager.PasswordHasher.VerifyHashedPassword(new(), DummyHash, password);
 		}
+
+		return Unauthorized();
 	}
 
 	[HttpPost("RequestAccessToken")]
