@@ -31,8 +31,6 @@ public class IdentityContext : IdentityDbContext<ApplicationUser, ApplicationRol
 
 public class ApplicationUser : IdentityUser
 {
-	public string? GoogleId { get; set; }
-
 	public ApplicationUser()
 	{
 

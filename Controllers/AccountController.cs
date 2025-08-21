@@ -249,7 +249,7 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 
 		HttpContext.Session.SetString("google-state", state.ToString());
 
-		var url = $"""https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=848012559230-nrseu5f3im3mvdjuv25r9f39a2mtm2t8.apps.googleusercontent.com&redirect_uri=http://localhost:2100/Account/Google&scope=openid email profile&state={state}""";
+		var url = $"""https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id={GetEnvironmentVariable("google-client-id")}&redirect_uri=http://localhost:2100/Account/Google&scope=openid email profile&state={state}""";
 
 		return Redirect(url);
 	}
@@ -275,6 +275,8 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 			FormUrlEncodedContent formUrlEncodedContent = new(formData);
 
 			var response = await httpClient.PostAsync(url, formUrlEncodedContent);
+
+			var str = await response.Content.ReadAsStringAsync();
 
 			var data = await response.Content.ReadFromJsonAsync<GoogleResponse>();
 
