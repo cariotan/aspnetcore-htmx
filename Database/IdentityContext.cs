@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 /*
-dotnet ef migrations add AddedGoogleId -c IdentityContext
+dotnet ef migrations add InitialMigration -c IdentityContext
 dotnet ef database update -c IdentityContext
 */
 
