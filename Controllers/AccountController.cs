@@ -1,9 +1,11 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-public class AccountController(ILogger<AccountController> logger, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager) : HtmxController
+public class AccountController(ILogger<AccountController> logger, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, HttpClient httpClient) : HtmxController
 {
 	[AllowAnonymous]
 	[HttpGet]
@@ -238,5 +240,115 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 	public IActionResult AccessDenied()
 	{
 		return View();
+	}
+
+	[HttpGet]
+	public IActionResult GoogleLogin()
+	{
+		var state = Guid.NewGuid();
+
+		HttpContext.Session.SetString("google-state", state.ToString());
+
+		var url = $"""https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=848012559230-nrseu5f3im3mvdjuv25r9f39a2mtm2t8.apps.googleusercontent.com&redirect_uri=http://localhost:2100/Account/Google&scope=openid email profile&state={state}""";
+
+		return Redirect(url);
+	}
+
+	[HttpGet]
+	public async Task<IActionResult> Google(string state, string code, string scope, string authuser, string prompt)
+	{
+		var url = "https://oauth2.googleapis.com/token";
+
+		var sessionState = HttpContext.Session.GetString("google-state");
+
+		if (state == sessionState)
+		{
+			Dictionary<string, string> formData = new()
+			{
+				["grant_type"] = "authorization_code",
+				["code"] = code,
+				["redirect_uri"] = "http://localhost:2100/Account/Google",
+				["client_id"] = GetEnvironmentVariable("google-client-id"),
+				["client_secret"] = GetEnvironmentVariable("google-client-secret"),
+			};
+
+			FormUrlEncodedContent formUrlEncodedContent = new(formData);
+
+			var response = await httpClient.PostAsync(url, formUrlEncodedContent);
+
+			var data = await response.Content.ReadFromJsonAsync<GoogleResponse>();
+
+			var jwtToken = new JwtSecurityTokenHandler().ReadJwtToken(data.IdToken);
+			var claims = jwtToken.Claims;
+
+			// HttpRequestMessage httpRequestMessage = new();
+			// httpRequestMessage.Headers.Authorization = new("Bearer", data.AccessToken);
+			// httpRequestMessage.RequestUri = new("https://openidconnect.googleapis.com/v1/userinfo");
+
+			// response = await httpClient.SendAsync(httpRequestMessage);
+
+			// var googleUser = await response.Content.ReadFromJsonAsync<GoogleUserResponse>();
+
+			var sub = claims.First(x => x.Type == "sub").Value;
+			var email = claims.First(x => x.Type == "email").Value;
+			// var sub = googleUser.Sub;
+			// var email = googleUser.Email;
+
+			var user = await userManager.FindByLoginAsync("google", sub);
+
+			if (user is { })
+			{
+				await signInManager.SignInAsync(user, true);
+
+				return LocalRedirect("/");
+			}
+			else
+			{
+				user = new(email);
+
+				var result = await userManager.CreateAsync(user);
+
+				if (result.Succeeded)
+				{
+					result = await userManager.AddLoginAsync(user, new("google", sub, "Google"));
+
+					if (result.Succeeded)
+					{
+						await signInManager.SignInAsync(user, true);
+						return LocalRedirect("/");
+					}
+					else
+					{
+						throw new Exception(result.Errors.First().Description);
+					}
+				}
+				else
+				{
+					throw new Exception(result.Errors.First().Description);
+				}
+			}
+		}
+		else
+		{
+			return Unauthorized();
+		}
+	}
+
+	private class GoogleUserResponse
+	{
+		[JsonPropertyName("sub")]
+		public required string Sub { get; set; }
+
+		[JsonPropertyName("email")]
+		public required string Email { get; set; }
+	}
+
+	private class GoogleResponse
+	{
+		[JsonPropertyName("id_token")]
+		public required string IdToken { get; set; }
+
+		[JsonPropertyName("access_token")]
+		public required string AccessToken { get; set; }
 	}
 }

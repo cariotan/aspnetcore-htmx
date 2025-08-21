@@ -28,10 +28,9 @@ static partial class StaticMethods
 		// 	options.Password.RequiredLength = 8;
 		// });
 
-		services.ConfigureApplicationCookie(options =>
-		{
-			options.Cookie.SameSite = SameSiteMode.Strict;
-		});
+		// services.ConfigureApplicationCookie(options =>
+		// {
+		// });
 
 		services.AddAuthentication(options =>
 		{

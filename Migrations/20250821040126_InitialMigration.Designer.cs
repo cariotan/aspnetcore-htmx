@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ASP.NET_Core_HTMX.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    [Migration("20250820082623_InitialMigration")]
+    [Migration("20250821040126_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -63,6 +63,9 @@ namespace ASP.NET_Core_HTMX.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("GoogleId")
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("INTEGER");

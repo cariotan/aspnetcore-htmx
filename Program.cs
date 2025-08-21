@@ -6,6 +6,8 @@ _ = GetDatabasePath();
 
 DotNetEnv.Env.Load(Path.Combine(GetWorkingDirectory(), ".env"));
 
+var nani = Environment.GetEnvironmentVariables();
+
 Directory.CreateDirectory(GetDatabasePath());
 
 IdentityContext identityContext = new();
@@ -30,6 +32,14 @@ builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.AddSerilog();
 builder.Services.AddCors();
+
+builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddSession(options =>
+{
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 var app = builder.Build();
 
@@ -72,6 +82,8 @@ app.UseCors(x => x
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseSession();
 
 app.MapControllerRoute(
 	name: "default",

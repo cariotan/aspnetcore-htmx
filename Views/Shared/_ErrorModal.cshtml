@@ -4,17 +4,17 @@
 			}'
 		  x-teleport='body'>
 
-	<div x-show='show'
+	<div x-show='error_modal_show'
 		 x-transition.opacity.duration.300ms
 		 @@keyup.escape.window.prevent='error_modal_show = false'
 		 @@show_error_modal.window='
 		 	error_modal_show = true
-			message = $event.detail.error
+			error_modal_message = $event.detail.error
 		'
 		 @@hide_error_modal.window='error_modal_show = false'
 		 class='fixed inset-0 bg-black/80 backdrop-blur-sm'>
 
-		<div x-show='show'
+		<div x-show='error_modal_show'
 			 x-transition.opacity.scale.50.duration.300ms
 			 class='flex justify-center items-center min-h-full'>
 
@@ -28,7 +28,7 @@
 					<h2 class='text-2xl text-red-400 font-semibold'>
 						Error
 					</h2>
-					<p x-text='message'
+					<p x-text='error_modal_message'
 					   class='text-center text-gray-500'>
 					</p>
 				</div>

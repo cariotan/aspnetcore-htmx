@@ -1,5 +1,4 @@
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +9,7 @@ namespace Api;
 [Route("Api/[controller]")]
 [ApiController]
 [AllowAnonymous]
-public class AuthenticationController(UserManager<ApplicationUser> userManager, IdentityContext identityContext) : ControllerBase
+public class AuthenticationController(UserManager<ApplicationUser> userManager, IdentityContext identityContext, HttpClient httpClient) : ControllerBase
 {
 	static string DummyHash;
 
