@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 
 public class AccountController(ILogger<AccountController> logger, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, HttpClient httpClient) : HtmxController
 {
+	static string GoogleRedirectUrl = GetEnvironmentVariable("google-redirect-url");
+
 	[AllowAnonymous]
 	[HttpGet]
 	public IActionResult Register()
@@ -249,7 +251,7 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 
 		HttpContext.Session.SetString("google-state", state.ToString());
 
-		var url = $"""https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id={GetEnvironmentVariable("google-client-id")}&redirect_uri=http://localhost:2100/Account/Google&scope=openid email profile&state={state}""";
+		var url = $"""https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id={GetEnvironmentVariable("google-client-id")}&redirect_uri={GoogleRedirectUrl}&scope=openid email profile&state={state}""";
 
 		return Redirect(url);
 	}
@@ -263,38 +265,21 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 
 		if (state == sessionState)
 		{
-			Dictionary<string, string> formData = new()
+			var response = await httpClient.PostAsync(url, new FormUrlEncodedContent(new Dictionary<string, string>()
 			{
 				["grant_type"] = "authorization_code",
 				["code"] = code,
-				["redirect_uri"] = "http://localhost:2100/Account/Google",
+				["redirect_uri"] = GoogleRedirectUrl,
 				["client_id"] = GetEnvironmentVariable("google-client-id"),
 				["client_secret"] = GetEnvironmentVariable("google-client-secret"),
-			};
+			}));
 
-			FormUrlEncodedContent formUrlEncodedContent = new(formData);
+			var googleResponse = await response.EnsureSuccessStatusCode().Content.ReadFromJsonAsync<GoogleResponse>();
 
-			var response = await httpClient.PostAsync(url, formUrlEncodedContent);
+			var jwtToken = new JwtSecurityTokenHandler().ReadJwtToken(googleResponse!.IdToken);
 
-			var str = await response.Content.ReadAsStringAsync();
-
-			var data = await response.Content.ReadFromJsonAsync<GoogleResponse>();
-
-			var jwtToken = new JwtSecurityTokenHandler().ReadJwtToken(data.IdToken);
-			var claims = jwtToken.Claims;
-
-			// HttpRequestMessage httpRequestMessage = new();
-			// httpRequestMessage.Headers.Authorization = new("Bearer", data.AccessToken);
-			// httpRequestMessage.RequestUri = new("https://openidconnect.googleapis.com/v1/userinfo");
-
-			// response = await httpClient.SendAsync(httpRequestMessage);
-
-			// var googleUser = await response.Content.ReadFromJsonAsync<GoogleUserResponse>();
-
-			var sub = claims.First(x => x.Type == "sub").Value;
-			var email = claims.First(x => x.Type == "email").Value;
-			// var sub = googleUser.Sub;
-			// var email = googleUser.Email;
+			var sub = jwtToken.Claims.First(x => x.Type == "sub").Value;
+			var email = jwtToken.Claims.First(x => x.Type == "email").Value;
 
 			var user = await userManager.FindByLoginAsync("google", sub);
 
