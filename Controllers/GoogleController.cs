@@ -34,7 +34,31 @@ public class GoogleController(HttpClient httpClient, UserManager<ApplicationUser
 
 		if (state == sessionState)
 		{
-			var externalUserInfo = await GetExternalAuthUserInfo(code, httpClient);
+			ExternalAuthUserInfo externalUserInfo;
+			{
+				var response = await httpClient.PostAsync(idTokenUrl, new FormUrlEncodedContent(new Dictionary<string, string>()
+				{
+					["grant_type"] = "authorization_code",
+					["code"] = code,
+					["redirect_uri"] = redirectUrl,
+					["client_id"] = clientId,
+					["client_secret"] = clientSecret,
+				}));
+
+				var data = await response.EnsureSuccessStatusCode().Content.ReadAsStringAsync();
+
+				using JsonDocument doc = JsonDocument.Parse(data);
+
+				string id_token = doc.RootElement.GetProperty("id_token").GetString()!;
+				// string access_token = doc.RootElement.GetProperty("access_token").GetString();
+
+				var jwtToken = new JwtSecurityTokenHandler().ReadJwtToken(id_token);
+
+				var sub = jwtToken.Claims.First(x => x.Type == "sub").Value;
+				var email = jwtToken.Claims.First(x => x.Type == "email").Value;
+
+				externalUserInfo = new(sub, email);
+			}
 
 			var user = await userManager.FindByLoginAsync("google", externalUserInfo.Id);
 
@@ -73,32 +97,6 @@ public class GoogleController(HttpClient httpClient, UserManager<ApplicationUser
 		else
 		{
 			return Unauthorized();
-		}
-
-		static async Task<ExternalAuthUserInfo> GetExternalAuthUserInfo(string code, HttpClient httpClient)
-		{
-			var response = await httpClient.PostAsync(idTokenUrl, new FormUrlEncodedContent(new Dictionary<string, string>()
-			{
-				["grant_type"] = "authorization_code",
-				["code"] = code,
-				["redirect_uri"] = redirectUrl,
-				["client_id"] = clientId,
-				["client_secret"] = clientSecret,
-			}));
-
-			var data = await response.EnsureSuccessStatusCode().Content.ReadAsStringAsync();
-
-			using JsonDocument doc = JsonDocument.Parse(data);
-
-			string id_token = doc.RootElement.GetProperty("id_token").GetString()!;
-			// string access_token = doc.RootElement.GetProperty("access_token").GetString();
-
-			var jwtToken = new JwtSecurityTokenHandler().ReadJwtToken(id_token);
-
-			var sub = jwtToken.Claims.First(x => x.Type == "sub").Value;
-			var email = jwtToken.Claims.First(x => x.Type == "email").Value;
-
-			return new ExternalAuthUserInfo(sub, email);
 		}
 	}
 }
