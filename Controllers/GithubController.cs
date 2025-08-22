@@ -95,38 +95,23 @@ public class GithubController(HttpClient httpClient, UserManager<ApplicationUser
 				externalUserInfo = new(id.ToString(), email);
 			}
 
-			var user = await userManager.FindByLoginAsync("github", externalUserInfo.Id);
-
-			if (user is { })
+			if (!string.IsNullOrWhiteSpace(externalUserInfo.Email))
 			{
-				await signInManager.SignInAsync(user, true);
+				var result = await CreateOrLinkUser(externalUserInfo.Email, externalUserInfo.Id, "github", "Github", userManager);
 
-				return LocalRedirect("/");
-			}
-			else
-			{
-				user = new(externalUserInfo.Email);
-
-				var result = await userManager.CreateAsync(user);
-
-				if (result.Succeeded)
+				if (result.IsSuccess(out var user))
 				{
-					result = await userManager.AddLoginAsync(user, new("github", externalUserInfo.Id, "Github"));
-
-					if (result.Succeeded)
-					{
-						await signInManager.SignInAsync(user, true);
-						return LocalRedirect("/");
-					}
-					else
-					{
-						throw new Exception(result.Errors.First().Description);
-					}
+					await signInManager.SignInAsync(user, true);
+					return LocalRedirect("/");
 				}
 				else
 				{
-					throw new Exception(result.Errors.First().Description);
+					throw new Exception(result.ErrorMessage.ToString());
 				}
+			}
+			else
+			{
+				return BadRequest("Cannot continue with account creation as the Github account does not have an email associated with it.");
 			}
 		}
 		else

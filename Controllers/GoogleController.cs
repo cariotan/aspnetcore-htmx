@@ -62,38 +62,16 @@ public class GoogleController(HttpClient httpClient, UserManager<ApplicationUser
 				externalUserInfo = new(sub, email);
 			}
 
-			var user = await userManager.FindByLoginAsync("google", externalUserInfo.Id);
+			var result = await CreateOrLinkUser(externalUserInfo.Email, externalUserInfo.Id, "google", "Google", userManager);
 
-			if (user is { })
+			if (result.IsSuccess(out var user))
 			{
 				await signInManager.SignInAsync(user, true);
-
 				return LocalRedirect("/");
 			}
 			else
 			{
-				user = new(externalUserInfo.Email);
-
-				var result = await userManager.CreateAsync(user);
-
-				if (result.Succeeded)
-				{
-					result = await userManager.AddLoginAsync(user, new("google", externalUserInfo.Id, "Google"));
-
-					if (result.Succeeded)
-					{
-						await signInManager.SignInAsync(user, true);
-						return LocalRedirect("/");
-					}
-					else
-					{
-						throw new Exception(result.Errors.First().Description);
-					}
-				}
-				else
-				{
-					throw new Exception(result.Errors.First().Description);
-				}
+				throw new Exception(result.ErrorMessage.ToString());
 			}
 		}
 		else
