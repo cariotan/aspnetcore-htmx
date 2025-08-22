@@ -74,62 +74,62 @@ public class GithubController(HttpClient httpClient, UserManager<ApplicationUser
 		{
 			return Unauthorized();
 		}
-	}
 
-	private static async Task<ExternalAuthUserInfo> GetExternalAuthUserInfo(string code, HttpClient httpClient)
-	{
-		var response = await httpClient.PostAsync(idTokenUrl, new FormUrlEncodedContent(new Dictionary<string, string>()
+		static async Task<ExternalAuthUserInfo> GetExternalAuthUserInfo(string code, HttpClient httpClient)
 		{
-			["code"] = code,
-			["redirect_uri"] = redirectUrl,
-			["client_id"] = clientId,
-			["client_secret"] = clientSecret,
-		}));
-
-		var data = await response.EnsureSuccessStatusCode().Content.ReadAsStringAsync();
-
-		var dict = System.Web.HttpUtility.ParseQueryString(data);
-		var accessToken = dict["access_token"];
-
-		string id = "";
-		string email = "";
-
-		{
-			HttpRequestMessage request = new(HttpMethod.Get, "https://api.github.com/user");
-			request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
-			request.Headers.Add("User-Agent", "aspnetcore-htmx");
-
-			response = await httpClient.SendAsync(request);
-			data = await response.Content.ReadAsStringAsync();
-
-			using JsonDocument userDoc = JsonDocument.Parse(data);
-
-			id = userDoc.RootElement.GetProperty("id").GetInt64().ToString();
-		}
-
-		{
-			HttpRequestMessage request = new(HttpMethod.Get, "https://api.github.com/user/emails");
-			request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
-			request.Headers.Add("User-Agent", "aspnetcore-htmx");
-
-			response = await httpClient.SendAsync(request);
-			data = await response.Content.ReadAsStringAsync();
-
-			using JsonDocument emailDoc = JsonDocument.Parse(data);
-
-			foreach (var element in emailDoc.RootElement.EnumerateArray())
+			var response = await httpClient.PostAsync(idTokenUrl, new FormUrlEncodedContent(new Dictionary<string, string>()
 			{
-				bool primary = element.GetProperty("primary").GetBoolean();
-				bool verified = element.GetProperty("verified").GetBoolean();
+				["code"] = code,
+				["redirect_uri"] = redirectUrl,
+				["client_id"] = clientId,
+				["client_secret"] = clientSecret,
+			}));
 
-				if (primary && verified)
+			var data = await response.EnsureSuccessStatusCode().Content.ReadAsStringAsync();
+
+			var dict = System.Web.HttpUtility.ParseQueryString(data);
+			var accessToken = dict["access_token"];
+
+			string id = "";
+			string email = "";
+
+			{
+				HttpRequestMessage request = new(HttpMethod.Get, "https://api.github.com/user");
+				request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
+				request.Headers.Add("User-Agent", "aspnetcore-htmx");
+
+				response = await httpClient.SendAsync(request);
+				data = await response.Content.ReadAsStringAsync();
+
+				using JsonDocument userDoc = JsonDocument.Parse(data);
+
+				id = userDoc.RootElement.GetProperty("id").GetInt64().ToString();
+			}
+
+			{
+				HttpRequestMessage request = new(HttpMethod.Get, "https://api.github.com/user/emails");
+				request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
+				request.Headers.Add("User-Agent", "aspnetcore-htmx");
+
+				response = await httpClient.SendAsync(request);
+				data = await response.Content.ReadAsStringAsync();
+
+				using JsonDocument emailDoc = JsonDocument.Parse(data);
+
+				foreach (var element in emailDoc.RootElement.EnumerateArray())
 				{
-					email = element.GetProperty("email").GetString() ?? "";
-					break;
+					bool primary = element.GetProperty("primary").GetBoolean();
+					bool verified = element.GetProperty("verified").GetBoolean();
+
+					if (primary && verified)
+					{
+						email = element.GetProperty("email").GetString() ?? "";
+						break;
+					}
 				}
 			}
-		}
 
-		return new ExternalAuthUserInfo(id.ToString(), email);
+			return new ExternalAuthUserInfo(id.ToString(), email);
+		}
 	}
 }

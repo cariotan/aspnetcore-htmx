@@ -74,32 +74,32 @@ public class GoogleController(HttpClient httpClient, UserManager<ApplicationUser
 		{
 			return Unauthorized();
 		}
-	}
 
-	private static async Task<ExternalAuthUserInfo> GetExternalAuthUserInfo(string code, HttpClient httpClient)
-	{
-		var response = await httpClient.PostAsync(idTokenUrl, new FormUrlEncodedContent(new Dictionary<string, string>()
+		static async Task<ExternalAuthUserInfo> GetExternalAuthUserInfo(string code, HttpClient httpClient)
 		{
-			["grant_type"] = "authorization_code",
-			["code"] = code,
-			["redirect_uri"] = redirectUrl,
-			["client_id"] = clientId,
-			["client_secret"] = clientSecret,
-		}));
+			var response = await httpClient.PostAsync(idTokenUrl, new FormUrlEncodedContent(new Dictionary<string, string>()
+			{
+				["grant_type"] = "authorization_code",
+				["code"] = code,
+				["redirect_uri"] = redirectUrl,
+				["client_id"] = clientId,
+				["client_secret"] = clientSecret,
+			}));
 
-		var data = await response.EnsureSuccessStatusCode().Content.ReadAsStringAsync();
+			var data = await response.EnsureSuccessStatusCode().Content.ReadAsStringAsync();
 
-		using JsonDocument doc = JsonDocument.Parse(data);
+			using JsonDocument doc = JsonDocument.Parse(data);
 
-		string id_token = doc.RootElement.GetProperty("id_token").GetString()!;
-		// string access_token = doc.RootElement.GetProperty("access_token").GetString();
+			string id_token = doc.RootElement.GetProperty("id_token").GetString()!;
+			// string access_token = doc.RootElement.GetProperty("access_token").GetString();
 
-		var jwtToken = new JwtSecurityTokenHandler().ReadJwtToken(id_token);
+			var jwtToken = new JwtSecurityTokenHandler().ReadJwtToken(id_token);
 
-		var sub = jwtToken.Claims.First(x => x.Type == "sub").Value;
-		var email = jwtToken.Claims.First(x => x.Type == "email").Value;
+			var sub = jwtToken.Claims.First(x => x.Type == "sub").Value;
+			var email = jwtToken.Claims.First(x => x.Type == "email").Value;
 
-		return new ExternalAuthUserInfo(sub, email);
+			return new ExternalAuthUserInfo(sub, email);
+		}
 	}
 }
 
