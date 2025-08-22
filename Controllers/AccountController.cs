@@ -5,9 +5,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-public class AccountController(ILogger<AccountController> logger, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, HttpClient httpClient) : HtmxController
+public class AccountController(ILogger<AccountController> logger, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager) : HtmxController
 {
-	static string GoogleRedirectUrl = GetEnvironmentVariable("google-redirect-url");
 
 	[AllowAnonymous]
 	[HttpGet]
@@ -242,89 +241,5 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 	public IActionResult AccessDenied()
 	{
 		return View();
-	}
-
-	[HttpGet]
-	public IActionResult GoogleLogin()
-	{
-		var state = Guid.NewGuid();
-
-		HttpContext.Session.SetString("google-state", state.ToString());
-
-		var url = $"""https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id={GetEnvironmentVariable("google-client-id")}&redirect_uri={GoogleRedirectUrl}&scope=openid email profile&state={state}""";
-
-		return Redirect(url);
-	}
-
-	[HttpGet]
-	public async Task<IActionResult> Google(string state, string code, string scope, string authuser, string prompt)
-	{
-		var sessionState = HttpContext.Session.GetString("google-state");
-
-		if (state == sessionState)
-		{
-			var response = await httpClient.PostAsync("https://oauth2.googleapis.com/token", new FormUrlEncodedContent(new Dictionary<string, string>()
-			{
-				["grant_type"] = "authorization_code",
-				["code"] = code,
-				["redirect_uri"] = GoogleRedirectUrl,
-				["client_id"] = GetEnvironmentVariable("google-client-id"),
-				["client_secret"] = GetEnvironmentVariable("google-client-secret"),
-			}));
-
-			var googleResponse = await response.EnsureSuccessStatusCode().Content.ReadFromJsonAsync<GoogleResponse>();
-
-			var jwtToken = new JwtSecurityTokenHandler().ReadJwtToken(googleResponse!.IdToken);
-
-			var sub = jwtToken.Claims.First(x => x.Type == "sub").Value;
-			var email = jwtToken.Claims.First(x => x.Type == "email").Value;
-
-			var user = await userManager.FindByLoginAsync("google", sub);
-
-			if (user is { })
-			{
-				await signInManager.SignInAsync(user, true);
-
-				return LocalRedirect("/");
-			}
-			else
-			{
-				user = new(email);
-
-				var result = await userManager.CreateAsync(user);
-
-				if (result.Succeeded)
-				{
-					result = await userManager.AddLoginAsync(user, new("google", sub, "Google"));
-
-					if (result.Succeeded)
-					{
-						await signInManager.SignInAsync(user, true);
-						return LocalRedirect("/");
-					}
-					else
-					{
-						throw new Exception(result.Errors.First().Description);
-					}
-				}
-				else
-				{
-					throw new Exception(result.Errors.First().Description);
-				}
-			}
-		}
-		else
-		{
-			return Unauthorized();
-		}
-	}
-
-	private class GoogleUserResponse
-	{
-		[JsonPropertyName("sub")]
-		public required string Sub { get; set; }
-
-		[JsonPropertyName("email")]
-		public required string Email { get; set; }
 	}
 }
