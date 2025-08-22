@@ -259,13 +259,11 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 	[HttpGet]
 	public async Task<IActionResult> Google(string state, string code, string scope, string authuser, string prompt)
 	{
-		var url = "https://oauth2.googleapis.com/token";
-
 		var sessionState = HttpContext.Session.GetString("google-state");
 
 		if (state == sessionState)
 		{
-			var response = await httpClient.PostAsync(url, new FormUrlEncodedContent(new Dictionary<string, string>()
+			var response = await httpClient.PostAsync("https://oauth2.googleapis.com/token", new FormUrlEncodedContent(new Dictionary<string, string>()
 			{
 				["grant_type"] = "authorization_code",
 				["code"] = code,
@@ -328,14 +326,5 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 
 		[JsonPropertyName("email")]
 		public required string Email { get; set; }
-	}
-
-	private class GoogleResponse
-	{
-		[JsonPropertyName("id_token")]
-		public required string IdToken { get; set; }
-
-		[JsonPropertyName("access_token")]
-		public required string AccessToken { get; set; }
 	}
 }

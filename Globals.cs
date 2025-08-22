@@ -4,3 +4,4 @@ global using Akka.Actor;
 global using Akka.Hosting;
 global using System.ComponentModel.DataAnnotations;
 global using static CssClasses;
+global using Utilities;
