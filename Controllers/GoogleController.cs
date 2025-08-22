@@ -34,6 +34,8 @@ public class GoogleController(HttpClient httpClient, UserManager<ApplicationUser
 
 		if (state == sessionState)
 		{
+			HttpContext.Session.Clear();
+
 			ExternalAuthUserInfo externalUserInfo;
 			{
 				var response = await httpClient.PostAsync(idTokenUrl, new FormUrlEncodedContent(new Dictionary<string, string>()
