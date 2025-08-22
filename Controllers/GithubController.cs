@@ -52,9 +52,6 @@ public class GithubController(HttpClient httpClient, UserManager<ApplicationUser
 				var accessToken = dict["access_token"];
 
 				string id = "";
-				string email = "";
-
-				// Get user id.
 				{
 					HttpRequestMessage request = new(HttpMethod.Get, "https://api.github.com/user");
 					request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
@@ -68,7 +65,7 @@ public class GithubController(HttpClient httpClient, UserManager<ApplicationUser
 					id = userDoc.RootElement.GetProperty("id").GetInt64().ToString();
 				}
 
-				// Get user primary email.
+				string email = "";
 				{
 					HttpRequestMessage request = new(HttpMethod.Get, "https://api.github.com/user/emails");
 					request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
