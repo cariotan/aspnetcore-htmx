@@ -9,7 +9,7 @@ public class GoogleController(HttpClient httpClient, UserManager<ApplicationUser
 {
 	static string loginUrl = "https://accounts.google.com/o/oauth2/v2/auth";
 	static string idTokenUrl = "https://oauth2.googleapis.com/token";
-	static string redirectUrl = GetEnvironmentVariable("google-redirect-url");
+	string callbackUrl => GetBaseUrl(Request) + GetEnvironmentVariable("google-callback-url");
 	static string clientId = GetEnvironmentVariable("google-client-id");
 	static string clientSecret = GetEnvironmentVariable("google-client-secret");
 
@@ -22,7 +22,7 @@ public class GoogleController(HttpClient httpClient, UserManager<ApplicationUser
 
 		string scope = "openid email profile";
 
-		string url = $"""{loginUrl}?response_type=code&client_id={clientId}&redirect_uri={redirectUrl}&scope={scope}&state={state}""";
+		string url = $"""{loginUrl}?response_type=code&client_id={clientId}&redirect_uri={callbackUrl}&scope={scope}&state={state}""";
 
 		return Redirect(url);
 	}
@@ -42,7 +42,7 @@ public class GoogleController(HttpClient httpClient, UserManager<ApplicationUser
 				{
 					["grant_type"] = "authorization_code",
 					["code"] = code,
-					["redirect_uri"] = redirectUrl,
+					["redirect_uri"] = callbackUrl,
 					["client_id"] = clientId,
 					["client_secret"] = clientSecret,
 				}));

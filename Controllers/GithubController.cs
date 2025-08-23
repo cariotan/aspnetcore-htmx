@@ -9,7 +9,7 @@ public class GithubController(HttpClient httpClient, UserManager<ApplicationUser
 {
 	static string loginUrl = "https://github.com/login/oauth/authorize";
 	static string idTokenUrl = "https://github.com/login/oauth/access_token";
-	static string redirectUrl = GetEnvironmentVariable("github-redirect-url");
+	string callbackUrl => GetBaseUrl(Request) + GetEnvironmentVariable("github-callback-url");
 	static string clientId = GetEnvironmentVariable("github-client-id");
 	static string clientSecret = GetEnvironmentVariable("github-client-secret");
 
@@ -22,7 +22,7 @@ public class GithubController(HttpClient httpClient, UserManager<ApplicationUser
 
 		string scope = "read:user user:email";
 
-		string url = $"""{loginUrl}?client_id={clientId}&redirect_uri={redirectUrl}&scope={scope}&state={state}""";
+		string url = $"""{loginUrl}?client_id={clientId}&redirect_uri={callbackUrl}&scope={scope}&state={state}""";
 
 		return Redirect(url);
 	}
@@ -41,7 +41,7 @@ public class GithubController(HttpClient httpClient, UserManager<ApplicationUser
 				var response = await httpClient.PostAsync(idTokenUrl, new FormUrlEncodedContent(new Dictionary<string, string>()
 				{
 					["code"] = code,
-					["redirect_uri"] = redirectUrl,
+					["redirect_uri"] = callbackUrl,
 					["client_id"] = clientId,
 					["client_secret"] = clientSecret,
 				}));
