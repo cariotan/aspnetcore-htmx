@@ -1,3 +1,4 @@
+using System.Reflection.PortableExecutable;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
@@ -5,8 +6,6 @@ using Scalar.AspNetCore;
 _ = GetDatabasePath();
 
 DotNetEnv.Env.Load(Path.Combine(GetWorkingDirectory(), ".env"));
-
-var nani = Environment.GetEnvironmentVariables();
 
 Directory.CreateDirectory(GetDatabasePath());
 
