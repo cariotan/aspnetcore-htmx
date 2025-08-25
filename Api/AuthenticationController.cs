@@ -1,4 +1,6 @@
+using System.Threading.Tasks;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +10,6 @@ namespace Api;
 
 [Route("Api/[controller]")]
 [ApiController]
-[AllowAnonymous]
 public class AuthenticationController(UserManager<ApplicationUser> userManager, IdentityContext identityContext, HttpClient httpClient) : ControllerBase
 {
 	static string DummyHash;
@@ -69,6 +70,24 @@ public class AuthenticationController(UserManager<ApplicationUser> userManager, 
 		}
 
 		return Unauthorized();
+	}
+
+	[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+	[HttpPost("RequestRefreshToken")]
+	public async Task<ActionResult<AuthenticationResponse>> RequestRefreshToken()
+	{
+		var user = await userManager.GetUserAsync(User);
+		if (user is { })
+		{
+			var access_token = GenerateJwtToken(user.Id, user.Email!);
+			var refresh_token = await GenerateRefreshToken(user.Id, identityContext);
+
+			return new AuthenticationResponse(access_token, refresh_token);
+		}
+		else
+		{
+			return Unauthorized();
+		}
 	}
 
 	public record AuthenticationResponse([property: JsonPropertyName("access_token")] string AccessToken, [property: JsonPropertyName("refresh_token")] string RefreshToken);

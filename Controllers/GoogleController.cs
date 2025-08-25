@@ -9,7 +9,7 @@ public class GoogleController(HttpClient httpClient, UserManager<ApplicationUser
 {
 	static string loginUrl = "https://accounts.google.com/o/oauth2/v2/auth";
 	static string idTokenUrl = "https://oauth2.googleapis.com/token";
-	string callbackUrl => GetBaseUrl(Request) + GetEnvironmentVariable("google-callback-url");
+	static string callbackUrl = "/Google/Callback";
 	static string clientId = GetEnvironmentVariable("google-client-id");
 	static string clientSecret = GetEnvironmentVariable("google-client-secret");
 

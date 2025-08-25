@@ -5,18 +5,22 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
-public class GithubController(HttpClient httpClient, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager) : Controller
+public class GithubController(HttpClient httpClient, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IdentityContext identityContext) : Controller
 {
 	static string loginUrl = "https://github.com/login/oauth/authorize";
 	static string idTokenUrl = "https://github.com/login/oauth/access_token";
-	string callbackUrl => GetBaseUrl(Request) + GetEnvironmentVariable("github-callback-url");
+	string callbackUrl => GetBaseUrl(Request) + "/GitHub/Callback";
 	static string clientId = GetEnvironmentVariable("github-client-id");
 	static string clientSecret = GetEnvironmentVariable("github-client-secret");
 
 	[HttpGet]
-	public IActionResult Login()
+	public IActionResult Login(string redirectUrl)
 	{
-		var state = Guid.NewGuid().ToString();
+		var state = JsonSerializer.Serialize(new
+		{
+			redirectUrl,
+			csrf = Guid.NewGuid()
+		});
 
 		HttpContext.Session.SetString("state", state);
 
@@ -35,6 +39,9 @@ public class GithubController(HttpClient httpClient, UserManager<ApplicationUser
 		if (state == sessionState)
 		{
 			HttpContext.Session.Clear();
+
+			using JsonDocument stateJson = JsonDocument.Parse(state);
+			string? redirectUrl = stateJson.RootElement.GetProperty("redirectUrl").GetString();
 
 			ExternalAuthUserInfo externalUserInfo;
 			{
@@ -98,8 +105,17 @@ public class GithubController(HttpClient httpClient, UserManager<ApplicationUser
 
 				if (result.IsSuccess(out var user))
 				{
-					await signInManager.SignInAsync(user, true);
-					return LocalRedirect("/");
+					if (string.IsNullOrWhiteSpace(redirectUrl))
+					{
+						await signInManager.SignInAsync(user, true);
+						return LocalRedirect("/");
+					}
+					else
+					{
+						var access_token = GenerateJwtToken(user.Id, user.Email!);
+
+						return Redirect(redirectUrl + $"?access_token={access_token}&");
+					}
 				}
 				else
 				{
