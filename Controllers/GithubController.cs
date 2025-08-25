@@ -113,7 +113,6 @@ public class GithubController(HttpClient httpClient, UserManager<ApplicationUser
 					else
 					{
 						var access_token = GenerateJwtToken(user.Id, user.Email!);
-
 						return Redirect(redirectUrl + $"?access_token={access_token}&");
 					}
 				}

@@ -9,14 +9,18 @@ public class GoogleController(HttpClient httpClient, UserManager<ApplicationUser
 {
 	static string loginUrl = "https://accounts.google.com/o/oauth2/v2/auth";
 	static string idTokenUrl = "https://oauth2.googleapis.com/token";
-	static string callbackUrl = "/Google/Callback";
+	string callbackUrl => GetBaseUrl(Request) + "/Google/Callback";
 	static string clientId = GetEnvironmentVariable("google-client-id");
 	static string clientSecret = GetEnvironmentVariable("google-client-secret");
 
 	[HttpGet]
-	public IActionResult Login()
+	public IActionResult Login(string redirectUrl)
 	{
-		var state = Guid.NewGuid().ToString();
+		var state = JsonSerializer.Serialize(new
+		{
+			redirectUrl,
+			csrf = Guid.NewGuid()
+		});
 
 		HttpContext.Session.SetString("state", state);
 
@@ -35,6 +39,9 @@ public class GoogleController(HttpClient httpClient, UserManager<ApplicationUser
 		if (state == sessionState)
 		{
 			HttpContext.Session.Clear();
+
+			using JsonDocument stateJson = JsonDocument.Parse(state);
+			string? redirectUrl = stateJson.RootElement.GetProperty("redirectUrl").GetString();
 
 			ExternalAuthUserInfo externalUserInfo;
 			{
@@ -66,8 +73,16 @@ public class GoogleController(HttpClient httpClient, UserManager<ApplicationUser
 
 			if (result.IsSuccess(out var user))
 			{
-				await signInManager.SignInAsync(user, true);
-				return LocalRedirect("/");
+				if (string.IsNullOrWhiteSpace(redirectUrl))
+				{
+					await signInManager.SignInAsync(user, true);
+					return LocalRedirect("/");
+				}
+				else
+				{
+					var access_token = GenerateJwtToken(user.Id, user.Email!);
+					return Redirect(redirectUrl + $"?access_token={access_token}&");
+				}
 			}
 			else
 			{
