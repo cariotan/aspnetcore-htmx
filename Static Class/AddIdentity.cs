@@ -13,7 +13,7 @@ static partial class StaticMethods
 			.AddEntityFrameworkStores<IdentityContext>()
 			.AddDefaultTokenProviders();
 
-		services.Configure<SecurityStampValidatorOptions>(options => options.ValidationInterval = 0.Seconds());
+		services.Configure<SecurityStampValidatorOptions>(options => options.ValidationInterval = TimeSpan.FromSeconds(0));
 
 		services.Configure<IdentityOptions>(options =>
 		{
@@ -44,7 +44,7 @@ static partial class StaticMethods
 				ValidateIssuerSigningKey = true,
 				ValidIssuer = "cario",
 				ValidAudience = "cario",
-				ClockSkew = 0.Seconds(),
+				ClockSkew = TimeSpan.FromSeconds(0),
 			};
 
 			// This is used for endpoints where the authentication headers cannot be supplied for whatever reason like signal r. In which case it will extract it from access_token query parameter.

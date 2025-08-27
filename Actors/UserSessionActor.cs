@@ -11,7 +11,7 @@ public class UserSessionActor : ReceiveActor
 
 	protected override void PreStart()
 	{
-		Context.SetReceiveTimeout(2.Minutes());
+		Context.SetReceiveTimeout(TimeSpan.FromSeconds(2));
 	}
 
 	public UserSessionActor(HttpClient httpClient)
