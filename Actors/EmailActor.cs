@@ -53,7 +53,7 @@ public class EmailActor : ReceiveActor
 		});
 	}
 
-	public static async Task SendEmailAsync(string fromEmail, string? fromName, string toEmail, string? toName, string subject, string body, HttpClient httpClient)
+	public static async Task SendEmailAsync(string fromEmail, string? fromName, string toEmail, string? toName, string subject, string body, bool isHtml, HttpClient httpClient)
 	{
 		// Check if either email is null or empty, return without doing anything
 		if (string.IsNullOrEmpty(fromEmail) || string.IsNullOrEmpty(toEmail))
@@ -89,6 +89,8 @@ public class EmailActor : ReceiveActor
 			fromObject = new { email = fromEmail, name = fromName };
 		}
 
+		string contentType = isHtml ? "text/html" : "text/plain";
+
 		var requestBody = new
 		{
 			personalizations = new[]
@@ -102,7 +104,7 @@ public class EmailActor : ReceiveActor
 			from = fromObject,
 			content = new[]
 			{
-				new { type = "text/plain", value = body }
+				new { type = contentType, value = body }
 			}
 		};
 
