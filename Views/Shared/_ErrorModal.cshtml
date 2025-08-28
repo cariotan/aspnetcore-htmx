@@ -12,7 +12,7 @@
 			error_modal_message = $event.detail.error
 		'
 		 @@hide_error_modal.window='error_modal_show = false'
-		 class='fixed inset-0 bg-black/80 backdrop-blur-sm'>
+		 class='fixed inset-0 bg-black/80 backdrop-blur-sm z-50'>
 
 		<div x-show='error_modal_show'
 			 x-transition.opacity.scale.50.duration.300ms
