@@ -1,4 +1,6 @@
+using Akka.Actor;
 using Akka.Configuration;
+using Akka.Hosting;
 
 static partial class StaticMethods
 {

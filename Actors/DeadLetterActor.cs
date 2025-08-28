@@ -1,3 +1,4 @@
+using Akka.Actor;
 using Akka.Event;
 
 public class DeadLetterActor : ReceiveActor

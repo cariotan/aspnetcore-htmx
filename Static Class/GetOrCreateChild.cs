@@ -1,3 +1,5 @@
+using Akka.Actor;
+
 static partial class StaticMethods
 {
 	public static IActorRef GetOrCreateChild(this IActorContext context, Props props, string name)

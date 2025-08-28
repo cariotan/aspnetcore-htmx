@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Text;
 using System.Text.Json;
+using Akka.Actor;
 using Akka.Event;
 
 public class EmailActor : ReceiveActor
