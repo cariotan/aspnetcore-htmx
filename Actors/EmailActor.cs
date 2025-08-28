@@ -160,4 +160,4 @@ public class SendEmailNotification : SendEmail
 
 public interface IEmailMsg;
 
-public record EmailAddress(string Email, string Name);
+public record EmailAddress(string Email, string? Name = null);
