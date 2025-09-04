@@ -20,6 +20,12 @@ var isDebug = true;
 		<style type='text/tailwindcss'>
 			@Html.Raw(File.ReadAllText("Input.css"))
 		</style>
+		<script type='module'>
+			import { theme } from '/js/theme.js'
+			tailwind.config = {
+				theme: theme
+			}
+		</script>
 	}
 
 	<link rel='stylesheet' href='~/css/tailwind.css' asp-append-version='true'>
