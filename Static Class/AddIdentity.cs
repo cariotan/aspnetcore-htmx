@@ -13,7 +13,7 @@ static partial class StaticMethods
 			.AddEntityFrameworkStores<IdentityContext>()
 			.AddDefaultTokenProviders();
 
-		services.Configure<SecurityStampValidatorOptions>(options => options.ValidationInterval = 0.Seconds());
+		services.Configure<SecurityStampValidatorOptions>(options => options.ValidationInterval = 30.Minutes());
 
 		services.Configure<IdentityOptions>(options =>
 		{
