@@ -14,7 +14,8 @@ public class EmailActor : ReceiveActor
 		{
 			var emailRequest = msg;
 
-			if (!string.IsNullOrWhiteSpace(emailRequest?.From?.Email) &&
+			if (
+				!string.IsNullOrWhiteSpace(emailRequest?.From?.Email) &&
 				!string.IsNullOrWhiteSpace(emailRequest?.To?.Email) &&
 				!string.IsNullOrWhiteSpace(emailRequest?.Subject) &&
 				!string.IsNullOrWhiteSpace(emailRequest?.Body))
@@ -27,9 +28,15 @@ public class EmailActor : ReceiveActor
 					try
 					{
 						await SendEmailAsync(
-							emailRequest.From.Email, emailRequest.From.Name,
-							emailRequest.To.Email, emailRequest.To.Name,
-							emailRequest.Subject, emailRequest.Body, httpClient);
+							emailRequest.From.Email,
+							emailRequest.From.Name,
+							emailRequest.To.Email,
+							emailRequest.To.Name,
+							emailRequest.Subject,
+							emailRequest.Body,
+							emailRequest.IsHtml,
+							httpClient
+						);
 
 						return;
 					}
@@ -137,6 +144,7 @@ public class SendEmail : IEmailMsg
 	public EmailAddress? To { get; init; }
 	public string? Subject { get; init; }
 	public string? Body { get; init; }
+	public bool IsHtml { get; init; }
 }
 
 public class SendEmailException : SendEmail
