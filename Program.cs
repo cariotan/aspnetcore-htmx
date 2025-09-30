@@ -37,8 +37,13 @@ builder.Services.AddDistributedMemoryCache();
 
 builder.Services.AddSession(options =>
 {
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
+	options.Cookie.HttpOnly = true;
+	options.Cookie.IsEssential = true;
+});
+
+builder.Services.Configure<RouteOptions>(options =>
+{
+	options.LowercaseUrls = true;
 });
 
 var app = builder.Build();
