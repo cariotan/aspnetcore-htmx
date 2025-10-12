@@ -7,16 +7,16 @@ public class DiscordActor : ReceiveActor
 
 	public DiscordActor(HttpClient httpClient)
 	{
-		ReceiveAsync<SendDiscord>(async msg =>
-		{
-			try
-			{
 #if DEBUG
 				var url = GetEnvironmentVariable("Test");
 #else
 				var url = GetEnvironmentVariable(msg.Key);
 #endif
 
+		ReceiveAsync<SendDiscord>(async msg =>
+		{
+			try
+			{
 				const int discordCharacterlimit = 2000;
 
 				var chunks = SplitMessageIntoChunks(msg.Message, discordCharacterlimit);
