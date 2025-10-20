@@ -17,25 +17,25 @@ notepad $profile
 Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 
 function db {
-    dotnet build @args
+	dotnet build @args
 }
 
 function dr {
-    dotnet run @args
+	dotnet run @args
 }
 
 function d {
-    dotnet watch @args
+	dotnet watch @args
 }
 
 function dbr {
-    dotnet build -c Release
+	dotnet build -c Release
 }
 
 function drr {
-    dotnet run -c Release
+	dotnet run -c Release
 }
 
 function dwr {
-    dotnet watch -c Release
+	dotnet watch -c Release
 }
