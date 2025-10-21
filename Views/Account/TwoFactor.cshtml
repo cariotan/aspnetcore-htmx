@@ -9,76 +9,76 @@
 <div class='h-screen'>
 	<div class='flex flex-col justify-center min-h-full px-6 py-12 lg:px-8'>
 		<div class='sm:mx-auto sm:w-full sm:max-w-sm'>
-			<img class='mx-auto w-auto h-10' src='https://tailwindui.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600' alt='Your Company'>
+			<img
+				src='https://tailwindui.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600' 
+				alt='Company'
+				class='mx-auto w-auto h-10'
+			/>
 			<h2 class='mt-10 text-center text-2xl/9 text-gray-900 font-bold tracking-tight'>
 				Sign in to your account
 			</h2>
 		</div>
-
 		<div class='mt-10 sm:mx-auto sm:w-full sm:max-w-sm'>
-
-			<form x-data='{ two_factor_enable2fa: null }'
-				  asp-controller='Account'
-				  asp-action='TwoFactor'
-				  class='space-y-6'>
-
+			<form
+				asp-action='TwoFactor'
+				x-data='{
+					twoFactor_enable2fa: null
+				}'
+				class='space-y-6'
+			>
 				<div>
-					<label asp-for='@Model.Code'
-						   class='block text-gray-900 text-sm/6 font-medium'>
+					<label asp-for='@Model.Code' class='block text-gray-900 text-sm/6 font-medium'>
 						Code
 					</label>
-
 					<div class='mt-2'>
-						<input asp-for='@Model.Code'
-							   autocomplete='email'
-							   value='@Model?.Code'
-							   class='block rounded-md outline outline-1 outline-gray-300 -outline-offset-1 w-full bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-2 focus:outline-indigo-600 focus:-outline-offset-2 sm:text-sm/6'>
+						<input
+							asp-for='@Model.Code'
+							value='@Model?.Code'
+							class='block rounded-md outline outline-1 outline-gray-300 -outline-offset-1 w-full bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-2 focus:outline-indigo-600 focus:-outline-offset-2 sm:text-sm/6'
+						/>
 						@Html.ValidationMessageFor(x => x.Code)
 					</div>
 				</div>
-
-				<!-- Remember this device -->
 				<div class='flex items-start'>
-
 					<div class='flex items-center h-6'>
-
-						<input type='checkbox'
-							   x-model='two_factor_enable2fa'
-							   asp-for='RememberClient'
-							   class='rounded border-gray-300 w-4 h-4 text-indigo-600 focus:ring-indigo-600'>
+						<input
+							type='checkbox'
+							asp-for='RememberClient'
+							x-model='twoFactor_enable2fa'
+							class='rounded border-gray-300 w-4 h-4 text-indigo-600 focus:ring-indigo-600'
+						/>
 					</div>
-
 					<div class='ml-3 text-sm/6'>
-
 						<label asp-for='RememberClient' class='text-gray-900 font-medium'>
 							Remember this device
 						</label>
-
 						<p class='text-gray-500'>
 							Skip 2FA on this browser next time
 						</p>
 					</div>
 				</div>
 				@Html.ValidationMessageFor(x => x.RememberClient)
-
 				<div>
-					<button type='submit'
-							class='rounded-md flex justify-center w-full bg-indigo-600 px-3 py-1.5 text-sm/6 text-white font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-600 focus-visible:outline-offset-2 shadow-sm hover:bg-indigo-500'>
+					<button
+						type='submit'
+						class='rounded-md flex justify-center w-full bg-indigo-600 px-3 py-1.5 text-sm/6 text-white font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-600 focus-visible:outline-offset-2 shadow-sm hover:bg-indigo-500'
+					>
 						Sign in
 					</button>
 					@Html.ValidationMessage("Error")
 				</div>
-
-				<input type='hidden'
-					   name='returnUrl'
-					   value='@ViewData["ReturnUrl"]' />
+				<input
+					type='hidden'
+					name='returnUrl'
+					value='@ViewData["ReturnUrl"]'
+				/>
 			</form>
-
 			<p class='mt-10 text-center text-gray-500 text-sm/6'>
-
 				Not a member?
-
-				<a href='/Account/Register' class='text-indigo-600 font-semibold hover:text-indigo-500'>
+				<a
+					asp-action='Register'
+					class='text-indigo-600 font-semibold hover:text-indigo-500'
+				>
 					Register here
 				</a>
 			</p>

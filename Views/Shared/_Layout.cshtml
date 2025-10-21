@@ -14,20 +14,6 @@ var isDebug = true;
 	<meta name='viewport' content='width=device-width, initial-scale=1.0' />
 	<title>@ViewData["Title"] - ASP.NET_Core_HTMX</title>
 
-	@if (isDebug)
-	{
-		<script src='https://cdn.tailwindcss.com'></script>
-		<style type='text/tailwindcss'>
-			@Html.Raw(File.ReadAllText("Input.css"))
-		</style>
-		<script type='module'>
-			import { theme } from '/js/theme.js'
-			tailwind.config = {
-				theme: theme
-			}
-		</script>
-	}
-
 	<link rel='stylesheet' href='~/css/tailwind.css' asp-append-version='true'>
 
 	<!-- 2.0.4 -->
@@ -63,19 +49,12 @@ var isDebug = true;
 	</script>
 </head>
 
-<body hx-history='false'
-	  hx-target='#wrapper'
-	  hx-select='#wrapper'
-	  x-data='{ layout_isLoading: false }'
-	  x-on:htmx:before-request='layout_isLoading = true'
-	  x-on:htmx:after-request='layout_isLoading = false'>
-
-	<partial name='_ErrorModal' />
-
+<body hx-history='false'>
 	<div id='wrapper'>
 		@RenderBody()
 		@await RenderSectionAsync("Scripts", required: false)
 	</div>
+	<partial name='_ErrorModal' />
 </body>
 
 </html>

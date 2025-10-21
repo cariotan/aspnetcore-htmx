@@ -6,7 +6,6 @@
 
 <div class='h-screen'>
 	<div class='flex flex-col min-h-full'>
-		<!-- Hero Section -->
 		<section class='flex flex-col justify-center items-center min-h-[50vh] bg-gradient-to-b from-sky-50 to-white px-4'>
 			<div class='max-w-2xl text-center'>
 				<h1 class='mb-6 text-5xl text-gray-900 font-extrabold tracking-tight md:text-6xl'>
@@ -14,23 +13,25 @@
 				</h1>
 				<p class='mb-10 text-lg text-gray-600 md:text-xl'>
 					Learn about
-					<a class='transition-colors duration-150 text-sky-600 underline hover:text-sky-800'
-					   href='https://learn.microsoft.com/aspnet/core'
-					   target='_blank'>
+					<a
+						href='https://learn.microsoft.com/aspnet/core'
+						target='_blank'
+						class='transition-colors duration-150 text-sky-600 underline hover:text-sky-800'
+					>
 						building Web apps with ASP.NET&nbsp;Core MVC
 					</a>
 					.
 				</p>
-				<!-- Call‑to‑action buttons -->
 				<div class='flex flex-col justify-center gap-4 sm:flex-row'>
-					<a href='https://learn.microsoft.com/aspnet/core' class='transition-colors duration-150 rounded-full inline-flex justify-center items-center bg-sky-600 px-6 py-3 text-white font-semibold shadow hover:bg-sky-700'>
+					<a
+						href='https://learn.microsoft.com/aspnet/core'
+						class='transition-colors duration-150 rounded-full inline-flex justify-center items-center bg-sky-600 px-6 py-3 text-white font-semibold shadow hover:bg-sky-700'
+					>
 						Get Started
 					</a>
 				</div>
 			</div>
 		</section>
-
-		<!-- Feature Grid -->
 		<section class='bg-white px-4 py-16'>
 			<div class='mx-auto max-w-6xl'>
 				<h2 class='mb-12 text-center text-3xl text-gray-900 font-bold'>
@@ -39,8 +40,14 @@
 				<div class='grid gap-8 sm:grid-cols-2 lg:grid-cols-3'>
 					<div class='transition-shadow duration-150 rounded-2xl bg-sky-50 p-6 group shadow-sm hover:shadow-md'>
 						<div class='mb-4 rounded-full flex justify-center items-center w-12 h-12 bg-sky-100'>
-							<!-- Server Icon -->
-							<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6 text-sky-600'>
+							<svg
+								xmlns='http://www.w3.org/2000/svg'
+								fill='none'
+								viewBox='0 0 24 24'
+								stroke-width='1.5'
+								stroke='currentColor'
+								class='w-6 h-6 text-sky-600'
+							>
 								<path stroke-linecap='round' stroke-linejoin='round' d='M4.5 6.75h15m-15 5.25h15m-15 5.25h15' />
 							</svg>
 						</div>
@@ -51,11 +58,16 @@
 							A modern, high-performance web framework for building fast, scalable, and cross-platform applications on .NET—ideal for APIs, web apps, and real-time services.
 						</p>
 					</div>
-
 					<div class='transition-shadow duration-150 rounded-2xl bg-sky-50 p-6 group shadow-sm hover:shadow-md'>
 						<div class='mb-4 rounded-full flex justify-center items-center w-12 h-12 bg-sky-100'>
-							<!-- Bolt Icon -->
-							<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6 text-sky-600'>
+							<svg
+								xmlns='http://www.w3.org/2000/svg'
+								fill='none'
+								viewBox='0 0 24 24'
+								stroke-width='1.5'
+								stroke='currentColor'
+								class='w-6 h-6 text-sky-600'
+							>
 								<path stroke-linecap='round' stroke-linejoin='round' d='M9.428 2.926a.75.75 0 01.838-.514l10.125 1.895a.75.75 0 01.611.992l-3.6 9.196a.75.75 0 01-.65.503l-5.34.447L9.5 21.688a.75.75 0 01-1.35-.315l-.454-3.585-4.219-.353a.75.75 0 01-.646-1.088l6.597-13.423z' />
 							</svg>
 						</div>
@@ -66,11 +78,16 @@
 							Lightweight tools that add dynamic interactivity and modern UX patterns with minimal JavaScript, enabling fast, reactive, and maintainable pages without heavy frameworks.
 						</p>
 					</div>
-
 					<div class='transition-shadow duration-150 rounded-2xl bg-sky-50 p-6 group shadow-sm hover:shadow-md'>
 						<div class='mb-4 rounded-full flex justify-center items-center w-12 h-12 bg-sky-100'>
-							<!-- Shield Check Icon -->
-							<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' class='w-6 h-6 text-sky-600'>
+							<svg
+								xmlns='http://www.w3.org/2000/svg'
+								fill='none'
+								viewBox='0 0 24 24'
+								stroke-width='1.5'
+								stroke='currentColor'
+								class='w-6 h-6 text-sky-600'
+							>
 								<path stroke-linecap='round' stroke-linejoin='round' d='M12 3.75l8.25 4.5v5.273a9.004 9.004 0 01-4.995 8.03l-3.255 1.613a.75.75 0 01-.628 0l-3.255-1.613a9.004 9.004 0 01-4.995-8.03V8.25L12 3.75z' />
 							</svg>
 						</div>
@@ -84,8 +101,6 @@
 				</div>
 			</div>
 		</section>
-
-		<!-- Footer -->
 		<footer class='bg-gray-100 py-8 mt-auto'>
 			<div class='mx-auto max-w-6xl px-4 text-center text-sm text-gray-500'>
 				© @(DateTime.Now.Year). By The Grace Of God. All rights reserved.

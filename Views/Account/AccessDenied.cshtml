@@ -3,19 +3,29 @@
 }
 
 <title>@ViewData["Title"]</title>
-<div class='min-h-screen flex items-center justify-center bg-gray-100 p-4'>
-    <div class='bg-white p-8 rounded-2xl shadow-lg max-w-lg w-full text-center'>
-        <svg xmlns='http://www.w3.org/2000/svg' class='h-16 w-16 text-red-500 mx-auto mb-4' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
-            <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M18.364 5.636L5.636 18.364M5.636 5.636l12.728 12.728' />
-        </svg>
-        <h1 class='text-2xl font-bold text-gray-800 mb-2'>
-            Hold up! 🚫
-        </h1>
-        <p class='text-gray-600 mb-6'>
-            It looks like you don't have permission to access this page. If you think this is a mistake, please contact support or try logging in with a different account.
-        </p>
-        <a href='/Account/Login' class='inline-block px-6 py-2 bg-blue-600 text-white font-semibold rounded-xl shadow hover:bg-blue-700 transition'>
-            Login
-        </a>
-    </div>
+
+<div class='flex justify-center items-center min-h-screen bg-gray-100 p-4'>
+	<div class='rounded-2xl w-full max-w-lg bg-white p-8 text-center shadow-lg'>
+		<svg
+			xmlns='http://www.w3.org/2000/svg'
+			fill='none'
+			viewBox='0 0 24 24'
+			stroke='currentColor'
+			class='mx-auto mb-4 w-16 h-16 text-red-500'
+		>
+			<path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M18.364 5.636L5.636 18.364M5.636 5.636l12.728 12.728' />
+		</svg>
+		<h1 class='mb-2 text-2xl text-gray-800 font-bold'>
+			Hold up! 🚫
+		</h1>
+		<p class='mb-6 text-gray-600'>
+			It looks like you don't have permission to access this page. If you think this is a mistake, please contact support or try logging in with a different account.
+		</p>
+		<a
+			href='@Url.Action("Login")'
+			class='transition rounded-xl inline-block bg-blue-600 px-6 py-2 text-white font-semibold shadow hover:bg-blue-700'
+		>
+			Login
+		</a>
+	</div>
 </div>
