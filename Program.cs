@@ -22,11 +22,6 @@ builder.Services.AddControllersWithViews(x =>
 	x.Filters.Add<CustomExceptionFilter>();
 });
 
-builder.Services.AddRouting(x =>
-{
-	x.LowercaseUrls = true;
-});
-
 builder.Services.AddSwagger();
 // builder.Services.AddOpenApi();
 builder.Services.AddHttpClient();
