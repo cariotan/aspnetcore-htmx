@@ -4,6 +4,9 @@ export let theme = {
 		},
 		screens: {
 		},
+		fontFamily: {
+			sans: ["Poppins"]
+		}
 	},
 	fontFamily: {
 	}
