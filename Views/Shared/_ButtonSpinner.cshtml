@@ -9,14 +9,6 @@
 		}
 	}'
 	x-init='
-		$watch("buttonSpinner_properties.size", () => {
-			console.log("The current size is", buttonSpinner_properties.size)
-		})
-
-		$watch("buttonSpinner_properties.color", () => {
-			console.log("The current color is", buttonSpinner_properties.color)
-		})
-
 		$nextTick(() => {
 			if(!buttonSpinner_properties.size) {
 				buttonSpinner_properties.size = "size-4"
