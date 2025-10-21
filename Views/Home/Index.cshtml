@@ -24,9 +24,18 @@
 				</p>
 				<div class='flex flex-col justify-center gap-4 sm:flex-row'>
 					<a
+						x-data='{
+							btnProperties: {
+								isLoading: false,
+								size: "size-[4.5px]",
+								color: "text-white",
+							}
+						}'
+						x-on:click='btnProperties.isLoading = true'
 						href='https://learn.microsoft.com/aspnet/core'
-						class='transition-colors duration-150 rounded-full inline-flex justify-center items-center bg-sky-600 px-6 py-3 text-white font-semibold shadow hover:bg-sky-700'
+						class='transition-colors duration-150 rounded-full inline-flex justify-center items-center gap-2 bg-sky-600 px-6 py-3 text-white font-semibold shadow hover:bg-sky-700'
 					>
+						<partial name='_ButtonSpinner' model='"btnProperties"' />
 						Get Started
 					</a>
 				</div>

@@ -1,13 +1,17 @@
-@model ButtonSpinnerModel
+@model string
 
 <div
 	x-data='{
-		buttonSpinner_isLoading: false
+		buttonSpinner_properties: {
+			isLoading: false,
+			size: "size-4",
+			color: "text-blue-600",
+		}
 	}'
-	x-show='buttonSpinner_isLoading'
-	x-modelable='buttonSpinner_isLoading'
-	x-model='@Model.IsLoadingModel'
-	class='animate-spin rounded-full border-2 border-current border-t-transparent inline-block text-gray-200 @Model.Color @Model.Size'
+	x-show='buttonSpinner_properties.isLoading'
+	x-modelable='buttonSpinner_properties'
+	x-model='@Model'
+	:class='`animate-spin rounded-full border-2 border-current border-t-transparent inline-block text-gray-200 ${buttonSpinner_properties.size} ${buttonSpinner_properties.color}`'
 	style='display: none'
 >
 	<span class='sr-only'>Loading...</span>
