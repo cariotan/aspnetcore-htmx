@@ -4,10 +4,29 @@
 	x-data='{
 		buttonSpinner_properties: {
 			isLoading: false,
-			size: "size-4",
-			color: "text-blue-600",
+			size: null,
+			color: null,
 		}
 	}'
+	x-init='
+		$watch("buttonSpinner_properties.size", () => {
+			console.log("The current size is", buttonSpinner_properties.size)
+		})
+
+		$watch("buttonSpinner_properties.color", () => {
+			console.log("The current color is", buttonSpinner_properties.color)
+		})
+
+		$nextTick(() => {
+			if(!buttonSpinner_properties.size) {
+				buttonSpinner_properties.size = "size-4"
+			}
+
+			if(!buttonSpinner_properties.color) {
+				buttonSpinner_properties.color = "text-white"
+			}
+		})
+	'
 	x-show='buttonSpinner_properties.isLoading'
 	x-modelable='buttonSpinner_properties'
 	x-model='@Model'
