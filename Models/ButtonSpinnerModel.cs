@@ -7,7 +7,7 @@ public class ButtonSpinnerModel
 	public ButtonSpinnerModel(
 		string isLoadingModel,
 		string size = "size-5",
-		string color = "fill-blue-600"
+		string color = "text-blue-600"
 	)
 	{
 		IsLoadingModel = isLoadingModel;
