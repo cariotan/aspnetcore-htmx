@@ -8,6 +8,16 @@ _ = GetDatabasePath();
 
 DotNetEnv.Env.Load(Path.Combine(GetWorkingDirectory(), ".env"));
 
+var keys = EnvironmentVariables.Keys;
+
+foreach (var key in keys)
+{
+	if (string.IsNullOrWhiteSpace(EnvironmentVariables[key]))
+	{
+		throw new Exception($"Please set {key} correctly in environment variables");
+	}
+}
+
 Directory.CreateDirectory(GetDatabasePath());
 
 IdentityContext identityContext = new();
