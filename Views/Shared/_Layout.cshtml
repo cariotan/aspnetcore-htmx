@@ -28,6 +28,7 @@ var isDebug = true;
 		htmx.config.defaultSwapStyle = 'outerHTML'
 		htmx.config.scrollBehavior = 'smooth'
 		htmx.config.refreshOnHistoryMiss = true
+		htmx.config.disableInheritance = true
 	</script>
 
 	@RenderSection("Head", required: false)
@@ -49,7 +50,10 @@ var isDebug = true;
 	</script>
 </head>
 
-<body hx-history='false'>
+<body
+	hx-history='false'
+	hx-inherit='hx-history'
+>
 	<div id='wrapper'>
 		@RenderBody()
 		@await RenderSectionAsync("Scripts", required: false)
