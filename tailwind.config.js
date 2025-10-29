@@ -10,6 +10,7 @@ module.exports = {
 		'!wwwroot/js/alpine.js',
 		'!wwwroot/js/htmx.js',
 		'!wwwroot/js/signalr/dist/browser/signalr.js',
+		'!./node_modules',
 	],
 	theme: theme,
 	plugins: [
