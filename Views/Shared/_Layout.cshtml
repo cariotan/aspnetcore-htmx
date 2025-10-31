@@ -50,7 +50,10 @@ var isDebug = true;
 	</script>
 </head>
 
-<body hx-history='false'>
+<body
+	hx-history='false'
+	class='debug-body'
+>
 	<div id='wrapper'>
 		@RenderBody()
 		@await RenderSectionAsync("Scripts", required: false)
