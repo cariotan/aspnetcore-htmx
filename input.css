@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.debug-ring {
+	@apply ring ring-red-600;
+}
+
 .field-validation-error {
 	@apply mt-1 text-sm text-red-600;
 }
