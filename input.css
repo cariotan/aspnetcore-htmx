@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .debug-ring {
-	@apply ring ring-red-600;
+	@apply ring ring-red-600 ring-inset;
 }
 .debug-body {
 	@apply p-5;
