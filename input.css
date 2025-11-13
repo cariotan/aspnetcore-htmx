@@ -1,4 +1,9 @@
 @tailwind base;
+@layer base {
+	img {
+			max-width: none;
+	}
+}
 @tailwind components;
 @tailwind utilities;
 
