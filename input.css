@@ -18,6 +18,22 @@
 	@apply mt-1 text-sm text-red-600;
 }
 
+.validation-summary-errors {
+  @apply rounded-md border border-red-300 w-full bg-red-50 px-4 py-3 text-sm text-red-800 leading-relaxed;
+}
+
+.validation-summary-errors ul {
+  @apply m-0 list-disc list-inside p-0;
+}
+
+.validation-summary-errors li {
+  @apply mb-1;
+}
+
+.validation-summary-errors li:last-child {
+  @apply mb-0;
+}
+
 @font-face {
 	font-family: 'Roboto';
 	src: url('/fonts/Roboto-VariableFont_wdth,wght.ttf') format('truetype');
