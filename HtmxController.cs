@@ -37,11 +37,11 @@ public class HtmxController : Controller
 		{
 			if (Response.Headers.ContainsKey("hx-reselect"))
 			{
-				Response.Headers["hx-reselect"] = target;
+				Response.Headers["hx-reselect"] = select;
 			}
 			else
 			{
-				Response.Headers.Append("hx-reselect", target);
+				Response.Headers.Append("hx-reselect", select);
 			}
 		}
 	}
