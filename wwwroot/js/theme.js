@@ -3,9 +3,11 @@ export let theme = {
 		colors: {
 		},
 		screens: {
+			ml: '896px',
+			lr: '1152px'
 		},
 		fontFamily: {
-			sans: ["Poppins"]
+			sans: ['Poppins']
 		}
 	},
 	fontFamily: {

@@ -51,11 +51,6 @@ builder.Services.AddSession(options =>
 	options.Cookie.IsEssential = true;
 });
 
-builder.Services.Configure<RouteOptions>(options =>
-{
-	options.LowercaseUrls = true;
-});
-
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

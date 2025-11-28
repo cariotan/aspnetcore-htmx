@@ -1,9 +1,8 @@
-using System.Threading.Tasks;
-using System.IdentityModel.Tokens.Jwt;
-using System.Text.Json.Serialization;
+using System.Runtime.InteropServices.JavaScript;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 public class GithubController(HttpClient httpClient, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IdentityContext identityContext) : Controller
 {
@@ -16,7 +15,7 @@ public class GithubController(HttpClient httpClient, UserManager<ApplicationUser
 	[HttpGet]
 	public IActionResult Login(string redirectUrl)
 	{
-		var state = JsonSerializer.Serialize(new
+		var state = JsonConvert.SerializeObject(new
 		{
 			redirectUrl,
 			csrf = Guid.NewGuid()
@@ -40,8 +39,8 @@ public class GithubController(HttpClient httpClient, UserManager<ApplicationUser
 		{
 			HttpContext.Session.Clear();
 
-			using JsonDocument stateJson = JsonDocument.Parse(state);
-			string? redirectUrl = stateJson.RootElement.GetProperty("redirectUrl").GetString();
+			JObject stateJson = JObject.Parse(state);
+			string? redirectUrl = (string?)stateJson["redirectUrl"];
 
 			ExternalAuthUserInfo externalUserInfo;
 			{
@@ -67,9 +66,9 @@ public class GithubController(HttpClient httpClient, UserManager<ApplicationUser
 					response = await httpClient.SendAsync(request);
 					data = await response.Content.ReadAsStringAsync();
 
-					using JsonDocument userDoc = JsonDocument.Parse(data);
+					JObject userDoc = JObject.Parse(data);
 
-					id = userDoc.RootElement.GetProperty("id").GetInt64().ToString();
+					id = (string)userDoc["id"];
 				}
 
 				string email = "";

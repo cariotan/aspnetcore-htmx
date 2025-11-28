@@ -1,6 +1,4 @@
-using System.Threading.Tasks;
 using System.IdentityModel.Tokens.Jwt;
-using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
