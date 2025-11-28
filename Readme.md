@@ -1,4 +1,4 @@
-https://builds.dotnet.microsoft.com/dotnet/Sdk/9.0.303/dotnet-sdk-9.0.303-win-x64.exe
+https://builds.dotnet.microsoft.com/dotnet/Sdk/9.0.308/dotnet-sdk-9.0.308-win-x64.exe
 
 dotnet tool install --global dotnet-ef
 dotnet tool install --global dotnet-outdated-tool
