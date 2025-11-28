@@ -1,8 +1,7 @@
-using System.Text.Json;
 using Akka.Hosting;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Newtonsoft.Json;
 
 public class CustomExceptionFilter(ILogger<CustomExceptionFilter> logger, IRequiredActor<Brain> brain) : IExceptionFilter
 {
@@ -24,7 +23,7 @@ public class CustomExceptionFilter(ILogger<CustomExceptionFilter> logger, IRequi
 			}
 		};
 
-		string triggerValue = JsonSerializer.Serialize(payload);
+		string triggerValue = JsonConvert.SerializeObject(payload);
 
 		context.HttpContext.Response.Headers.Append("hx-trigger", triggerValue);
 

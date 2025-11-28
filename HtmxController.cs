@@ -1,5 +1,5 @@
-using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 public class HtmxController : Controller
 {
@@ -56,15 +56,15 @@ public class HtmxController : Controller
 			[trigger] = value
 		};
 
-		string triggerValue = JsonSerializer.Serialize(payload);
+		string triggerValue = JsonConvert.SerializeObject(payload);
 
 		if (Response.Headers.ContainsKey("hx-trigger"))
 		{
-			payload = JsonSerializer.Deserialize<Dictionary<string, object>>(Response.Headers["hx-trigger"]!)!;
+			payload = JsonConvert.DeserializeObject<Dictionary<string, object>>(Response.Headers["hx-trigger"]!)!;
 
 			payload.Add(trigger, value);
 
-			var json = JsonSerializer.Serialize(payload);
+			var json = JsonConvert.SerializeObject(payload);
 
 			Response.Headers["hx-trigger"] = json;
 		}

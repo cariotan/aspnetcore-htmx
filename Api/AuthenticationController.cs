@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+#warning Get rid of System.Text.Json.Serialization
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;

@@ -1,8 +1,8 @@
 using System.Reflection;
 using System.Text;
-using System.Text.Json;
 using Akka.Actor;
 using Akka.Event;
+using Newtonsoft.Json;
 
 public class EmailActor : ReceiveActor
 {
@@ -115,7 +115,7 @@ public class EmailActor : ReceiveActor
 			}
 		};
 
-		var json = JsonSerializer.Serialize(requestBody);
+		var json = JsonConvert.SerializeObject(requestBody);
 		var content = new StringContent(json, Encoding.UTF8, "application/json");
 
 		HttpRequestMessage request = new(HttpMethod.Post, "https://api.sendgrid.com/v3/mail/send")
