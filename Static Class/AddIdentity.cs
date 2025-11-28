@@ -40,7 +40,7 @@ static partial class StaticMethods
 		{
 			options.TokenValidationParameters = new TokenValidationParameters
 			{
-				IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SigningSecret)),
+				IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SigningSecret ?? throw new Exception("SigningSecret is null."))),
 				ValidateIssuerSigningKey = true,
 				ValidIssuer = "cario",
 				ValidAudience = "cario",

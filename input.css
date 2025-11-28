@@ -10,9 +10,6 @@
 .debug-ring {
 	@apply ring ring-red-600 ring-inset;
 }
-.debug-body {
-	@apply p-5;
-}
 
 .field-validation-error {
 	@apply mt-1 text-sm text-red-600;

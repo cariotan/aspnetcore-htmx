@@ -12,9 +12,9 @@ var keys = EnvironmentVariables.Keys;
 
 foreach (var key in keys)
 {
-	if (string.IsNullOrWhiteSpace(EnvironmentVariables[key]))
+	if (EnvironmentVariables[key] is null)
 	{
-		throw new Exception($"Please set {key} correctly in environment variables");
+		throw new Exception($"Please set {key} in environment variables");
 	}
 }
 

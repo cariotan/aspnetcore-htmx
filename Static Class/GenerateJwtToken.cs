@@ -16,7 +16,7 @@ static partial class StaticMethods
 		return new JwtSecurityTokenHandler().WriteToken(new JwtSecurityToken(
 			claims: claims,
 			expires: DateTime.Now.AddSeconds(10),
-			signingCredentials: new(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SigningSecret)), SecurityAlgorithms.HmacSha256),
+			signingCredentials: new(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SigningSecret ?? throw new Exception("SigningSecret is null."))), SecurityAlgorithms.HmacSha256),
 			issuer: "cario",
 			audience: "cario"
 		));

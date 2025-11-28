@@ -9,7 +9,7 @@ dotnet tool update --global dotnet-outdated-tool
 git clone --quiet https://github.com/cariotan/aspnetcore-htmx.git "$env:USERPROFILE\Documents\aspnetcore-htmx"; dotnet new install "$env:USERPROFILE\Documents\aspnetcore-htmx"
 
 dotnet list package --outdated
-dotnet outdated -u
+dotnet outdated -u --version-lock Major
 
 New-Item -Type File -Path $profile -Force
 notepad $profile

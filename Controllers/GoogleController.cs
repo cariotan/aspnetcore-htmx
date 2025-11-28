@@ -1,20 +1,21 @@
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 public class GoogleController(HttpClient httpClient, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager) : Controller
 {
 	static string loginUrl = "https://accounts.google.com/o/oauth2/v2/auth";
 	static string idTokenUrl = "https://oauth2.googleapis.com/token";
 	string callbackUrl => GetBaseUrl(Request) + "/Google/Callback";
-	static string clientId = GetEnvironmentVariable("google-client-id");
-	static string clientSecret = GetEnvironmentVariable("google-client-secret");
+	static string? clientId = GetEnvironmentVariable("google-client-id");
+	static string? clientSecret = GetEnvironmentVariable("google-client-secret");
 
 	[HttpGet]
 	public IActionResult Login(string redirectUrl)
 	{
-		var state = JsonSerializer.Serialize(new
+		var state = JsonConvert.SerializeObject(new
 		{
 			redirectUrl,
 			csrf = Guid.NewGuid()
@@ -38,8 +39,8 @@ public class GoogleController(HttpClient httpClient, UserManager<ApplicationUser
 		{
 			HttpContext.Session.Clear();
 
-			using JsonDocument stateJson = JsonDocument.Parse(state);
-			string? redirectUrl = stateJson.RootElement.GetProperty("redirectUrl").GetString();
+			JObject stateJson = JObject.Parse(state);
+			string? redirectUrl = (string?)stateJson["redirectUrl"];
 
 			ExternalAuthUserInfo externalUserInfo;
 			{
@@ -48,15 +49,15 @@ public class GoogleController(HttpClient httpClient, UserManager<ApplicationUser
 					["grant_type"] = "authorization_code",
 					["code"] = code,
 					["redirect_uri"] = callbackUrl,
-					["client_id"] = clientId,
-					["client_secret"] = clientSecret,
+					["client_id"] = clientId ?? throw new Exception("ClientId is null."),
+					["client_secret"] = clientSecret ?? throw new Exception("ClientSecret is null."),
 				}));
 
 				var data = await response.EnsureSuccessStatusCode().Content.ReadAsStringAsync();
 
-				using JsonDocument doc = JsonDocument.Parse(data);
+				JObject doc = JObject.Parse(data);
 
-				string id_token = doc.RootElement.GetProperty("id_token").GetString()!;
+				string? id_token = (string?)doc["id_token"];
 				// string access_token = doc.RootElement.GetProperty("access_token").GetString();
 
 				var jwtToken = new JwtSecurityTokenHandler().ReadJwtToken(id_token);

@@ -10,7 +10,7 @@ namespace Api;
 
 [Route("Api/[controller]")]
 [ApiController]
-public class AuthenticationController(UserManager<ApplicationUser> userManager, IdentityContext identityContext, HttpClient httpClient) : ControllerBase
+public class AuthenticationController(UserManager<ApplicationUser> userManager, IdentityContext identityContext) : ControllerBase
 {
 	static string DummyHash;
 

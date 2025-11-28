@@ -4,13 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-public class GithubController(HttpClient httpClient, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IdentityContext identityContext) : Controller
+public class GithubController(HttpClient httpClient, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager) : Controller
 {
 	static string loginUrl = "https://github.com/login/oauth/authorize";
 	static string idTokenUrl = "https://github.com/login/oauth/access_token";
 	string callbackUrl => GetBaseUrl(Request) + "/GitHub/Callback";
-	static string clientId = GetEnvironmentVariable("github-client-id");
-	static string clientSecret = GetEnvironmentVariable("github-client-secret");
+	static string? clientId = GetEnvironmentVariable("github-client-id");
+	static string? clientSecret = GetEnvironmentVariable("github-client-secret");
 
 	[HttpGet]
 	public IActionResult Login(string redirectUrl)
@@ -48,8 +48,8 @@ public class GithubController(HttpClient httpClient, UserManager<ApplicationUser
 				{
 					["code"] = code,
 					["redirect_uri"] = callbackUrl,
-					["client_id"] = clientId,
-					["client_secret"] = clientSecret,
+					["client_id"] = clientId ?? throw new Exception("ClientId is null."),
+					["client_secret"] = clientSecret ?? throw new Exception("ClientId is null."),
 				}));
 
 				var data = await response.EnsureSuccessStatusCode().Content.ReadAsStringAsync();
@@ -57,7 +57,7 @@ public class GithubController(HttpClient httpClient, UserManager<ApplicationUser
 				var dict = System.Web.HttpUtility.ParseQueryString(data);
 				var accessToken = dict["access_token"];
 
-				string id = "";
+				string? id = "";
 				{
 					HttpRequestMessage request = new(HttpMethod.Get, "https://api.github.com/user");
 					request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
@@ -68,10 +68,10 @@ public class GithubController(HttpClient httpClient, UserManager<ApplicationUser
 
 					JObject userDoc = JObject.Parse(data);
 
-					id = (string)userDoc["id"];
+					id = (string?)userDoc["id"];
 				}
 
-				string email = "";
+				string? email = "";
 				{
 					HttpRequestMessage request = new(HttpMethod.Get, "https://api.github.com/user/emails");
 					request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
@@ -80,19 +80,29 @@ public class GithubController(HttpClient httpClient, UserManager<ApplicationUser
 					response = await httpClient.SendAsync(request);
 					data = await response.Content.ReadAsStringAsync();
 
-					using JsonDocument emailDoc = JsonDocument.Parse(data);
+					JArray emailDoc = JArray.Parse(data);
 
-					foreach (var element in emailDoc.RootElement.EnumerateArray())
+					foreach (JObject element in emailDoc)
 					{
-						bool primary = element.GetProperty("primary").GetBoolean();
-						bool verified = element.GetProperty("verified").GetBoolean();
+						bool? primary = (bool?)element["primary"];
+						bool? verified = (bool?)element["verified"];
 
-						if (primary && verified)
+						if (primary == true && verified == true)
 						{
-							email = element.GetProperty("email").GetString() ?? "";
+							email = (string?)element["email"];
 							break;
 						}
 					}
+				}
+
+				if(id is null)
+				{
+					throw new Exception("Id returned from callback response is null.");
+				}
+
+				if(email is null)
+				{
+					throw new Exception("Email returned from callback response is null.");
 				}
 
 				externalUserInfo = new(id.ToString(), email);

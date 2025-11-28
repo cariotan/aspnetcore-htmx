@@ -1,5 +1,3 @@
-import { theme } from './wwwroot/js/theme.js'
-
 module.exports = {
 	content: [
 		'Controllers/*.cs',
@@ -12,7 +10,21 @@ module.exports = {
 		'!wwwroot/js/signalr/dist/browser/signalr.js',
 		'!./node_modules',
 	],
-	theme: theme,
+	theme: {
+		extend: {
+			colors: {
+			},
+			screens: {
+				ml: '896px',
+				lr: '1152px'
+			},
+			fontFamily: {
+				sans: ['Poppins']
+			}
+		},
+		fontFamily: {
+		}
+	},
 	plugins: [
 		require('@tailwindcss/forms')({
 			strategy: 'class',
