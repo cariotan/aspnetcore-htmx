@@ -38,42 +38,60 @@ var isDebug = true;
 		{
 			if(localStorage.theme === 'dark')
 			{
-				layout_changeTheme('dark')
+				changeTheme('dark')
 			}
 			else if(localStorage.theme === 'light')
 			{
-				layout_changeTheme('light')
+				changeTheme('light')
 			}
 			else if(!localStorage.theme)
 			{
 				if(window.matchMedia('(prefers-color-scheme: dark)').matches)
 				{
-					layout_changeTheme('dark')
+					changeTheme('dark')
 				}
 				else
 				{
-					layout_changeTheme('light')
+					changeTheme('light')
+				}
+			}
+
+			function changeTheme(theme)
+			{
+				if(theme === 'dark')
+				{
+					document.documentElement.classList.add('dark')
+					console.log('Theme changed to dark')
+				}
+				else if(theme === 'light')
+				{
+					document.documentElement.classList.remove('dark')
+					console.log('Theme changed to light')
+				}
+				else if(theme === 'system')
+				{
+					document.documentElement.classList.remove('dark')
+					console.log('Theme changed to system')
 				}
 			}
 		}
 
 		function layout_changeTheme(theme)
 		{
-			if(theme === 'dark')
+			if(theme === 'dark' || theme === 'light')
 			{
-				document.documentElement.classList.add('dark')
-				console.log('Theme changed to dark')
-			}
-			else if(theme === 'light')
-			{
-				document.documentElement.classList.remove('dark')
-				console.log('Theme changed to light')
+					localStorage.theme = theme
 			}
 			else if(theme === 'system')
 			{
-				document.documentElement.classList.remove('dark')
-				console.log('Theme changed to system')
+				delete localStorage.theme
 			}
+			else
+			{
+				throw new Error(theme + ' is not supported as a theme.')
+			}
+
+			layout_refreshTheme()
 		}
 	</script>
 

@@ -9,16 +9,7 @@
 	'
 		$watch("themeToggle_theme", value =>
 		{
-			if(value === "system")
-			{
-				delete localStorage.theme
-			}
-			else
-			{
-				localStorage.theme = value
-			}
-
-			layout_refreshTheme()
+			layout_changeTheme(value)
 		})
 	'
 	class='rounded-full inline-flex items-center bg-slate-200 p-1 text-slate-600 dark:bg-slate-700 dark:text-slate-400 debug-ring shadow-inner'
