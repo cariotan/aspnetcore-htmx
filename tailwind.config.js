@@ -25,6 +25,7 @@ module.exports = {
 		fontFamily: {
 		}
 	},
+	darkMode: 'selector',
 	plugins: [
 		require('@tailwindcss/forms')({
 			strategy: 'class',

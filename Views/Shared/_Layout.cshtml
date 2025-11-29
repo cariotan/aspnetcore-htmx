@@ -29,6 +29,52 @@ var isDebug = true;
 		htmx.config.scrollBehavior = 'smooth'
 		htmx.config.refreshOnHistoryMiss = true
 		htmx.config.disableInheritance = true
+
+		layout_refreshTheme()
+
+		window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', layout_refreshTheme)
+
+		function layout_refreshTheme()
+		{
+			if(localStorage.theme === 'dark')
+			{
+				layout_changeTheme('dark')
+			}
+			else if(localStorage.theme === 'light')
+			{
+				layout_changeTheme('light')
+			}
+			else if(!localStorage.theme)
+			{
+				if(window.matchMedia('(prefers-color-scheme: dark)').matches)
+				{
+					layout_changeTheme('dark')
+				}
+				else
+				{
+					layout_changeTheme('light')
+				}
+			}
+		}
+
+		function layout_changeTheme(theme)
+		{
+			if(theme === 'dark')
+			{
+				document.documentElement.classList.add('dark')
+				console.log('Theme changed to dark')
+			}
+			else if(theme === 'light')
+			{
+				document.documentElement.classList.remove('dark')
+				console.log('Theme changed to light')
+			}
+			else if(theme === 'system')
+			{
+				document.documentElement.classList.remove('dark')
+				console.log('Theme changed to system')
+			}
+		}
 	</script>
 
 	<link rel='preload' href='~/fonts/Roboto-VariableFont_wdth,wght.ttf' as='font' type='font/ttf' crossorigin>
@@ -57,6 +103,7 @@ var isDebug = true;
 </head>
 
 <body
+	x-data
 	hx-history='false'
 >
 	<div id='wrapper'>
