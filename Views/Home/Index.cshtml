@@ -9,22 +9,24 @@
 		<partial name='_ThemeToggle' />
 	</div>
 	<div class='flex flex-col min-h-full'>
-		<section class='debug-ring flex flex-col justify-center items-center py-28 bg-gradient-to-b from-sky-50 to-white px-4 dark:from-gray-800 dark:to-gray-900'>
+		<section class='flex flex-col justify-center items-center bg-gradient-to-b from-sky-50 to-white px-4 py-28 dark:from-gray-800 dark:to-gray-900 debug-ring'>
 			<div class='max-w-2xl text-center'>
-				<h1 class='mb-6 text-5xl text-gray-900 font-extrabold tracking-tight dark:text-white md:text-6xl'>
+				<h1 class='text-5xl text-gray-900 font-extrabold tracking-tight dark:text-white md:text-6xl'>
 					Welcome to Your New ASP.NET Core App MVC
 				</h1>
-				<p class='mb-10 text-lg text-gray-600 dark:text-gray-300 md:text-xl'>
-					Learn about
-					<a
-						href='https://learn.microsoft.com/aspnet/core'
-						target='_blank'
-						class='transition-colors duration-150 text-sky-600 dark:hover:text-sky-300 dark:text-sky-400 underline hover:text-sky-800'
-					>
-						building Web apps with ASP.NET Core MVC
-					</a>
-					.
-				</p>
+				<div class='pt-6'>
+					<p class='mb-10 text-lg text-gray-600 dark:text-gray-300 md:text-xl debug-ring'>
+						Learn about
+						<a
+							href='https://learn.microsoft.com/aspnet/core'
+							target='_blank'
+							class='transition-colors duration-150 text-sky-600 dark:hover:text-sky-300 dark:text-sky-400 underline hover:text-sky-800'
+						>
+							building Web apps with ASP.NET Core MVC
+						</a>
+						.
+					</p>
+				</div>
 				<div class='flex flex-col justify-center gap-4 sm:flex-row'>
 					<a
 						x-data=
@@ -46,7 +48,7 @@
 				</div>
 			</div>
 		</section>
-		<section class='debug-ring bg-white px-4 py-16 dark:bg-gray-800'>
+		<section class='bg-white px-4 py-16 dark:bg-gray-800 debug-ring'>
 			<div class='mx-auto max-w-6xl'>
 				<h2 class='mb-12 text-center text-3xl text-gray-900 font-bold dark:text-white'>
 					Key Features
