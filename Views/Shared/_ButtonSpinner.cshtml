@@ -11,7 +11,7 @@
 	x-init='
 		$nextTick(() => {
 			if(!buttonSpinner_properties.size) {
-				buttonSpinner_properties.size = "size-4"
+				buttonSpinner_properties.size = ""
 			}
 
 			if(!buttonSpinner_properties.color) {
@@ -22,8 +22,8 @@
 	x-show='buttonSpinner_properties.isLoading'
 	x-modelable='buttonSpinner_properties'
 	x-model='@Model'
-	:class='`animate-spin rounded-full border-2 border-current border-t-transparent inline-block text-gray-200 ${buttonSpinner_properties.size} ${buttonSpinner_properties.color}`'
-	style='display: none'
+	:class='`absolute animate-spin rounded-full border-2 border-current border-t-transparent inline-block text-gray-200 ${buttonSpinner_properties.color} ${buttonSpinner_properties.size}`'
+	style='display: none; width: 1lh; height: 1lh;'
 >
 	<span class='sr-only'>Loading...</span>
 </div>
