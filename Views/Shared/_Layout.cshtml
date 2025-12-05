@@ -22,6 +22,18 @@ var isDebug = true;
 	<!-- 3.14.8 -->
 	<script src='~/js/alpine.js' defer></script>
 
+	<script>
+		document.addEventListener('alpine:init', () => {
+			Alpine.directive('opacity', (el, { expression }, { evaluateLater, effect }) => {
+				effect(() => {
+					evaluateLater(expression)(value => {
+						el.style.opacity = value ? '1' : '0'
+					})
+				})
+			})
+		})
+	</script>
+
 	<script src='~/js/signalr/dist/browser/signalr.js'></script>
 
 	<script>
