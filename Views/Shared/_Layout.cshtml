@@ -22,6 +22,18 @@ var isDebug = true;
 	<!-- 3.14.8 -->
 	<script src='~/js/alpine.js' defer></script>
 
+	<script>
+		document.addEventListener('alpine:init', () => {
+			Alpine.directive('opacity', (el, { expression }, { evaluateLater, effect }) => {
+				effect(() => {
+					evaluateLater(expression)(value => {
+						el.style.opacity = value ? '1' : '0'
+					})
+				})
+			})
+		})
+	</script>
+
 	<script src='~/js/signalr/dist/browser/signalr.js'></script>
 
 	<script>
@@ -134,13 +146,28 @@ var isDebug = true;
 	@if(isDebug)
 	{
 		<div
+			x-data=
+			'
+				{
+					debugRing_toggle: JSON.parse(localStorage.debugRingToggle ?? "true"),
+				}
+			'
+			x-init=
+			'
+				$watch("debugRing_toggle", value =>
+				{
+					localStorage.debugRingToggle = value
+					document.body.classList.toggle("debug-off")
+				})
+
+				if(localStorage.debugRingToggle === "false")
+				{
+					document.body.classList.toggle("debug-off")
+				}
+			'
 			x-on:keyup.insert.window=
 			'
-				let rings = document.querySelectorAll(".debug-ring")
-    for(let i = 0; i < rings.length; i++)
-				{
-					rings[i].classList.toggle("debug-off")
-    }
+				debugRing_toggle = !debugRing_toggle
 			'
 			class='hidden'
 		></div>

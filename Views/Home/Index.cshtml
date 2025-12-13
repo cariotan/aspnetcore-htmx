@@ -40,10 +40,12 @@
 						'
 						x-on:click='index_btnProperties.isLoading = true'
 						href='https://learn.microsoft.com/aspnet/core'
-						class='transition-colors duration-150 rounded-full inline-flex justify-center items-center gap-2 bg-sky-600 px-6 py-3 text-white font-semibold dark:bg-sky-500 dark:hover:bg-sky-600 shadow hover:bg-sky-700'
+						class='relative transition-colors duration-150 rounded-full inline-flex justify-center items-center gap-2 bg-sky-600 px-6 py-3 text-white font-semibold dark:bg-sky-500 dark:hover:bg-sky-600 shadow hover:bg-sky-700'
 					>
 						<partial name='_ButtonSpinner' model='"index_btnProperties"' />
-						Get Started
+						<span x-opacity='!index_btnProperties.isLoading'>
+							Get Started
+						</span>
 					</a>
 				</div>
 			</div>
