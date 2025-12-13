@@ -34,8 +34,28 @@ var isDebug = true;
 
 		window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', layout_refreshTheme)
 
+		// Sets theme from localStorage or media if localStorage doesn't contain theme.
 		function layout_refreshTheme()
 		{
+			const changeTheme = () => theme
+			{
+				if(theme === 'dark')
+				{
+					document.documentElement.classList.add('dark')
+					console.log('Theme changed to dark')
+				}
+				else if(theme === 'light')
+				{
+					document.documentElement.classList.remove('dark')
+					console.log('Theme changed to light')
+				}
+				else if(theme === 'system')
+				{
+					document.documentElement.classList.remove('dark')
+					console.log('Theme changed to system')
+				}
+			}
+
 			if(localStorage.theme === 'dark')
 			{
 				changeTheme('dark')
@@ -55,27 +75,9 @@ var isDebug = true;
 					changeTheme('light')
 				}
 			}
-
-			function changeTheme(theme)
-			{
-				if(theme === 'dark')
-				{
-					document.documentElement.classList.add('dark')
-					console.log('Theme changed to dark')
-				}
-				else if(theme === 'light')
-				{
-					document.documentElement.classList.remove('dark')
-					console.log('Theme changed to light')
-				}
-				else if(theme === 'system')
-				{
-					document.documentElement.classList.remove('dark')
-					console.log('Theme changed to system')
-				}
-			}
 		}
 
+		// Saves the theme to localStroge and calls layout_refreshTheme.
 		function layout_changeTheme(theme)
 		{
 			if(theme === 'dark' || theme === 'light')
