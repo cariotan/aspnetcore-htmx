@@ -49,7 +49,7 @@ var isDebug = true;
 		// Sets theme from localStorage or media if localStorage doesn't contain theme.
 		function layout_refreshTheme()
 		{
-			const changeTheme = () => theme
+			const changeTheme = theme =>
 			{
 				if(theme === 'dark')
 				{
