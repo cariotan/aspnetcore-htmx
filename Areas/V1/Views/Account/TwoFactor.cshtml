@@ -22,8 +22,13 @@
 			<form
 				asp-action='TwoFactor'
 				x-data='{
-					twoFactor_enable2fa: null
+					twoFactor_enable2fa: null,
+					twoFactor_buttonSpinner:
+					{
+						isLoading: false,
+					},
 				}'
+				x-on:submit='twoFactor_buttonSpinner.isLoading = true'
 				class='space-y-6'
 			>
 				<div>
@@ -63,7 +68,10 @@
 						type='submit'
 						class='rounded-md flex justify-center w-full bg-indigo-600 px-3 py-1.5 text-sm/6 text-white font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-600 focus-visible:outline-offset-2 shadow-sm hover:bg-indigo-500'
 					>
-						Sign in
+						<partial name='_ButtonSpinner' model='"twoFactor_buttonSpinner"' />
+						<span x-opacity='!twoFactor_buttonSpinner.isLoading'>
+							Sign in
+						</span>
 					</button>
 					@Html.ValidationMessage("Error")
 				</div>

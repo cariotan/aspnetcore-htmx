@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
+[Area("V1")]
 public class GoogleController(HttpClient httpClient, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager) : Controller
 {
 	static string loginUrl = "https://accounts.google.com/o/oauth2/v2/auth";

@@ -96,8 +96,14 @@ app.UseAuthorization();
 app.UseSession();
 
 app.MapControllerRoute(
-	name: "default",
-	pattern: "{controller=Home}/{action=Index}/{id?}"
+	name: "v1-primary",
+	pattern: "{controller=Home}/{action=Index}/{id?}",
+	defaults: new { area = "V1" }
+);
+
+app.MapControllerRoute(
+	name: "v1-primary-area",
+	pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
 );
 
 app.MapHub<ChatHub>("/ChatHub");

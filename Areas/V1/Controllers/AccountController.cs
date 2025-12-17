@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
+[Area("V1")]
 public class AccountController(ILogger<AccountController> logger, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager) : HtmxController
 {
 	[AllowAnonymous]
@@ -25,13 +26,6 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 
 		var email = registerModel.Email.Trim();
 
-		if (registerModel.Password != registerModel.ConfirmPassword)
-		{
-			ModelState.AddModelError(nameof(registerModel.Password), "Passwords do not match");
-
-			return View(registerModel);
-		}
-
 		ApplicationUser newUser = new(email);
 
 		var result = await userManager.CreateAsync(newUser, registerModel.Password);
@@ -42,11 +36,11 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 
 			if (registerModel.RequireTwoFactor)
 			{
-				return LocalRedirect("/Account/Enable2fa");
+				return RedirectToAction("Enable2fa", "Account");
 			}
 			else
 			{
-				return LocalRedirect("/");
+				return RedirectToAction("Index", "Home");
 			}
 		}
 		else
@@ -80,7 +74,7 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 			}
 			else
 			{
-				return LocalRedirect("/");
+				return RedirectToAction("Index", "Home");
 			}
 		}
 		else
@@ -108,9 +102,7 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 
 			await signInManager.SignInAsync(user, true);
 
-			HxRedirect("/");
-
-			return Ok();
+			return RedirectToAction("Index", "Home");
 		}
 		else
 		{
@@ -152,7 +144,7 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 			}
 			else
 			{
-				return LocalRedirect("/");
+				return RedirectToAction("Index", "Home");
 			}
 		}
 		else if (result.RequiresTwoFactor)
@@ -181,7 +173,7 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 		else
 		{
 			System.Console.WriteLine("No user for two factor");
-			return LocalRedirect("/");
+			return RedirectToAction("Index", "Home");
 		}
 	}
 
@@ -209,7 +201,7 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 				}
 				else
 				{
-					return LocalRedirect("/");
+					return RedirectToAction("Index", "Home");
 				}
 			}
 			else
@@ -221,7 +213,7 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 		else
 		{
 			System.Console.WriteLine("No user for two factor");
-			return LocalRedirect("/Login");
+			return RedirectToAction("Login");
 		}
 	}
 

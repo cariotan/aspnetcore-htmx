@@ -3,7 +3,5 @@ public record RegisterModel(
 	string Email,
 	[Display(Name = "password")]
 	string Password,
-	[Display(Name = "confirm password")]
-	string ConfirmPassword,
 	bool RequireTwoFactor
 );

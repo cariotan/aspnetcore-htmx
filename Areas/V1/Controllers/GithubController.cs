@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
+[Area("V1")]
 public class GithubController(HttpClient httpClient, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager) : Controller
 {
 	static string loginUrl = "https://github.com/login/oauth/authorize";
