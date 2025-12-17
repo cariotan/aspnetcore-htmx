@@ -102,4 +102,11 @@ app.MapControllerRoute(
 
 app.MapHub<ChatHub>("/ChatHub");
 
+app.MapFallback(context =>
+{
+	context.Response.Redirect("/NotFound");
+	return Task.CompletedTask;
+});
+
 app.Run();
+

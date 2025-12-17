@@ -7,7 +7,7 @@
 @tailwind components;
 @tailwind utilities;
 
-.debug-ring {
+.debug-on .debug-ring {
 	@apply ring ring-red-600 ring-inset;
 }
 .debug-off .debug-ring {

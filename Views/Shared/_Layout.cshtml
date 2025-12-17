@@ -137,6 +137,7 @@ var isDebug = true;
 <body
 	x-data
 	hx-history='false'
+	class='@(isDebug ? "debug-on" : "")'
 >
 	<div id='wrapper'>
 		@RenderBody()
