@@ -6,6 +6,7 @@ using Scalar.AspNetCore;
 
 _ = GetDatabasePath();
 
+DotNetEnv.Env.Load();
 DotNetEnv.Env.Load(Path.Combine(GetWorkingDirectory(), ".env"));
 
 var keys = EnvironmentVariables.Keys;
