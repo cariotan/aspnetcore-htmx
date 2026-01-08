@@ -14,7 +14,7 @@
 			error_modal_message = $event.detail.error
 		'
 		x-on:hide_error_modal.window='error_modal_show = false'
-		class='fixed inset-0 bg-black/80 backdrop-blur-sm z-50'
+		class='fixed z-50 inset-0 backdrop-blur-sm bg-black/80'
 	>
 		<div
 			x-show='error_modal_show'
