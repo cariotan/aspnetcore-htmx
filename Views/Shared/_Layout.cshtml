@@ -136,6 +136,21 @@ var isDebug = true;
 
 <body
 	x-data
+	x-init=
+	'
+		let show_error_modal = @(ViewData.ContainsKey("show_error_modal").ToString().ToLower())
+		if(show_error_modal)
+		{
+			$nextTick(() =>
+			{
+				$dispatch("show_error_modal", 
+				{
+					error: "@ViewData["show_error_modal"]"
+				})
+				console.log("show_error_modal")
+			})
+		}
+	'
 	hx-history='false'
 	class='@(isDebug ? "debug-on" : "")'
 >

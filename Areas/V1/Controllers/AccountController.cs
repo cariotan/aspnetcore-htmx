@@ -10,6 +10,11 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 	public IActionResult Register()
 	{
 		logger.Endpoint(Get, "/Account/Register");
+		
+		{
+			ViewData["show_error_modal"] = "This isn't currently available. Please change the source code.";
+			return View();
+		}
 
 		return View();
 	}
@@ -18,6 +23,11 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 	public async Task<IActionResult> Register(RegisterModel registerModel)
 	{
 		logger.Endpoint(Post, "/Account/Register");
+
+		{
+			ViewData["show_error_modal"] = "This isn't currently available. Please change the source code.";
+			return View();
+		}
 
 		if (!ModelState.IsValid)
 		{
