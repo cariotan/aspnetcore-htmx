@@ -156,9 +156,13 @@ var isDebug = true;
 >
 	<div id='wrapper'>
 		@RenderBody()
-		@await RenderSectionAsync("Scripts", required: false)
 	</div>
+
+	@await RenderSectionAsync("Scripts", required: false)
+
 	<partial name='_ErrorModal' />
+	<partial name='_Toast' />
+
 	@if(isDebug)
 	{
 		<div
