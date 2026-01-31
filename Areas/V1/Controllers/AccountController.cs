@@ -67,6 +67,8 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 	[Authorize]
 	public async Task<IActionResult> Enable2fa()
 	{
+		logger.Endpoint(Get, "/Account/Enable2fa");
+
 		var user = await userManager.GetUserAsync(User);
 		if (user is { })
 		{
@@ -99,6 +101,8 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 	[Authorize]
 	public async Task<IActionResult> Enable2fa(string code)
 	{
+		logger.Endpoint(Post, "/Account/Enable2fa");
+
 		if (!ModelState.IsValid)
 		{
 			return View();
@@ -232,6 +236,8 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 	[HttpPost]
 	public async Task<IActionResult> Logout()
 	{
+		logger.Endpoint(Post, "/Account/Logout");
+
 		await signInManager.SignOutAsync();
 
 		return RedirectToAction("Login");
@@ -240,6 +246,8 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 	[HttpGet]
 	public IActionResult AccessDenied()
 	{
+		logger.Endpoint(Get, "/Account/AccessDenied");
+
 		return View();
 	}
 }

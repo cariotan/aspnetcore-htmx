@@ -21,6 +21,8 @@ public class GoogleController(
 	[HttpGet]
 	public IActionResult Login(string redirectUrl)
 	{
+		logger.Endpoint(Get, "/Google/Login");
+		
 		var state = JsonConvert.SerializeObject(new
 		{
 			redirectUrl,
@@ -39,6 +41,8 @@ public class GoogleController(
 	[HttpGet]
 	public async Task<IActionResult> Callback(string state, string code, string scope, string authuser, string prompt)
 	{
+		logger.Endpoint(Get, "/Google/Callback");
+
 		var sessionState = HttpContext.Session.GetString("state");
 
 		if (state == sessionState)

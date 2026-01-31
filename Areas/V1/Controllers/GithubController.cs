@@ -21,6 +21,8 @@ public class GithubController(
 	[HttpGet]
 	public IActionResult Login(string redirectUrl)
 	{
+		logger.Endpoint(Get, "/Github/Login");
+
 		var state = JsonConvert.SerializeObject(new
 		{
 			redirectUrl,
@@ -39,6 +41,8 @@ public class GithubController(
 	[HttpGet]
 	public async Task<IActionResult> Callback(string state, string code)
 	{
+		logger.Endpoint(Get, "/Github/Callback");
+
 		var sessionState = HttpContext.Session.GetString("state");
 
 		if (state == sessionState)
