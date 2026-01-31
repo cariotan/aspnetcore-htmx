@@ -8,12 +8,19 @@
 	<div
 		x-show='error_modal_show'
 		x-transition.opacity.duration.300ms
-		x-on:keyup.escape.window.prevent='error_modal_show = false'
-		x-on:show_error_modal.window='
+		x-on:keyup.escape.window.prevent=
+		'
+			$dispatch("hide_error_modal")
+		'
+		x-on:show_error_modal.window=
+		'
 			error_modal_show = true
 			error_modal_message = $event.detail.error
 		'
-		x-on:hide_error_modal.window='error_modal_show = false'
+		x-on:hide_error_modal.window=
+		'
+			error_modal_show = false
+		'
 		class='fixed z-50 inset-0 backdrop-blur-sm bg-black/80'
 	>
 		<div
@@ -22,7 +29,10 @@
 			class='flex justify-center items-center min-h-full'
 		>
 			<div
-				x-on:click.outside='error_modal_show = false'
+				x-on:click.outside=
+				'
+					$dispatch("hide_error_modal")
+				'
 				class='rounded flex flex-col items-center w-full max-w-md bg-white'
 			>
 				<div class='flex flex-col items-center gap-3 p-8'>
@@ -39,7 +49,10 @@
 					</p>
 				</div>
 				<button
-					x-on:click='error_modal_show = false'
+					x-on:click=
+					'
+						$dispatch("hide_error_modal")
+					'
 					class='rounded-b w-full bg-red-400 py-3 text-white font-light'
 				>
 					Continue
