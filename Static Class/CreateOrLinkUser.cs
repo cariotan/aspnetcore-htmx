@@ -17,6 +17,8 @@ static partial class StaticMethods
 
 			if (user is { })
 			{
+				await userManager.AddToRoleAsync(user, "User");
+
 				var result = await userManager.AddLoginAsync(user, new(provider, providerId, providerFriendlyName));
 
 				if (result.Succeeded)
@@ -36,6 +38,8 @@ static partial class StaticMethods
 
 				if (result.Succeeded)
 				{
+					await userManager.AddToRoleAsync(user, "User");
+
 					result = await userManager.AddLoginAsync(user, new(provider, providerId, providerFriendlyName));
 
 					if (result.Succeeded)

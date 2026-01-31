@@ -10,14 +10,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ASP.NET_Core_HTMX.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    [Migration("20250821084725_InitialMigration")]
+    [Migration("20260131220319_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.8");
+            modelBuilder.HasAnnotation("ProductVersion", "9.0.11");
 
             modelBuilder.Entity("ApplicationRole", b =>
                 {
@@ -43,6 +43,26 @@ namespace ASP.NET_Core_HTMX.Migrations
                         .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "19F014BA-8247-4992-B8AD-9DC90B5685CB",
+                            Name = "SuperAdmin",
+                            NormalizedName = "SUPERADMIN"
+                        },
+                        new
+                        {
+                            Id = "A72D6D34-3B0E-446F-86AF-483D56FD7210",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "B91F285F-4C1F-557B-97BC-594E67BE8321",
+                            Name = "User",
+                            NormalizedName = "USER"
+                        });
                 });
 
             modelBuilder.Entity("ApplicationUser", b =>

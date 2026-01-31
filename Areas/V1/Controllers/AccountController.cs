@@ -42,6 +42,8 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 
 		if (result.Succeeded)
 		{
+			await userManager.AddToRoleAsync(newUser, "User");
+
 			await signInManager.SignInAsync(newUser, true);
 
 			if (registerModel.RequireTwoFactor)

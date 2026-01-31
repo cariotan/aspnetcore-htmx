@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-[Authorize]
+[Authorize(Roles = "User")]
 [Area("V1")]
 public class HomeController(ILogger<HomeController> logger) : HtmxController, IHasUser
 {

@@ -5,7 +5,12 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 [Area("V1")]
-public class GithubController(HttpClient httpClient, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager) : Controller
+public class GithubController(
+	HttpClient httpClient,
+	UserManager<ApplicationUser> userManager,
+	SignInManager<ApplicationUser> signInManager,
+	ILogger<GithubController> logger
+) : Controller
 {
 	static string loginUrl = "https://github.com/login/oauth/authorize";
 	static string idTokenUrl = "https://github.com/login/oauth/access_token";
