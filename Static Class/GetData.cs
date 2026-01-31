@@ -1,11 +1,14 @@
+using Akka.Hosting;
 using Newtonsoft.Json.Linq;
 
 static partial class StaticMethods
 {
-	public static async Task<Result<string>> GetData(HttpRequestMessage httpRequestMessage, HttpClient httpClient, IRequiredActor<Brain> brain)
+	public static async Task<Result<string>> GetData(HttpRequestMessage httpRequestMessage, HttpClient httpClient, IRequiredActor<Brain> brain, string? access_token)
 	{
-		var access_token = await brain.Ask<string>(new GetAccessToken());
-		httpRequestMessage.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", access_token);
+		if(access_token is not null)
+		{
+			httpRequestMessage.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", access_token);
+		}
 
 		HttpResponseMessage response;
 		{
@@ -16,7 +19,7 @@ static partial class StaticMethods
 			catch(HttpRequestException)
 			{
 				var error = ErrorCodes["GEN001"];
-				SendDiscordException sendDiscordException = new(new Exception(error), "Developer");
+				SendDiscordException sendDiscordException = new(new Exception(error));
 				brain.Tell(sendDiscordException);
 				return new Error(error);
 			}

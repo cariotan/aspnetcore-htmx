@@ -17,24 +17,10 @@ var isDebug = true;
 	@if(isDebug)
 	{
 		<script src='~/js/tailwind.js' asp-append-version='true'></script>
-		<script type='text/tailwindcss'>
+		<script>
     tailwind.config = {
-					theme: {
-						extend: {
-							colors: {
-							},
-							screens: {
-								ml: '896px',
-								lr: '1152px'
-							},
-							fontFamily: {
-								sans: ['Poppins']
-							}
-						},
-						fontFamily: {
-						}
-					},
-    }
+					theme: @Html.Raw(@GetThemeSection(File.ReadAllText("""C:/Users/cario/Documents/aspnetcore-htmx/tailwind.config.js""")))
+				}
 		</script>
 	}
 
