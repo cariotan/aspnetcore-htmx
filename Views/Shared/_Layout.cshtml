@@ -14,6 +14,30 @@ var isDebug = true;
 	<meta name='viewport' content='width=device-width, initial-scale=1.0' />
 	<title>@ViewData["Title"] - ASP.NET_Core_HTMX</title>
 
+	@if(isDebug)
+	{
+		<script src='~/js/tailwind.js' asp-append-version='true'></script>
+		<script type='text/tailwindcss'>
+    tailwind.config = {
+					theme: {
+						extend: {
+							colors: {
+							},
+							screens: {
+								ml: '896px',
+								lr: '1152px'
+							},
+							fontFamily: {
+								sans: ['Poppins']
+							}
+						},
+						fontFamily: {
+						}
+					},
+    }
+		</script>
+	}
+
 	<link rel='stylesheet' href='~/css/tailwind.css' asp-append-version='true'>
 
 	<!-- 2.0.4 -->
