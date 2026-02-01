@@ -18,9 +18,8 @@ var isDebug = true;
 	{
 		<script src='~/js/tailwind.js' asp-append-version='true'></script>
 		<script>
-    tailwind.config = {
-					theme: @Html.Raw(@GetThemeSection(File.ReadAllText("""C:/Users/cario/Documents/aspnetcore-htmx/tailwind.config.js""")))
-				}
+			theme: @Html.Raw(@GetThemeSection(File.ReadAllText(System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "tailwind.config.js"))))
+		}
 		</script>
 	}
 
