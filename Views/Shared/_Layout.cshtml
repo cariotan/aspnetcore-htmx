@@ -19,8 +19,8 @@ var isDebug = true;
 		<script src='~/js/tailwind.js' asp-append-version='true'></script>
 		<script>
 			tailwind.config = {
-					theme: @Html.Raw(@GetThemeSection(File.ReadAllText(System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "tailwind.config.js")))),
-					darkMode: 'selector'
+				theme: @Html.Raw(@GetThemeSection(File.ReadAllText(System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "tailwind.config.js")))),
+				darkMode: 'selector'
 			}
 		</script>
 	}
