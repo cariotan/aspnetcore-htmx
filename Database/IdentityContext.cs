@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 /*
-dotnet ef migrations add InitialMigration -c IdentityContext
+dotnet ef migrations add InitialMigration -c IdentityContext -o Migrations/IdentityDatabase
 dotnet ef database update -c IdentityContext
 */
 

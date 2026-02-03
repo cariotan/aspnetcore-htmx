@@ -7,10 +7,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace ASP.NET_Core_HTMX.Migrations
+namespace ASP.NET_Core_HTMX.Migrations.IdentityDatabase
 {
     [DbContext(typeof(IdentityContext))]
-    [Migration("20260131220319_InitialMigration")]
+    [Migration("20260203171806_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />

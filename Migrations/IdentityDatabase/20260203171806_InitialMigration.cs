@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace ASP.NET_Core_HTMX.Migrations
+namespace ASP.NET_Core_HTMX.Migrations.IdentityDatabase
 {
     /// <inheritdoc />
     public partial class InitialMigration : Migration
