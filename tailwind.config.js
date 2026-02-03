@@ -13,7 +13,6 @@ module.exports = {
 	theme: {
 		extend: {
 			colors: {
-				"nani": "#DDD"
 			},
 			screens: {
 				ml: '896px',

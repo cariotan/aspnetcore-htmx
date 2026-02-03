@@ -11,7 +11,7 @@
 	<div class='flex flex-col min-h-full'>
 		<section class='flex flex-col justify-center items-center bg-gradient-to-b from-sky-50 to-white px-4 py-32 dark:from-gray-800 dark:to-gray-900 debug-ring'>
 			<div class='max-w-2xl text-center'>
-				<h1 class='text-5xl text-gray-900 font-extrabold tracking-tight dark:text-white md:text-6xl bg-nani'>
+				<h1 class='text-5xl text-gray-900 font-extrabold tracking-tight dark:text-white md:text-6xl'>
 					Welcome to Your New ASP.NET Core App MVC
 				</h1>
 				<div class='pt-6 pb-10 debug-ring'>
@@ -40,7 +40,7 @@
 						'
 						x-on:click='index_btnProperties.isLoading = true'
 						href='https://learn.microsoft.com/aspnet/core'
-						class='relative transition-colors duration-150 rounded-full inline-flex justify-center items-center gap-2 bg-sky-600 px-6 py-3 text-white font-semibold dark:bg-sky-500 dark:hover:bg-sky-600 shadow hover:bg-sky-700'
+						class='relative transition-colors duration-150 rounded-full inline-flex justify-center items-center gap-2 bg-sky-600 px-6 py-3 text-white font-semibold shadow dark:bg-sky-500 dark:hover:bg-sky-600 hover:bg-sky-700'
 					>
 						<partial name='_ButtonSpinner' model='"index_btnProperties"' />
 						<span x-opacity='!index_btnProperties.isLoading'>
@@ -55,8 +55,8 @@
 				<h2 class='text-center text-3xl text-gray-900 font-bold dark:text-white'>
 					Key Features
 				</h2>
-				<div class='pt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3 debug-ring'>
-					<div class='transition-shadow duration-150 rounded-2xl bg-sky-50 p-6 dark:bg-gray-700 group shadow-sm hover:shadow-md'>
+				<div class='grid gap-8 pt-12 sm:grid-cols-2 lg:grid-cols-3 debug-ring'>
+					<div class='transition-shadow duration-150 rounded-2xl bg-sky-50 p-6 shadow-sm dark:bg-gray-700 group hover:shadow-md'>
 						<div class='mb-4 rounded-full flex justify-center items-center w-12 h-12 bg-sky-100 dark:bg-gray-600'>
 							<svg
 								xmlns='http://www.w3.org/2000/svg'
@@ -76,7 +76,7 @@
 							A modern, high-performance web framework for building fast, scalable, and cross-platform applications on .NET—ideal for APIs, web apps, and real-time services.
 						</p>
 					</div>
-					<div class='transition-shadow duration-150 rounded-2xl bg-sky-50 p-6 dark:bg-gray-700 group shadow-sm hover:shadow-md'>
+					<div class='transition-shadow duration-150 rounded-2xl bg-sky-50 p-6 shadow-sm dark:bg-gray-700 group hover:shadow-md'>
 						<div class='mb-4 rounded-full flex justify-center items-center w-12 h-12 bg-sky-100 dark:bg-gray-600'>
 							<svg
 								xmlns='http://www.w3.org/2000/svg'
@@ -96,7 +96,7 @@
 							Lightweight tools that add dynamic interactivity and modern UX patterns with minimal JavaScript, enabling fast, reactive, and maintainable pages without heavy frameworks.
 						</p>
 					</div>
-					<div class='transition-shadow duration-150 rounded-2xl bg-sky-50 p-6 dark:bg-gray-700 group shadow-sm hover:shadow-md'>
+					<div class='transition-shadow duration-150 rounded-2xl bg-sky-50 p-6 shadow-sm dark:bg-gray-700 group hover:shadow-md'>
 						<div class='mb-4 rounded-full flex justify-center items-center w-12 h-12 bg-sky-100 dark:bg-gray-600'>
 							<svg
 								xmlns='http://www.w3.org/2000/svg'
