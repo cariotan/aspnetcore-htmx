@@ -107,7 +107,7 @@ app.MapControllerRoute(
 	pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
 );
 
-app.MapHub<ChatHub>("/ChatHub");
+app.MapHub<ChatHub>($"/{nameof(ChatHub)}");
 
 app.MapFallback(context =>
 {
