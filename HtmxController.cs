@@ -1,21 +1,20 @@
-using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 public class HtmxController : Controller
 {
-	public void Hx(string target, bool outerHTML, bool? sameSelectAsTarget = null)
+	protected void Hx(string target, bool outerHTML, bool? sameSelectAsTarget = null)
 	{
 		Hx(target, outerHTML ? "outerHTML" : "innerHTML", sameSelectAsTarget == true ? target : "");
 	}
 
-	public void Hx(string target, bool outerHTML, string select)
+	protected void Hx(string target, bool outerHTML, string select)
 	{
 		Hx(target, outerHTML ? "outerHTML" : "innerHTML", select);
 	}
 
-	public void Hx(string target = "this", string swap = "outerHTML", string select = "")
+	protected void Hx(string target = "this", string swap = "outerHTML", string select = "")
 	{
-		Console.WriteLine("Ensure Ids include #");
 		if (Response.Headers.ContainsKey("hx-retarget"))
 		{
 			Response.Headers["hx-retarget"] = target;
@@ -38,30 +37,16 @@ public class HtmxController : Controller
 		{
 			if (Response.Headers.ContainsKey("hx-reselect"))
 			{
-				Response.Headers["hx-reselect"] = target;
+				Response.Headers["hx-reselect"] = select;
 			}
 			else
 			{
-				Response.Headers.Append("hx-reselect", target);
+				Response.Headers.Append("hx-reselect", select);
 			}
 		}
 	}
 
-	public void HxTrigger(string trigger)
-	{
-		if (Response.Headers.ContainsKey("hx-trigger"))
-		{
-			Response.Headers["hx-trigger"] += ", " + trigger;
-		}
-		else
-		{
-			Response.Headers.Append("hx-trigger", trigger);
-		}
-
-		Console.WriteLine("Don't forget to listen for the event from:body");
-	}
-
-	public void HxTrigger(string trigger, object? value = null)
+	protected void HxTrigger(string trigger, object? value = null)
 	{
 		value ??= "";
 
@@ -71,15 +56,15 @@ public class HtmxController : Controller
 			[trigger] = value
 		};
 
-		string triggerValue = JsonSerializer.Serialize(payload);
+		string triggerValue = JsonConvert.SerializeObject(payload);
 
 		if (Response.Headers.ContainsKey("hx-trigger"))
 		{
-			payload = JsonSerializer.Deserialize<Dictionary<string, object>>(Response.Headers["hx-trigger"]!)!;
+			payload = JsonConvert.DeserializeObject<Dictionary<string, object>>(Response.Headers["hx-trigger"]!)!;
 
 			payload.Add(trigger, value);
 
-			var json = JsonSerializer.Serialize(payload);
+			var json = JsonConvert.SerializeObject(payload);
 
 			Response.Headers["hx-trigger"] = json;
 		}
@@ -87,11 +72,9 @@ public class HtmxController : Controller
 		{
 			Response.Headers.Append("hx-trigger", triggerValue);
 		}
-
-		Console.WriteLine("Don't forget to listen for the event from:body");
 	}
 
-	public IActionResult HxRedirect(string localPath)
+	protected void HxRedirect(string localPath)
 	{
 		if (Response.Headers.ContainsKey("hx-redirect"))
 		{
@@ -101,24 +84,9 @@ public class HtmxController : Controller
 		{
 			Response.Headers.Append("hx-redirect", localPath);
 		}
-
-		HxNone();
-		return Ok();
 	}
 
-	public void HxPushUrl(string url)
-	{
-		if (Response.Headers.ContainsKey("hx-push-url"))
-		{
-			Response.Headers["hx-push-url"] = url;
-		}
-		else
-		{
-			Response.Headers.Append("hx-push-url", url);
-		}
-	}
-
-	public void HxNone()
+	protected void HxNone()
 	{
 		if (Response.Headers.ContainsKey("hx-reswap"))
 		{
@@ -128,26 +96,5 @@ public class HtmxController : Controller
 		{
 			Response.Headers.Append("hx-reswap", "none");
 		}
-	}
-
-	public IActionResult PartialView(Partials partials, object model)
-	{
-		return base.PartialView(partials.ToString(), model);
-	}
-
-	public IActionResult PartialView(Partials partials)
-	{
-		return base.PartialView(partials.ToString());
-	}
-
-	public IActionResult HxShowErrorModal(string error)
-	{
-		HxTrigger("show_error_modal", new
-		{
-			error = error
-		});
-
-		HxNone();
-		return Ok();
 	}
 }
