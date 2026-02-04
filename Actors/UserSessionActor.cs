@@ -19,6 +19,7 @@ public class UserSessionActor : ReceiveActor
 	{
 		Receive<ReceiveTimeout>(msg =>
 		{
+			logger.Info("User session timed out. Stopping actor.");
 			Context.Stop(Self);
 		});
 	}
