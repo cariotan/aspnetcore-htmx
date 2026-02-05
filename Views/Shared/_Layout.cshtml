@@ -163,6 +163,13 @@ var isDebug = true;
 		}
 	'
 	hx-history='false'
+	x-on:htmx:before-request=
+	'
+		let removeAll = document.querySelectorAll(".field-validation-error, .validation-summary-errors")
+		removeAll.forEach(element => {
+			element.remove()
+		})
+	'
 	class='@(isDebug ? "debug-on" : "")'
 >
 	<div id='wrapper'>

@@ -74,7 +74,7 @@ public class HtmxController : Controller
 		}
 	}
 
-	protected void HxRedirect(string localPath)
+	protected IActionResult HxRedirect(string localPath)
 	{
 		if (Response.Headers.ContainsKey("hx-redirect"))
 		{
@@ -84,6 +84,8 @@ public class HtmxController : Controller
 		{
 			Response.Headers.Append("hx-redirect", localPath);
 		}
+
+		return Ok();
 	}
 
 	protected void HxNone()
@@ -96,5 +98,16 @@ public class HtmxController : Controller
 		{
 			Response.Headers.Append("hx-reswap", "none");
 		}
+	}
+
+	public IActionResult HxShowErrorModal(string error)
+	{
+		HxTrigger("show_error_modal", new
+		{
+			error = error
+		});
+
+		HxNone();
+		return Ok();
 	}
 }
