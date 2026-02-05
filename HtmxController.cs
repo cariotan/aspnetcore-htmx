@@ -107,7 +107,8 @@ public class HtmxController : Controller
 			error = error
 		});
 
-		HxNone();
+		ViewData["show_error_modal"] = error;
+
 		return Ok();
 	}
 }
