@@ -9,7 +9,7 @@ dotnet ef database update -c IdentityContext
 
 public class IdentityContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
 {
-	private string connectionString = $"Data Source={GetDatabasePath()}\\IdentityContext.db";
+	private string connectionString = $"Data Source={Environment_GetDatabasePath()}\\IdentityContext.db";
 
 	public DbSet<RefreshToken> RefreshTokens { get; set; }
 

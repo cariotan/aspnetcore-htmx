@@ -153,7 +153,7 @@ public class SendEmailException : SendEmail
 	{
 		To = new("ctan@trucell.com.au", "Cario Tan");
 
-		Subject = $"{GetAssemblyName()} Exception: {e.Message}";
+		Subject = $"{Environment_GetAssemblyName()} Exception: {e.Message}";
 
 		Body = e.ToString();
 	}

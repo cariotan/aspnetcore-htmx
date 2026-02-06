@@ -14,7 +14,7 @@ public class GithubController(
 {
 	static string loginUrl = "https://github.com/login/oauth/authorize";
 	static string idTokenUrl = "https://github.com/login/oauth/access_token";
-	string callbackUrl => GetBaseUrl(Request) + "/GitHub/Callback";
+	string callbackUrl => Environment_GetBaseUrl(Request) + "/GitHub/Callback";
 	static string? clientId = GetEnvironmentVariable("github-client-id");
 	static string? clientSecret = GetEnvironmentVariable("github-client-secret");
 

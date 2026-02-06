@@ -1,6 +1,6 @@
 static partial class StaticMethods
 {
-	public readonly static Dictionary<string, string?> EnvironmentVariables = new()
+	public readonly static Dictionary<string, string?> Environment_EnvironmentVariables = new()
 	{
 		["Test"] = Environment.GetEnvironmentVariable("Test"),
 		["Exception"] = Environment.GetEnvironmentVariable("Exception"),
@@ -15,6 +15,6 @@ static partial class StaticMethods
 
 	public static string? GetEnvironmentVariable(string key)
 	{
-		return EnvironmentVariables[key];
+		return Environment_EnvironmentVariables[key];
 	}
 }

@@ -4,22 +4,22 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
-_ = GetDatabasePath();
+_ = Environment_GetDatabasePath();
 
 DotNetEnv.Env.Load();
-DotNetEnv.Env.Load(Path.Combine(GetWorkingDirectory(), ".env"));
+DotNetEnv.Env.Load(Path.Combine(Environment_GetWorkingDirectory(), ".env"));
 
-var keys = EnvironmentVariables.Keys;
+var keys = Environment_EnvironmentVariables.Keys;
 
 foreach (var key in keys)
 {
-	if (EnvironmentVariables[key] is null)
+	if (Environment_EnvironmentVariables[key] is null)
 	{
 		throw new Exception($"Please set {key} in environment variables");
 	}
 }
 
-Directory.CreateDirectory(GetDatabasePath());
+Directory.CreateDirectory(Environment_GetDatabasePath());
 
 IdentityContext identityContext = new();
 identityContext.Database.Migrate();

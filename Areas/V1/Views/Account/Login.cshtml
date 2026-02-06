@@ -113,7 +113,7 @@
 			<a
 				asp-action='Login'
 				asp-controller='Google'
-				asp-route-callbackUrl='@(GetBaseUrl(Context.Request))/Google/Callback'
+				asp-route-callbackUrl='@(Environment_GetBaseUrl(Context.Request))/Google/Callback'
 				class='mt-5 rounded-lg border border-gray-300 flex justify-center items-center bg-white px-6 py-2 text-sm text-gray-800 font-medium hover:bg-gray-200 focus:outline-none'
 			>
 				<svg
@@ -144,7 +144,7 @@
 			<a
 				asp-action='Login'
 				asp-controller='GitHub'
-				asp-route-callbackUrl='@(GetBaseUrl(Context.Request))/GitHub/Callback'
+				asp-route-callbackUrl='@(Environment_GetBaseUrl(Context.Request))/GitHub/Callback'
 				class='mt-5 rounded-lg border border-gray-300 flex justify-center items-center bg-white px-6 py-2 text-sm text-gray-800 font-medium hover:bg-gray-200 focus:outline-none'
 			>
 				<svg
