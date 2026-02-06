@@ -100,7 +100,7 @@ public class HtmxController : Controller
 		}
 	}
 
-	public IActionResult HxShowErrorModal(string error)
+	protected IActionResult HxShowErrorModal(string error)
 	{
 		HxTrigger("show_error_modal", new
 		{
@@ -110,5 +110,10 @@ public class HtmxController : Controller
 		ViewData["show_error_modal"] = error;
 
 		return Ok();
+	}
+
+	protected bool IsHTMXRequest()
+	{
+		return Request.Headers.ContainsKey("HX-Request");
 	}
 }
