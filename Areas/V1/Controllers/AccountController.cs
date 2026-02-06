@@ -15,8 +15,6 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 			ViewData["show_error_modal"] = "This isn't currently available. Please change the source code.";
 			return View();
 		}
-
-		return View();
 	}
 
 	[HttpPost]

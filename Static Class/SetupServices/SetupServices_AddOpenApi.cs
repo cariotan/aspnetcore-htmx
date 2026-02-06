@@ -7,7 +7,7 @@ using Microsoft.OpenApi.Models;
 
 static partial class StaticMethods
 {
-	public static void AddOpenApi(this IServiceCollection services)
+	public static void SetupServices_AddOpenApi(this IServiceCollection services)
 	{
 		services.AddOpenApi(options =>
 		{

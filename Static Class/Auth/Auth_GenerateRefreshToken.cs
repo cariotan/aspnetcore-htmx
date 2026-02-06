@@ -1,10 +1,10 @@
 static partial class StaticMethods
 {
-	public static async Task<string> GenerateRefreshToken(string userId, IdentityContext identityContext)
+	public static async Task<string> Auth_GenerateRefreshToken(string userId, IdentityContext identityContext)
 	{
-		var refresh_token = GenerateRandomString();
+		var refresh_token = Auth_GenerateRandomString();
 
-		var hash = GenerateHash(refresh_token);
+		var hash = Auth_GenerateHash(refresh_token);
 
 		RefreshToken refreshToken = new()
 		{

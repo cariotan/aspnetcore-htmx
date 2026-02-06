@@ -1,11 +1,10 @@
 using System.Threading.Tasks;
-#warning Get rid of System.Text.Json.Serialization
-using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace Api;
 
@@ -35,9 +34,9 @@ public class AuthenticationController(UserManager<ApplicationUser> userManager, 
 
 			if (verified)
 			{
-				var refresh_token = await GenerateRefreshToken(user.Id, identityContext);
+				var refresh_token = await Auth_GenerateRefreshToken(user.Id, identityContext);
 
-				var access_token = GenerateJwtToken(user.Id, email);
+				var access_token = Auth_GenerateJwtToken(user.Id, email);
 
 				return new AuthenticationResponse(access_token, refresh_token);
 			}
@@ -53,7 +52,7 @@ public class AuthenticationController(UserManager<ApplicationUser> userManager, 
 	[HttpPost("RequestAccessToken")]
 	public async Task<ActionResult<AuthenticationResponse>> RequestAccessToken([FromForm] string refresh_token)
 	{
-		var hash = GenerateHash(refresh_token);
+		var hash = Auth_GenerateHash(refresh_token);
 
 		var refreshToken = await identityContext.RefreshTokens
 			.Include(x => x.User)
@@ -64,8 +63,8 @@ public class AuthenticationController(UserManager<ApplicationUser> userManager, 
 			refreshToken.RevokedReason = "RequestAccessToken";
 			await identityContext.SaveChangesAsync();
 
-			var access_token = GenerateJwtToken(refreshToken.UserId, refreshToken.User!.Email!);
-			refresh_token = await GenerateRefreshToken(refreshToken.UserId, identityContext);
+			var access_token = Auth_GenerateJwtToken(refreshToken.UserId, refreshToken.User!.Email!);
+			refresh_token = await Auth_GenerateRefreshToken(refreshToken.UserId, identityContext);
 
 			return new AuthenticationResponse(access_token, refresh_token);
 		}
@@ -80,8 +79,8 @@ public class AuthenticationController(UserManager<ApplicationUser> userManager, 
 		var user = await userManager.GetUserAsync(User);
 		if (user is { })
 		{
-			var access_token = GenerateJwtToken(user.Id, user.Email!);
-			var refresh_token = await GenerateRefreshToken(user.Id, identityContext);
+			var access_token = Auth_GenerateJwtToken(user.Id, user.Email!);
+			var refresh_token = await Auth_GenerateRefreshToken(user.Id, identityContext);
 
 			return new AuthenticationResponse(access_token, refresh_token);
 		}
@@ -91,5 +90,5 @@ public class AuthenticationController(UserManager<ApplicationUser> userManager, 
 		}
 	}
 
-	public record AuthenticationResponse([property: JsonPropertyName("access_token")] string AccessToken, [property: JsonPropertyName("refresh_token")] string RefreshToken);
+	public record AuthenticationResponse([property: JsonProperty("access_token")] string AccessToken, [property: JsonProperty("refresh_token")] string RefreshToken);
 }

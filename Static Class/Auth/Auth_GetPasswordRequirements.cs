@@ -3,7 +3,7 @@ using Microsoft.Extensions.Options;
 
 static partial class StaticMethods
 {
-	public static IEnumerable<string> GetPasswordRequirements(IOptions<IdentityOptions> options)
+	public static IEnumerable<string> Auth_GetPasswordRequirements(IOptions<IdentityOptions> options)
 	{
 		var identityOptions = options.Value;
 

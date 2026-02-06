@@ -131,7 +131,7 @@ public class GithubController(
 					}
 					else
 					{
-						var access_token = GenerateJwtToken(user.Id, user.Email!);
+						var access_token = Auth_GenerateJwtToken(user.Id, user.Email!);
 						return Redirect(redirectUrl + $"?access_token={access_token}&");
 					}
 				}

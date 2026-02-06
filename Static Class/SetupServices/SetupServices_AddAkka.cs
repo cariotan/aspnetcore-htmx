@@ -4,7 +4,7 @@ using Akka.Hosting;
 
 static partial class StaticMethods
 {
-	public static void AddAkka(this IServiceCollection services)
+	public static void SetupServices_AddAkka(this IServiceCollection services)
 	{
 		services.AddAkka(nameof(ActorSystem), x =>
 		{

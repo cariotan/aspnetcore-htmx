@@ -5,7 +5,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 static partial class StaticMethods
 {
-	public static void AddSwagger(this IServiceCollection services)
+	public static void SetupServices_AddSwagger(this IServiceCollection services)
 	{
 		services.AddEndpointsApiExplorer();
 		services.AddSwaggerGen(options =>

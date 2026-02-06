@@ -3,7 +3,7 @@ using System.Text;
 
 static partial class StaticMethods
 {
-	public static string GenerateHash(string token)
+	public static string Auth_GenerateHash(string token)
 	{
 		using var sha = SHA256.Create();
 

@@ -5,7 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 
 static partial class StaticMethods
 {
-	public static void AddIdentity(this IServiceCollection services)
+	public static void SetupServices_AddIdentity(this IServiceCollection services)
 	{
 		services
 			.AddDbContext<IdentityContext>()
@@ -44,7 +44,7 @@ static partial class StaticMethods
 				ValidateIssuerSigningKey = true,
 				ValidIssuer = "cario",
 				ValidAudience = "cario",
-				ClockSkew = 0.Seconds(),
+				ClockSkew = 30.Minutes(),
 			};
 
 			// This is used for endpoints where the authentication headers cannot be supplied for whatever reason like signal r. In which case it will extract it from access_token query parameter.

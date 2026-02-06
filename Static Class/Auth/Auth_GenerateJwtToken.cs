@@ -5,7 +5,7 @@ using System.Text;
 
 static partial class StaticMethods
 {
-	public static string GenerateJwtToken(string userId, string email)
+	public static string Auth_GenerateJwtToken(string userId, string email)
 	{
 		Claim[] claims =
 		[

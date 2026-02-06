@@ -33,15 +33,15 @@ builder.Services.AddControllersWithViews(x =>
 	x.Filters.Add<CustomExceptionFilter>();
 });
 
-builder.Services.AddSwagger();
+builder.Services.SetupServices_AddSwagger();
 // builder.Services.AddOpenApi();
 builder.Services.AddHttpClient();
 builder.Services.AddSignalR();
-builder.Services.AddIdentity();
-builder.Services.AddAkka();
+builder.Services.SetupServices_AddIdentity();
+builder.Services.SetupServices_AddAkka();
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
-builder.AddSerilog();
+builder.SetupServices_AddSerilog();
 builder.Services.AddCors();
 
 builder.Services.AddDistributedMemoryCache();
