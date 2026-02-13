@@ -39,3 +39,17 @@ function drr {
 function dwr {
 	dotnet watch -c Release
 }
+
+cd "C:\Users\cario\Documents\aspnetcore-htmx"
+
+mklink /D "1 Models" "Models"
+mklink /D "2 Views" "Areas\V1\Views"
+mklink /D "3 Controllers" "Areas\V1\Controllers"
+mklink /D "3.5 Views (Root)" "Views"
+mklink /D "4 Static Class" "Static Class"
+
+<ItemGroup>
+	<Compile Remove="1*\**;2*\**;3*\**;4*\**" />
+	<Content Remove="1*\**;2*\**;3*\**;4*\**" />
+	<None Remove="1*\**;2*\**;3*\**;4*\**" />
+</ItemGroup>
