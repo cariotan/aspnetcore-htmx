@@ -18,10 +18,4 @@ public class HomeController(
 
 		return View();
 	}
-
-	[HttpGet]
-	public async Task<IActionResult> GetViewHx()
-	{
-		return PartialView("Home_View");
-	}
 }
