@@ -22,6 +22,7 @@
 	x-show='buttonSpinner_properties.isLoading'
 	x-modelable='buttonSpinner_properties'
 	x-model='@Model'
+	x-on:window.pageshow.window='buttonSpinner_properties.isLoading = false'
 	:class='`absolute animate-spin rounded-full border-2 border-current border-t-transparent inline-block text-gray-200 ${buttonSpinner_properties.color} ${buttonSpinner_properties.size}`'
 	style='display: none; width: 1lh; height: 1lh;'
 >
