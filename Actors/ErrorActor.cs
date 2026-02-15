@@ -1,36 +1,49 @@
 using Akka.Actor;
 using Akka.Event;
+using Akka.Hosting;
 
 public class ErrorActor : ReceiveActor
 {
-	readonly ILoggingAdapter logger = Context.GetLogger();
+	ILoggingAdapter logger = Context.GetLogger();
+	IServiceScopeFactory serviceScopeFactory;
 
-	public ErrorActor()
+	public ErrorActor(
+		IServiceScopeFactory serviceScopeFactory,
+		IRequiredActor<Brain> brain
+	)
 	{
-		Receive<Akka.Event.Error>(msg =>
+		this.serviceScopeFactory = serviceScopeFactory;
+
+		Receive<NewUnhandledError>(msg =>
 		{
-			if (msg.Cause is not null)
+			using var scope = serviceScopeFactory.CreateScope();
+			ErrorContext errorContext;
 			{
-				Context.Parent.Tell(new SendDiscordException(new ActorException(msg.Cause)));
+				errorContext = scope.ServiceProvider.GetRequiredService<ErrorContext>();
 			}
-			else
+
+			try
 			{
-				Context.Parent.Tell(new SendDiscordException(new ActorException(msg.ToString())));
+				UnhandledError unhandledError = new()
+				{
+					Message = msg.Message,
+					Exception = msg.Exception?.ToString(),
+					DateCreated = DateTime.Now
+				};
+
+				errorContext.UnhandledErrors.Add(unhandledError);
+				errorContext.SaveChanges();
+
+				brain.Tell(new SendDiscordException(unhandledError.Message));
+			}
+			catch(Exception e)
+			{
+				logger.Error(e, "Error occurred while saving unhandled error");
 			}
 		});
 	}
 }
 
-#warning Change ActorException to the name of the app.
-public class ActorException : Exception
-{
-	public ActorException(Exception innerException)
-		: base("An error occurred in Karisma Kiosk Actors", innerException)
-	{
-	}
+public record NewUnhandledError(string Message, Exception? Exception = null) : IErrorCommand;
 
-	public ActorException(string message)
-		: base(message)
-	{
-	}
-}
+public interface IErrorCommand;

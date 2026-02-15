@@ -23,9 +23,6 @@ public class AuthenticationController(UserManager<ApplicationUser> userManager, 
 	[ProducesResponseType(typeof(AuthenticationResponse), 200)]
 	public async Task<ActionResult<AuthenticationResponse>> Login([FromForm][Required] string email, [FromForm][Required] string password)
 	{
-#if !DEBUG
-#warning Use OAuth in production.
-#endif
 		var user = await userManager.FindByEmailAsync(email);
 
 		if (user is { })

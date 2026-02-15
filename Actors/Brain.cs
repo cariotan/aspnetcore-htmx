@@ -6,9 +6,24 @@ using Akka.Hosting;
 public class Brain : ReceiveActor
 {
 	readonly ILoggingAdapter logger = Context.GetLogger();
+	IServiceScopeFactory serviceScopeFactory;
 
-	public Brain(HttpClient httpClient)
+	public Brain(
+		HttpClient httpClient,
+		IServiceScopeFactory serviceScopeFactory,
+		IRequiredActor<Brain> brain
+	)
 	{
+		this.serviceScopeFactory = serviceScopeFactory;
+
+		Receive<IErrorCommand>(msg =>
+		{
+			Context.GetOrCreateChild(
+				Props.Create(() => new ErrorActor(serviceScopeFactory, brain)),
+				nameof(ErrorActor)
+			).Forward(msg);
+		});
+
 		Receive<IDiscordMsg>(msg =>
 		{
 			Context.GetOrCreateChild(
@@ -33,25 +48,25 @@ public class Brain : ReceiveActor
 			).Forward(msg);
 		});
 
-		Events();
+		// Events();
 	}
 
 	private void Events()
 	{
-		Context.System.EventStream.Subscribe(
-			Context.ActorOf(
-				Props.Create(() => new ErrorActor()),
-				nameof(ErrorActor)
-			),
-			typeof(Akka.Event.Error)
-		);
+		// Context.System.EventStream.Subscribe(
+		// 	Context.ActorOf(
+		// 		Props.Create(() => new ErrorActor(serviceScopeFactory)),
+		// 		nameof(ErrorActor)
+		// 	),
+		// 	typeof(Akka.Event.Error)
+		// );
 
-		Context.System.EventStream.Subscribe(
-			Context.ActorOf(
-				Props.Create(() => new DeadLetterActor()),
-				nameof(DeadLetterActor)
-			),
-			typeof(UnhandledMessage)
-		);
+		// Context.System.EventStream.Subscribe(
+		// 	Context.ActorOf(
+		// 		Props.Create(() => new DeadLetterActor()),
+		// 		nameof(DeadLetterActor)
+		// 	),
+		// 	typeof(UnhandledMessage)
+		// );
 	}
 }

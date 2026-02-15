@@ -12,9 +12,15 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 		logger.Endpoint(Get, "/Account/Register");
 		
 		{
-			ViewData["show_error_modal"] = "This isn't currently available. Please change the source code.";
-			return View();
+			var available = false;
+			if(available)
+			{
+				ViewData["show_error_modal"] = "This isn't currently available. Please change the source code.";
+				return View();
+			}
 		}
+
+		return View();
 	}
 
 	[HttpPost]
@@ -23,8 +29,12 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 		logger.Endpoint(Post, "/Account/Register");
 
 		{
-			ViewData["show_error_modal"] = "This isn't currently available. Please change the source code.";
-			return View();
+			var available = false;
+			if(available)
+			{
+				ViewData["show_error_modal"] = "This isn't currently available. Please change the source code.";
+				return View();
+			}
 		}
 
 		if (!ModelState.IsValid)

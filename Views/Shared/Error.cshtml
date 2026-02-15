@@ -1,0 +1,48 @@
+@{
+	ViewData["Title"] = "Error";
+}
+
+<div class='flex min-h-screen items-center justify-center bg-white p-6 font-sans text-slate-900'>
+	<div class='w-full max-w-xl py-12'>
+
+		<div class='mb-8'>
+			<svg
+				xmlns='http://www.w3.org/2000/svg'
+				fill='none'
+				viewBox='0 0 24 24'
+				stroke-width='1'
+				stroke='currentColor'
+				class='h-12 w-12 text-slate-300'
+			>
+				<path
+					stroke-linecap='round'
+					stroke-linejoin='round'
+					d='M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z'
+				/>
+			</svg>
+		</div>
+
+		<h1 class='mb-6 text-4xl font-light tracking-tight text-slate-950'>
+			Something went wrong.
+		</h1>
+
+		<p class='mb-12 max-w-md text-lg leading-relaxed text-slate-500'>
+			An unexpected error occurred. The issue has been logged and our team has been notified. We apologize for the inconvenience.
+		</p>
+
+		<div class='mb-20 flex flex-col gap-6 sm:flex-row sm:items-center'>
+			<a
+				href='@Url.Action("Index", "Home")'
+				class='inline-flex items-center justify-center rounded-full bg-slate-950 px-8 py-3 text-sm font-medium text-white transition-all hover:bg-slate-800'
+			>
+				Return home
+			</a>
+		</div>
+
+		<div class='flex items-center gap-4 border-t border-slate-100 pt-8'>
+			<span class='text-[11px] font-medium uppercase tracking-[0.2em] text-slate-400'>
+				Ref: @Guid.NewGuid().ToString().Substring(0, 8).ToUpper()
+			</span>
+		</div>
+	</div>
+</div>

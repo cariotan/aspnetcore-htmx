@@ -24,7 +24,12 @@ Directory.CreateDirectory(Environment_GetDatabasePath());
 IdentityContext identityContext = new();
 identityContext.Database.Migrate();
 
+ErrorContext errorContext = new();
+errorContext.Database.Migrate();
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<ErrorContext>();
 
 builder.Services.AddControllersWithViews(x =>
 {
@@ -43,6 +48,7 @@ builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.SetupServices_AddSerilog();
 builder.Services.AddCors();
+
 
 builder.Services.AddDistributedMemoryCache();
 

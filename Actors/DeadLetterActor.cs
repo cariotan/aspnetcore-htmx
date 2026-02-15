@@ -9,7 +9,7 @@ public class DeadLetterActor : ReceiveActor
 	{
 		Receive<AllDeadLetters>(msg =>
 		{
-			Context.Parent.Tell(new SendDiscordException(new ActorException(new Exception($"Dead letter received: {msg.Message}"))));
+			// Context.Parent.Tell(new SendDiscordException(new ActorException(new Exception($"Dead letter received: {msg.Message}"))));
 		});
 	}
 }

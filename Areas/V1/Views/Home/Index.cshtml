@@ -126,3 +126,14 @@
 		</footer>
 	</div>
 </div>
+
+<div
+	id='home_view'
+	hx-trigger='load'
+	hx-get='@Url.Action("GetViewHx", "Home")'
+	hx-target='this'
+	hx-swap='innerHTML'
+	hx-select='unset'
+>
+
+</div>

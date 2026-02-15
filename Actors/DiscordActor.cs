@@ -7,14 +7,23 @@ public class DiscordActor : ReceiveActor
 
 	public DiscordActor(HttpClient httpClient)
 	{
+		string key = "";
 #if DEBUG
-				var url = GetEnvironmentVariable("Test");
+		key = "Test";
 #else
-				var url = GetEnvironmentVariable(msg.Key);
+		key = msg.Key;
 #endif
+
+		var url = GetEnvironmentVariable(key);
 
 		ReceiveAsync<SendDiscord>(async msg =>
 		{
+			if(string.IsNullOrWhiteSpace(url))
+			{
+				logger.Error($"Discord {key} is not set. Discord Message: " + msg.Message);
+				return;
+			}
+
 			try
 			{
 				const int discordCharacterlimit = 2000;
@@ -53,6 +62,7 @@ public class DiscordActor : ReceiveActor
 			}
 			catch (Exception e)
 			{
+				logger.Error(e.Message);
 				Context.Parent.Tell(new SendEmailException(e));
 
 				Context.Parent.Tell(new SendEmail()
@@ -85,6 +95,12 @@ public record SendDiscordException : SendDiscord
 {
 	public SendDiscordException(Exception e)
 		: base("Exception", e.ToString())
+	{
+
+	}
+
+	public SendDiscordException(string message)
+		: base("Exception", message)
 	{
 
 	}

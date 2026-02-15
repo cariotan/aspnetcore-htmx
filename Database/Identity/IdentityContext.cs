@@ -11,7 +11,7 @@ public class IdentityContext : IdentityDbContext<ApplicationUser, ApplicationRol
 {
 	private string connectionString = $"Data Source={Environment_GetDatabasePath()}\\IdentityContext.db";
 
-	public DbSet<RefreshToken> RefreshTokens { get; set; }
+	public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
 
 	public IdentityContext()
 	{
@@ -58,45 +58,4 @@ public class IdentityContext : IdentityDbContext<ApplicationUser, ApplicationRol
 			}
 		);
 	}
-}
-
-public class ApplicationUser : IdentityUser
-{
-	public ApplicationUser()
-	{
-
-	}
-
-	public ApplicationUser(string userName)
-		: base(userName)
-	{
-		Email = userName;
-	}
-}
-
-public class ApplicationRole : IdentityRole
-{
-	public ApplicationRole()
-	{
-
-	}
-
-	public ApplicationRole(string role)
-		: base(role)
-	{
-
-	}
-}
-
-public class RefreshToken
-{
-	public int Id { get; set; }
-	public required string Hash256ShaToken { get; set; }
-	public DateTime DateCreated { get; set; }
-	public DateTime DateExpires { get; set; }
-	public string? Purpose { get; set; }
-	public string? RevokedReason { get; set; }
-	
-	public required string UserId { get; set; }
-	public ApplicationUser? User { get; set; }
 }
