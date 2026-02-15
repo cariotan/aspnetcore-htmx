@@ -16,7 +16,7 @@ public class DiscordActor : ReceiveActor
 
 		var url = GetEnvironmentVariable(key);
 
-		ReceiveAsync<SendDiscord>(async msg =>
+		ReceiveAsync<Discord_Send>(async msg =>
 		{
 			if(string.IsNullOrWhiteSpace(url))
 			{
@@ -89,9 +89,9 @@ public class DiscordActor : ReceiveActor
 	}
 }
 
-public record SendDiscord(string Key, string Message) : IDiscordMsg;
+public record Discord_Send(string Key, string Message) : IDiscordMsg;
 
-public record SendDiscordException : SendDiscord
+public record SendDiscordException : Discord_Send
 {
 	public SendDiscordException(Exception e)
 		: base("Exception", e.ToString())

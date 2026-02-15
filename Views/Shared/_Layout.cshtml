@@ -129,19 +129,37 @@ var isDebug = true;
 	@RenderSection("Head", required: false)
 
 	<script>
-		function buildSignalRConnection(url) {
-			// 
-			const connection = new signalR.HubConnectionBuilder()
-				.withUrl(url)
-				.withAutomaticReconnect({
-					nextRetryDelayInMilliseconds() {
-						return 1000
-					}
-				})
-				.build()
+		let error_hubConnection = new signalR
+			.HubConnectionBuilder()
+			.withUrl('/ErrorHub', {
+			})
+			.withAutomaticReconnect({
+				nextRetryDelayInMilliseconds() {
+					return 1000
+				}
+			})
+			.build()
 
-			return connection
-		}
+		error_hubConnection.start()
+
+		.then(() =>
+		{
+				let allConnectionInputs = document.querySelectorAll('input[name="connectionId"]')
+				for(let i = 0; i < allConnectionInputs.length; i++)
+				{
+					allConnectionInputs[i].value = error_hubConnection.connectionId;
+				}
+		})
+		.catch(error =>
+		{
+			window.dispatchEvent(new CustomEvent('show_error_modal', { detail: { error: error } }))
+		})
+
+		error_hubConnection.on('show_error_modal', error =>
+		{
+			window.dispatchEvent(new CustomEvent('show_error_modal', { detail: { error: error } }))
+		})
+		
 	</script>
 </head>
 

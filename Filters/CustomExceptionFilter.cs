@@ -12,7 +12,7 @@ public class CustomExceptionFilter(
 	{
 		logger.LogError(context.Exception, "Unhandled exception occurred");
 
-		brain.Tell(new NewUnhandledError(context.Exception.Message, context.Exception));
+		brain.Tell(new Error_NewUnhandledError(context.Exception.Message, context.Exception));
 
 		// 1. Detect if it is an HTMX request
 		bool isHtmx = context.HttpContext.Request.Headers.ContainsKey("HX-Request");

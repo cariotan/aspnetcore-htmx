@@ -88,6 +88,18 @@ public class HtmxController : Controller
 		return Ok();
 	}
 
+	public void HxPushUrl(string url)
+	{
+		if (Response.Headers.ContainsKey("hx-push-url"))
+		{
+			Response.Headers["hx-push-url"] = url;
+		}
+		else
+		{
+			Response.Headers.Append("hx-push-url", url);
+		}
+	}
+
 	protected void HxNone()
 	{
 		if (Response.Headers.ContainsKey("hx-reswap"))

@@ -114,6 +114,7 @@ app.MapControllerRoute(
 );
 
 app.MapHub<ChatHub>($"/{nameof(ChatHub)}");
+app.MapHub<ErrorHub>($"/{nameof(ErrorHub)}");
 
 app.MapFallback(context =>
 {
