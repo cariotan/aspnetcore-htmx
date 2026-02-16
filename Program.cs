@@ -3,6 +3,7 @@ using System.Reflection.PortableExecutable;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
+using Microsoft.AspNetCore.SignalR;
 
 _ = Environment_GetDatabasePath();
 
@@ -49,6 +50,11 @@ builder.Logging.AddConsole();
 builder.SetupServices_AddSerilog();
 builder.Services.AddCors();
 
+builder.Services.AddSignalR(options =>
+{
+	// This applies the filter to EVERY method in EVERY hub
+	options.AddFilter<SessionIdHubFilter>();
+});
 
 builder.Services.AddDistributedMemoryCache();
 

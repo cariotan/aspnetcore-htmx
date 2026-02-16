@@ -7,9 +7,10 @@ using Akka.Hosting;
 public class HomeController(
 	ILogger<HomeController> logger,
 	IRequiredActor<Brain> brain
-) : HtmxController, IHasUser
+) : HtmxController, IHasUser, IHasSessionId
 {
 	public ApplicationUser CurrentUser { get; set; } = null!;
+	public string SessionId { get; set; } = string.Empty;
 
 	[HttpGet]
 	public async Task<IActionResult> Index()
