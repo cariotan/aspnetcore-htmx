@@ -54,6 +54,9 @@ builder.Services.AddSignalR(options =>
 {
 	// This applies the filter to EVERY method in EVERY hub
 	options.AddFilter<SessionIdHubFilter>();
+	#if DEBUG
+		options.EnableDetailedErrors = true;
+	#endif
 });
 
 builder.Services.AddDistributedMemoryCache();
