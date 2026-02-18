@@ -9,6 +9,7 @@ dotnet ef database update -c IdentityContext
 
 public class IdentityContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
 {
+	private static SqlitePragmaInterceptor sqlitePragmaInterceptor = new();
 	private string connectionString = $"Data Source={Environment_GetDatabasePath()}\\IdentityContext.db";
 
 	public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
@@ -25,7 +26,7 @@ public class IdentityContext : IdentityDbContext<ApplicationUser, ApplicationRol
 
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 	{
-		optionsBuilder.UseSqlite(connectionString);
+		optionsBuilder.UseSqlite(connectionString).AddInterceptors(sqlitePragmaInterceptor);
 	}
 
 	protected override void OnModelCreating(ModelBuilder builder)
