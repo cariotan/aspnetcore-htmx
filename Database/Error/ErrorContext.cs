@@ -8,6 +8,7 @@ dotnet ef database update -c ErrorContext
 public class ErrorContext : DbContext
 {
 		private string connectionString = $"Data Source={Environment_GetDatabasePath()}\\ErrorContext.db";
+		private static SqlitePragmaInterceptor sqlitePragmaInterceptor = new();
 
 		public DbSet<UnhandledError> UnhandledErrors { get; set; } = null!;
 
@@ -18,6 +19,6 @@ public class ErrorContext : DbContext
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
-			optionsBuilder.UseSqlite(connectionString);
+			optionsBuilder.AddInterceptors(sqlitePragmaInterceptor).UseSqlite(connectionString);
 		}
 }

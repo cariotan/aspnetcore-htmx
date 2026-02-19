@@ -7,6 +7,14 @@
 @tailwind components;
 @tailwind utilities;
 
+.hidden-inputs {
+	@apply hidden;
+}
+
+.hidden-inputs.show-hidden-inputs {
+	@apply block;
+}
+
 .debug-on .debug-ring {
 	@apply ring ring-red-600 ring-inset;
 }

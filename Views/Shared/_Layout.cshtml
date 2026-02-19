@@ -225,6 +225,28 @@ var isDebug = true;
 			'
 				debugRing_toggle = !debugRing_toggle
 			'
+			x-on:keyup.home.window=
+			'
+				let hiddenInputs = document.querySelectorAll(".hidden-inputs")
+				hiddenInputs.forEach((input) =>
+				{
+					input.classList.toggle("show-hidden-inputs")
+				})
+
+				let typeHidden = document.querySelectorAll("input[type=\"hidden\"], [data-is-hidden=\"true\"]")
+				typeHidden.forEach((hidden) =>
+				{
+					if (hidden.type === "hidden")
+					{
+						hidden.type = "text"
+						hidden.setAttribute("data-is-hidden", "true")
+					}
+					else
+					{
+						hidden.type = "hidden"
+					}
+				})
+			'
 			class='hidden'
 		></div>
 	}

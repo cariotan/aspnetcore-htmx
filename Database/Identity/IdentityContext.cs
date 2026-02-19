@@ -26,7 +26,7 @@ public class IdentityContext : IdentityDbContext<ApplicationUser, ApplicationRol
 
 	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 	{
-		optionsBuilder.UseSqlite(connectionString).AddInterceptors(sqlitePragmaInterceptor);
+		optionsBuilder.AddInterceptors(sqlitePragmaInterceptor).UseSqlite(connectionString);
 	}
 
 	protected override void OnModelCreating(ModelBuilder builder)
