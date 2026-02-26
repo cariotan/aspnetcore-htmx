@@ -2,8 +2,10 @@ using System.Reflection;
 
 static partial class StaticMethods
 {
-	public static string Environment_GetWorkingDirectory()
+	public static string GetWorkingDirectory()
 	{
-		return Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
+		var workingDirectory = AppContext.BaseDirectory;
+		Js("workingDirectory:" + " " + workingDirectory);
+		return workingDirectory;
 	}
 }
