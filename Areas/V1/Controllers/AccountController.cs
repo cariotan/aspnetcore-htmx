@@ -44,7 +44,7 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 
 		var email = registerModel.Email.Trim();
 
-		ApplicationUser newUser = new(email);
+		ApplicationUser newUser = new(email, DateTime.Now);
 
 		var result = await userManager.CreateAsync(newUser, registerModel.Password);
 

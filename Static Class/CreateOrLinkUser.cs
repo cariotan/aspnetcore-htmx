@@ -32,7 +32,7 @@ static partial class StaticMethods
 			}
 			else
 			{
-				user = new(email);
+				user = new(email, DateTime.Now);
 
 				var result = await userManager.CreateAsync(user);
 
