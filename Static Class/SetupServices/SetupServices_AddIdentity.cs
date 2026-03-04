@@ -21,6 +21,7 @@ static partial class StaticMethods
 			options.Password.RequiredLength = 3;
 			options.Password.RequireDigit = false;
 			options.Password.RequireUppercase = false;
+			options.Lockout.MaxFailedAccessAttempts = 50;
 		});
 		// services.Configure<IdentityOptions>(options =>
 		// {
@@ -52,7 +53,7 @@ static partial class StaticMethods
 			{
 				OnMessageReceived = context =>
 				{
-					Console.WriteLine("Message received");
+					Js("Message received");
 					var accessToken = context.Request.Query["access_token"];
 
 					// If the request is for our hub...

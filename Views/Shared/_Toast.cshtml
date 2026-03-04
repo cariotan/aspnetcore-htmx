@@ -13,16 +13,20 @@
 		x-transition:leave-end="opacity-0 -translate-y-2"
 		x-on:show_toaster.window=
 		'
+			console.log("show_toaster event received in Toast")
+
 			toast_toaster = true
 			toast_toasterMessage = $event.detail.message
 			setTimeout(() =>
 			{
 				toast_toaster = false
+				console.log("Setting toast_toaster to false after 3 seconds")
 			}, 3000)
 		'
 		x-on:click=
 		'
 			toast_toaster = false
+			console.log("Toast clicked. Setting toast_toaster to false")
 		'
 		x-text='toast_toasterMessage'
 		class='fixed top-5 left-1/2 transition-all -translate-x-1/2 duration-300 rounded bg-gray-800 px-4 py-2 text-white shadow cursor-pointer'

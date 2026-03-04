@@ -100,7 +100,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseCors(x => x
-	.WithOrigins(builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? new string[0])
+	.WithOrigins(builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [])
 	.AllowAnyMethod()
 	.AllowAnyHeader()
 	.AllowCredentials());
@@ -122,8 +122,7 @@ app.MapControllerRoute(
 	pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
 );
 
-app.MapHub<ChatHub>($"/{nameof(ChatHub)}");
-app.MapHub<ErrorHub>($"/{nameof(ErrorHub)}");
+app.MapHub<SessionHub>($"/{nameof(SessionHub)}");
 
 app.MapFallback(context =>
 {

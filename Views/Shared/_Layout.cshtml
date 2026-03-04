@@ -127,67 +127,29 @@ var isDebug = true;
 	<link rel='preload' href='~/fonts/Poppins-Bold.ttf' as='font' type='font/ttf' crossorigin>
 
 	@RenderSection("Head", required: false)
-
-	<script>
-		let error_hubConnection = new signalR
-			.HubConnectionBuilder()
-			.withUrl('/ErrorHub', {
-			})
-			.withAutomaticReconnect({
-				nextRetryDelayInMilliseconds() {
-					return 1000
-				}
-			})
-			.build()
-
-		error_hubConnection.start()
-
-		.then(() =>
-		{
-				let allConnectionInputs = document.querySelectorAll('input[name="connectionId"]')
-				for(let i = 0; i < allConnectionInputs.length; i++)
-				{
-					allConnectionInputs[i].value = error_hubConnection.connectionId;
-				}
-		})
-		.catch(error =>
-		{
-			window.dispatchEvent(new CustomEvent('show_error_modal', { detail: { error: error } }))
-		})
-
-		error_hubConnection.on('show_error_modal', error =>
-		{
-			window.dispatchEvent(new CustomEvent('show_error_modal', { detail: { error: error } }))
-		})
-		
-	</script>
 </head>
 
 <body
 	x-data
 	x-init=
 	'
+		console.log("Alpine layout init")
+
 		let show_error_modal = @(ViewData.ContainsKey("show_error_modal").ToString().ToLower())
 		if(show_error_modal)
 		{
 			$nextTick(() =>
 			{
+				let error = "@ViewData["show_error_modal"]"
 				$dispatch("show_error_modal", 
 				{
-					error: "@ViewData["show_error_modal"]"
+					error: "error"
 				})
-				console.log("show_error_modal")
+				console.log("ViewData contains show_error_modal. Dispatching show_error_modal event from layout")
 			})
 		}
 	'
 	hx-history='false'
-	x-on:htmx:before-request=
-	'
-		let removeAll = document.querySelectorAll(".field-validation-error, .validation-summary-errors")
-		removeAll.forEach(element => {
-			element.remove()
-		})
-	'
 	class='@(isDebug ? "debug-on" : "")'
 >
 	<div id='wrapper'>

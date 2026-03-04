@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 public class ApplicationUser : IdentityUser
 {
 	public DateTime DateCreated { get; set; }
+	public required string DatabaseName { get; set; }
 
 	public ApplicationUser()
 	{

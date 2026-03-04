@@ -3,59 +3,54 @@ using Microsoft.AspNetCore.Identity;
 
 static partial class StaticMethods
 {
-	public static async Task<Result<ApplicationUser>> CreateOrLinkUser(string email, string providerId, string provider, string providerFriendlyName, UserManager<ApplicationUser> userManager)
+	public static async Task<Result<ApplicationUser>> CreateOrLinkUser(
+		string email,
+		string providerId,
+		string provider,
+		string providerFriendlyName,
+		UserManager<ApplicationUser> userManager
+	)
 	{
-		var user = await userManager.FindByLoginAsync(provider, providerId);
+		var dbUser = await userManager.FindByLoginAsync(provider, providerId);
 
-		if (user is { })
+		if (dbUser is not null)
 		{
-			return user;
+			return dbUser;
 		}
-		else
+
+		dbUser = await userManager.FindByEmailAsync(email);
+
+		if (dbUser is not null)
 		{
-			user = await userManager.FindByEmailAsync(email);
+			await userManager.AddToRoleAsync(dbUser, "User");
 
-			if (user is { })
+			var result = await userManager.AddLoginAsync(dbUser, new(provider, providerId, providerFriendlyName));
+			if (!result.Succeeded)
 			{
-				await userManager.AddToRoleAsync(user, "User");
-
-				var result = await userManager.AddLoginAsync(user, new(provider, providerId, providerFriendlyName));
-
-				if (result.Succeeded)
-				{
-					return user;
-				}
-				else
-				{
-					return new Error(result.Errors.First().Description);
-				}
+				return new Error(result.Errors.First().Description);
 			}
-			else
+
+			return dbUser;
+		}
+
+		{
+			var result = await Auth_CreateUser(email, userManager);
+			if (result.IsNotSuccessful)
 			{
-				user = new(email, DateTime.Now);
+				return new Error(result.ErrorMessage.ToString());
+			}
+			dbUser = result.Value;
+		}
 
-				var result = await userManager.CreateAsync(user);
-
-				if (result.Succeeded)
-				{
-					await userManager.AddToRoleAsync(user, "User");
-
-					result = await userManager.AddLoginAsync(user, new(provider, providerId, providerFriendlyName));
-
-					if (result.Succeeded)
-					{
-						return user;
-					}
-					else
-					{
-						return new Error(result.Errors.First().Description);
-					}
-				}
-				else
-				{
-					return new Error(result.Errors.First().Description);
-				}
+		{
+			var result = await userManager.AddLoginAsync(dbUser, new(provider, providerId, providerFriendlyName));
+			if (!result.Succeeded)
+			{
+				await userManager.DeleteAsync(dbUser);
+				return new Error(result.Errors.First().Description);
 			}
 		}
+
+		return dbUser;
 	}
 }

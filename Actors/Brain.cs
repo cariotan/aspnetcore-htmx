@@ -12,8 +12,7 @@ public class Brain : ReceiveActor
 	public Brain(
 		HttpClient httpClient,
 		IServiceScopeFactory serviceScopeFactory,
-		IRequiredActor<Brain> brain,
-		IHubContext<ErrorHub> errorHub
+		IRequiredActor<Brain> brain
 	)
 	{
 		this.serviceScopeFactory = serviceScopeFactory;
@@ -21,7 +20,7 @@ public class Brain : ReceiveActor
 		Receive<IErrorCommand>(msg =>
 		{
 			Context.GetOrCreateChild(
-				Props.Create(() => new ErrorActor(serviceScopeFactory, brain, errorHub)),
+				Props.Create(() => new ErrorActor(serviceScopeFactory, brain)),
 				nameof(ErrorActor)
 			).Forward(msg);
 		});

@@ -10,7 +10,7 @@ public class CustomExceptionFilter(
 {
 	public void OnException(ExceptionContext context)
 	{
-		logger.LogError(context.Exception, "Unhandled exception occurred");
+		logger.LogError(context.Exception, "Unhandled exception occurred, detected by CustomExceptionFilter");
 
 		brain.Tell(new Error_NewUnhandledError(context.Exception.Message, context.Exception));
 
@@ -22,6 +22,8 @@ public class CustomExceptionFilter(
 		if (isHtmx)
 		{
 			// HTMX Logic
+			Js("HTMX request detected by CustomExceptionFilter. Showing error modal");
+
 			context.HttpContext.Response.Headers.Append("hx-reswap", "none");
 
 			Dictionary<string, object> payload = new()
@@ -39,6 +41,8 @@ public class CustomExceptionFilter(
 		}
 		else
 		{
+			Js("Standard browser request detected by CustomExceptionFilter. Returning error view");
+
 			// Standard Browser Logic (Return a View)
 			var result = new ViewResult
 			{

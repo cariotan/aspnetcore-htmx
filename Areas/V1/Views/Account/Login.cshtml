@@ -6,7 +6,18 @@
 
 <title>@ViewData["Title"]</title>
 
-<div class='h-screen'>
+<div
+	x-data=
+	'
+		{
+			login_buttonSpinner:
+			{
+				isLoading: false,
+			},
+		}
+	'
+	class='h-screen'
+>
 	<div class='flex flex-col justify-center min-h-full px-6 py-12 lg:px-8'>
 		<div class='sm:mx-auto sm:w-full sm:max-w-sm'>
 			<h2 class='mt-10 text-center text-2xl/9 text-gray-900 font-bold tracking-tight'>
@@ -15,14 +26,11 @@
 		</div>
 		<div class='mt-10 sm:mx-auto sm:w-full sm:max-w-sm'>
 			<form
-				asp-action='Login'
-				x-data='{
-					login_buttonSpinner:
-					{
-						isLoading: false,
-					},
-				}'
 				x-on:submit='login_buttonSpinner.isLoading = true'
+				hx-post='@Url.Action()'
+				hx-target='#wrapper'
+				hx-swap='outerHTML'
+				hx-select='#wrapper'
 				class='space-y-6'
 			>
 				<div>
@@ -94,8 +102,12 @@
 			<p class='mt-5 text-center text-gray-500 text-sm/6'>
 				Not a member?
 				<a
-					asp-action='Register'
-					class='text-indigo-600 font-semibold hover:text-indigo-500'
+					hx-get='@Url.Action("Register")'
+					hx-target='#wrapper'
+					hx-swap='outerHTML'
+					hx-select='#wrapper'
+					hx-push-url='true'
+					class='text-indigo-600 font-semibold cursor-pointer hover:text-indigo-500'
 				>
 					Register here
 				</a>

@@ -26,6 +26,7 @@ public class SessionIdHubFilter : IHubFilter
 			if (httpContext != null && httpContext.Request.Cookies.TryGetValue("SessionId", out var sessionId))
 			{
 				hubWithSession.SessionId = sessionId;
+				Js($"SessionId set to {sessionId} by SessionHubFilter");
 			}
 		}
 	}

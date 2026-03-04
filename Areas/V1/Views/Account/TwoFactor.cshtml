@@ -6,12 +6,23 @@
 
 <title>@ViewData["Title"]</title>
 
-<div class='h-screen'>
+<div
+	x-data=
+	'
+		{
+			twoFactor_buttonSpinner:
+			{
+				isLoading: false,
+			},
+		}
+	'
+	class='h-screen'
+>
 	<div class='flex flex-col justify-center min-h-full px-6 py-12 lg:px-8'>
 		<div class='sm:mx-auto sm:w-full sm:max-w-sm'>
 			<img
-				src='https://tailwindui.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600' 
 				alt='Company'
+				src='https://tailwindui.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600' 
 				class='mx-auto w-auto h-10'
 			/>
 			<h2 class='mt-10 text-center text-2xl/9 text-gray-900 font-bold tracking-tight'>
@@ -20,15 +31,11 @@
 		</div>
 		<div class='mt-10 sm:mx-auto sm:w-full sm:max-w-sm'>
 			<form
-				asp-action='TwoFactor'
-				x-data='{
-					twoFactor_enable2fa: null,
-					twoFactor_buttonSpinner:
-					{
-						isLoading: false,
-					},
-				}'
 				x-on:submit='twoFactor_buttonSpinner.isLoading = true'
+				hx-post='@Url.Action()'
+				hx-target='#wrapper'
+				hx-swap='outerHTML'
+				hx-select='#wrapper'
 				class='space-y-6'
 			>
 				<div>
@@ -49,7 +56,6 @@
 						<input
 							type='checkbox'
 							asp-for='RememberClient'
-							x-model='twoFactor_enable2fa'
 							class='rounded border-gray-300 w-4 h-4 text-indigo-600 focus:ring-indigo-600'
 						/>
 					</div>
@@ -66,7 +72,7 @@
 				<div>
 					<button
 						type='submit'
-						class='rounded-md flex justify-center w-full bg-indigo-600 px-3 py-1.5 text-sm/6 text-white font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-600 focus-visible:outline-offset-2 shadow-sm hover:bg-indigo-500'
+						class='rounded-md flex justify-center w-full bg-indigo-600 px-3 py-1.5 text-sm/6 text-white font-semibold shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-600 focus-visible:outline-offset-2 hover:bg-indigo-500'
 					>
 						<partial name='_ButtonSpinner' model='"twoFactor_buttonSpinner"' />
 						<span x-opacity='!twoFactor_buttonSpinner.isLoading'>
@@ -84,8 +90,12 @@
 			<p class='mt-10 text-center text-gray-500 text-sm/6'>
 				Not a member?
 				<a
-					asp-action='Register'
-					class='text-indigo-600 font-semibold hover:text-indigo-500'
+					hx-get='@Url.Action("Register")'
+					hx-push-url='true'
+					hx-target='#wrapper'
+					hx-swap='outerHTML'
+					hx-select='#wrapper'
+					class='text-indigo-600 font-semibold cursor-pointer hover:text-indigo-500'
 				>
 					Register here
 				</a>

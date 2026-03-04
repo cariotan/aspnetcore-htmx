@@ -1,9 +1,14 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 [Area("V1")]
-public class AccountController(ILogger<AccountController> logger, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager) : HtmxController
+public class AccountController(
+	ILogger<AccountController> logger,
+	UserManager<ApplicationUser> userManager,
+	SignInManager<ApplicationUser> signInManager
+) : HtmxController
 {
 	[AllowAnonymous]
 	[HttpGet]
@@ -11,15 +16,6 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 	{
 		logger.Endpoint(Get, "/Account/Register");
 		
-		{
-			var available = false;
-			if(available)
-			{
-				ViewData["show_error_modal"] = "This isn't currently available. Please change the source code.";
-				return View();
-			}
-		}
-
 		return View();
 	}
 
@@ -28,46 +24,35 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 	{
 		logger.Endpoint(Post, "/Account/Register");
 
-		{
-			var available = false;
-			if(available)
-			{
-				ViewData["show_error_modal"] = "This isn't currently available. Please change the source code.";
-				return View();
-			}
-		}
-
 		if (!ModelState.IsValid)
 		{
 			return View(registerModel);
 		}
 
-		var email = registerModel.Email.Trim();
-
-		ApplicationUser newUser = new(email, DateTime.Now);
-
-		var result = await userManager.CreateAsync(newUser, registerModel.Password);
-
-		if (result.Succeeded)
+		ApplicationUser dbUser;
 		{
-			await userManager.AddToRoleAsync(newUser, "User");
-
-			await signInManager.SignInAsync(newUser, true);
-
-			if (registerModel.RequireTwoFactor)
+			var result = await Auth_CreateUser(
+				registerModel.Email,
+				userManager,
+				registerModel.Password
+			);
+			if(result.IsNotSuccessful)
 			{
-				return RedirectToAction("Enable2fa", "Account");
+				ModelState.AddModelError("Error", result.ErrorMessage.ToString());
+				return View(registerModel);
 			}
-			else
-			{
-				return RedirectToAction("Index", "Home");
-			}
+			dbUser = result.Value;
+		}
+
+		await signInManager.SignInAsync(dbUser, true);
+
+		if (registerModel.RequireTwoFactor)
+		{
+			return RedirectToAction("Enable2fa", "Account");
 		}
 		else
 		{
-			ModelState.AddModelError("Error", result.Errors.First().Description);
-
-			return View(registerModel);
+			return RedirectToAction("Index", "Home");
 		}
 	}
 
@@ -92,6 +77,7 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 
 				await signInManager.SignInAsync(user, true);
 
+				HxPushUrl(Url.Action("Enable2fa")!);
 				return View(new Enable2faModel(authenticatorKey!, qrBase64));
 			}
 			else
@@ -126,6 +112,7 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 
 			await signInManager.SignInAsync(user, true);
 
+			HxPushUrl(Url.Action("Index", "Home")!);
 			return RedirectToAction("Index", "Home");
 		}
 		else
@@ -143,11 +130,15 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 
 		ViewData["ReturnUrl"] = returnUrl;
 
+		HxPushUrl(Url.Action("Login")!);
 		return View();
 	}
 
 	[HttpPost]
-	public async Task<IActionResult> Login(LoginModel loginModel, string? returnUrl)
+	public async Task<IActionResult> Login(
+		LoginModel loginModel,
+		string? returnUrl
+	)
 	{
 		logger.Endpoint(Get, "/Account/Login");
 
@@ -158,12 +149,18 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 			return View(loginModel);
 		}
 
-		var result = await signInManager.PasswordSignInAsync(loginModel.Email, loginModel.Password, true, true);
+		var result = await signInManager.PasswordSignInAsync(
+			loginModel.Email,
+			loginModel.Password,
+			true,
+			true
+		);
 
 		if (result.Succeeded)
 		{
 			if (!string.IsNullOrWhiteSpace(returnUrl))
 			{
+				HxPushUrl(returnUrl);
 				return LocalRedirect(returnUrl);
 			}
 			else
@@ -192,17 +189,21 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 		var user = await signInManager.GetTwoFactorAuthenticationUserAsync();
 		if (user is { })
 		{
-			return View();
+			HxPushUrl(Url.Action("TwoFactor")!);
+			return View(new TwoFactorModel("", true));
 		}
 		else
 		{
-			System.Console.WriteLine("No user for two factor");
+			Js("No user for two factor");
 			return RedirectToAction("Index", "Home");
 		}
 	}
 
 	[HttpPost]
-	public async Task<IActionResult> TwoFactor(TwoFactorModel twoFactorModel, string? returnUrl)
+	public async Task<IActionResult> TwoFactor(
+		TwoFactorModel twoFactorModel,
+		string? returnUrl
+	)
 	{
 		logger.Endpoint(Post, "/Account/TwoFactor");
 
@@ -216,7 +217,11 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 		var user = await signInManager.GetTwoFactorAuthenticationUserAsync();
 		if (user is { })
 		{
-			var result = await signInManager.TwoFactorAuthenticatorSignInAsync(twoFactorModel.Code, true, twoFactorModel.RememberClient);
+			var result = await signInManager.TwoFactorAuthenticatorSignInAsync(
+				twoFactorModel.Code,
+				true,
+				twoFactorModel.RememberClient
+			);
 			if (result.Succeeded)
 			{
 				if (!string.IsNullOrWhiteSpace(returnUrl))
@@ -236,7 +241,7 @@ public class AccountController(ILogger<AccountController> logger, UserManager<Ap
 		}
 		else
 		{
-			System.Console.WriteLine("No user for two factor");
+			Js("No user for two factor");
 			return RedirectToAction("Login");
 		}
 	}

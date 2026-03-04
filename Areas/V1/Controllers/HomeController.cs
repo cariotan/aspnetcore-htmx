@@ -5,8 +5,7 @@ using Akka.Hosting;
 [Authorize(Roles = "User")]
 [Area("V1")]
 public class HomeController(
-	ILogger<HomeController> logger,
-	IRequiredActor<Brain> brain
+	ILogger<HomeController> logger
 ) : HtmxController, IHasUser, IHasSessionId
 {
 	public ApplicationUser CurrentUser { get; set; } = null!;
@@ -17,6 +16,7 @@ public class HomeController(
 	{
 		logger.Endpoint(Get, "/Home");
 
+		HxPushUrl(Url.Action("Index", "Home")!);
 		return View();
 	}
 }

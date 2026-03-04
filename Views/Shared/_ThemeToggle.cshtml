@@ -7,6 +7,8 @@
 	'
 	x-init=
 	'
+		console.log("ThemeToggle init")
+
 		$watch("themeToggle_theme", value =>
 		{
 			layout_changeTheme(value)
@@ -17,6 +19,7 @@
 	<button
 		x-on:click=
 		'
+			console.log("Light button clicked in ThemeToggle")
 			themeToggle_theme = "light"
 		'
 		:class='themeToggle_theme === "light" ? "bg-white text-slate-900 dark:bg-slate-800 dark:text-white shadow-md" : ""'
@@ -52,6 +55,7 @@
 	<button
 		x-on:click=
 		'
+			console.log("Dark button clicked in ThemeToggle")
 			themeToggle_theme = "dark"
 		'
 		:class='themeToggle_theme === "dark" ? "bg-white text-slate-900 dark:bg-slate-800 dark:text-white shadow-md" : ""'
@@ -79,6 +83,7 @@
 	<button
 		x-on:click=
 		'
+			console.log("System button clicked in ThemeToggle")
 			themeToggle_theme = "system"
 		'
 		:class='themeToggle_theme === "system" || !themeToggle_theme ? "bg-white text-slate-900 dark:bg-slate-800 dark:text-white shadow-md" : ""'

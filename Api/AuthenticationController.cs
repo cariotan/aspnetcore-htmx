@@ -13,10 +13,16 @@ namespace Api;
 public class AuthenticationController(UserManager<ApplicationUser> userManager, IdentityContext identityContext) : ControllerBase
 {
 	static string DummyHash;
+	static ApplicationUser DummyUser;
 
 	static AuthenticationController()
 	{
-		DummyHash = new PasswordHasher<ApplicationUser>().HashPassword(new ApplicationUser(), "DummyPassword!123");
+		DummyUser = new ApplicationUser("dummy@example.com", DateTime.Now)
+		{
+			DatabaseName = "dummy"
+		};
+
+		DummyHash = new PasswordHasher<ApplicationUser>().HashPassword(DummyUser, "DummyPassword!123");
 	}
 
 	[HttpPost]
@@ -40,7 +46,7 @@ public class AuthenticationController(UserManager<ApplicationUser> userManager, 
 		}
 		else
 		{
-			_ = userManager.PasswordHasher.VerifyHashedPassword(new(), DummyHash, password);
+			_ = userManager.PasswordHasher.VerifyHashedPassword(DummyUser, DummyHash, password);
 		}
 
 		return Unauthorized();

@@ -6,7 +6,7 @@ static partial class StaticMethods
 	public static void SetupServices_AddSerilog(this WebApplicationBuilder builder)
 	{
 #if !DEBUG
-		Console.WriteLine("\nUsing Serilog for logging. Refer to the logging folder for logs.");
+		Js("\nUsing Serilog for logging. Refer to the logging folder for logs.");
 
 		string folder = $"""C:/{GetAssemblyName()} Logs""";
 

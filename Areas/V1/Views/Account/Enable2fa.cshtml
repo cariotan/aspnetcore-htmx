@@ -1,6 +1,18 @@
 @model Enable2faModel
 
-<div class='fixed inset-0'>
+<div
+	x-data=
+	'
+		{
+			enable_2fa_key: "@Model?.AuthenticatorKey",
+			enable2fa_buttonSpinner:
+			{
+				isLoading: false,
+			},
+		}
+	'
+	class='fixed inset-0'
+>
 	<div class='flex justify-center items-center min-h-full'>
 		<div class='mx-auto rounded-xl w-full max-w-md bg-white p-6'>
 			<h2 class='mb-4 text-xl text-gray-900 font-bold'>
@@ -20,18 +32,17 @@
 				<label class='block mb-1 text-sm text-gray-900 font-medium'>
 					Setup Key
 				</label>
-				<div
-					x-data='{
-						enable_2fa_key: "@Model?.AuthenticatorKey"
-					}'
-					class='flex'
-				>
+				<div class='flex'>
 					<span
 						x-text='enable_2fa_key'
 						class='rounded-l-md border border-gray-300 flex-1 bg-gray-50 px-3 py-2 text-sm text-gray-800'
 					></span>
 					<button 
-						x-on:click='navigator.clipboard.writeText(enable_2fa_key)'
+						x-on:click=
+						'
+							navigator.clipboard.writeText(enable_2fa_key)
+							$dispatch("show_toaster", { message: "Copied to clipboard" })
+						'
 						class='rounded-r-md border border-gray-300 border-l-0 bg-white px-3 py-2 text-sm text-gray-700 hover:bg-gray-50'
 					>
 						Copy
@@ -40,14 +51,11 @@
 			</div>
 			<form
 				id='code-form'
-				asp-action='Enable2fa'
-				x-data='{
-					enable2fa_buttonSpinner:
-					{
-						isLoading: false,
-					},
-				}'
 				x-on:submit='enable2fa_buttonSpinner.isLoading = true'
+				hx-post='@Url.Action()'
+				hx-target='#wrapper'
+				hx-swap='outerHTML'
+				hx-select='#wrapper'
 			>
 				<div class='mb-6'>
 					<label class='block mb-1 text-sm text-gray-900 font-medium'>
@@ -71,9 +79,11 @@
 						</span>
 					</button>
 					<a
-						href='/'
-						asp-action='Index'
-						asp-controller='Home'
+						hx-get='@Url.Action("Index", "Home")'
+						hx-push-url='true'
+						hx-target='#wrapper'
+						hx-swap='outerHTML'
+						hx-select='#wrapper'
 						class='rounded-md flex flex-1 justify-center items-center bg-gray-100 px-3 py-2 text-gray-800 font-medium hover:bg-gray-200'
 					>
 						Skip

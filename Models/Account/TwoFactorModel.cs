@@ -1,5 +1,5 @@
 public record TwoFactorModel(
 	[Display(Name = "code")]
 	string Code,
-	bool RememberClient
+	bool RememberClient = true
 );
