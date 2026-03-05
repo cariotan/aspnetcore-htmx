@@ -22,6 +22,9 @@
 
 			error_modal_show = true
 			error_modal_message = $event.detail.error
+
+			history.pushState(null, "", `?errorMessage=${error_modal_message}`)
+			console.log("Added errorMessage to URL by ErrorModal")
 		'
 		x-on:hide_error_modal.window=
 		'
