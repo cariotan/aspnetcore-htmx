@@ -11,7 +11,6 @@ public interface IUserSessionMsg
 public record UserSession_SavePersistantData(object DataToPersist, string Type, string SessionId) : IUserSessionMsg;
 public record UserSession_GetPersistantData(string Type, string SessionId) : IUserSessionMsg;
 
-
 public class UserSessionActor : ReceiveActor
 {
 	readonly ILoggingAdapter logger = Context.GetLogger();
