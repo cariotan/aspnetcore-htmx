@@ -2,8 +2,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Akka.Hosting;
 
-[Authorize(Roles = "User")]
 [Area("V1")]
+[Authorize(Roles = "User")]
 public class HomeController(
 	ILogger<HomeController> logger
 ) : HtmxController, IHasUser, IHasSessionId
