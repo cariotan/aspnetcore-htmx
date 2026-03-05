@@ -15,7 +15,8 @@ public class AccountController(
 	public IActionResult Register()
 	{
 		logger.Endpoint(Get, "/Account/Register");
-		
+		HxPushUrl(Url.Action("Register")!);
+
 		return View();
 	}
 
@@ -61,6 +62,7 @@ public class AccountController(
 	public async Task<IActionResult> Enable2fa()
 	{
 		logger.Endpoint(Get, "/Account/Enable2fa");
+		HxPushUrl(Url.Action("Enable2fa")!);
 
 		var user = await userManager.GetUserAsync(User);
 		if (user is { })
@@ -127,10 +129,10 @@ public class AccountController(
 	public IActionResult Login(string? returnUrl)
 	{
 		logger.Endpoint(Get, "/Account/Login");
+		HxPushUrl(Url.Action("Login", new { returnUrl })!);
 
 		ViewData["ReturnUrl"] = returnUrl;
 
-		HxPushUrl(Url.Action("Login")!);
 		return View();
 	}
 
@@ -183,13 +185,13 @@ public class AccountController(
 	public async Task<IActionResult> TwoFactor(string? returnUrl)
 	{
 		logger.Endpoint(Get, "/Account/TwoFactor");
+		HxPushUrl(Url.Action("TwoFactor", new { returnUrl })!);
 
 		ViewData["ReturnUrl"] = returnUrl;
 
 		var user = await signInManager.GetTwoFactorAuthenticationUserAsync();
 		if (user is { })
 		{
-			HxPushUrl(Url.Action("TwoFactor")!);
 			return View(new TwoFactorModel("", true));
 		}
 		else
@@ -260,6 +262,7 @@ public class AccountController(
 	public IActionResult AccessDenied()
 	{
 		logger.Endpoint(Get, "/Account/AccessDenied");
+		HxPushUrl(Url.Action("AccessDenied")!);
 
 		return View();
 	}

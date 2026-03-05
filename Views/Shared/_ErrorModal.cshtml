@@ -30,6 +30,9 @@
 		'
 			console.log("hide_error_modal event received in errorModal")
 			error_modal_show = false
+
+			history.replaceState(null, "", window.location.pathname.split("?")[0])
+			console.log("Removed errorMessage from URL by ErrorModal")
 		'
 		class='fixed z-50 inset-0 backdrop-blur-sm bg-black/80'
 	>

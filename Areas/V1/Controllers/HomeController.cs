@@ -15,8 +15,8 @@ public class HomeController(
 	public async Task<IActionResult> Index()
 	{
 		logger.Endpoint(Get, "/Home");
-
 		HxPushUrl(Url.Action("Index", "Home")!);
+
 		return View();
 	}
 }
