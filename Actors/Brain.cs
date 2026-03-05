@@ -44,7 +44,7 @@ public class Brain : ReceiveActor
 		Receive<IUserSessionMsg>(msg =>
 		{
 			Context.GetOrCreateChild(
-				Props.Create(() => new UserSessionActor(httpClient)),
+				Props.Create(() => new UserSessionActor(serviceScopeFactory)),
 				nameof(UserSessionActor) + msg.SessionId
 			).Forward(msg);
 		});
