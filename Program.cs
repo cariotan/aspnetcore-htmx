@@ -124,10 +124,4 @@ app.MapControllerRoute(
 
 app.MapHub<SessionHub>($"/{nameof(SessionHub)}");
 
-app.MapFallback(context =>
-{
-	context.Response.Redirect("/NotFound");
-	return Task.CompletedTask;
-});
-
 app.Run();
