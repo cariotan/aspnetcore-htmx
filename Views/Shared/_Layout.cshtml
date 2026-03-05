@@ -28,7 +28,14 @@ var isDebug = true;
 	<link rel='stylesheet' href='~/css/tailwind.css' asp-append-version='true'>
 
 	<!-- 2.0.4 -->
-	<script src='~/js/htmx.js'></script>
+	@if(isDebug)
+	{
+		<script src='https://cdn.jsdelivr.net/npm/htmx.org@2.0.4/dist/htmx.js' integrity='sha384-ezjq8118wdwdRMj+nX4bevEi+cDLTbhLAeFF688VK8tPDGeLUe0WoY2MZtSla72F' crossorigin='anonymous'></script>
+	}
+	else
+	{
+		<script src='~/js/htmx.js'></script>
+	}
 
 	<!-- 3.14.8 -->
 	<script src='~/js/alpine.js' defer></script>
