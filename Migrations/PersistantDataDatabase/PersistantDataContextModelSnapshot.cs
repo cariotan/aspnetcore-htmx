@@ -7,7 +7,7 @@ using PersistantDataDatabase;
 
 #nullable disable
 
-namespace KarismaKiosk.Migrations.PersistantDataDatabase
+namespace ASP.NET_Core_HTMX.Migrations.PersistantDataDatabase
 {
     [DbContext(typeof(PersistantDataContext))]
     partial class PersistantDataContextModelSnapshot : ModelSnapshot
@@ -15,11 +15,12 @@ namespace KarismaKiosk.Migrations.PersistantDataDatabase
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.10");
+            modelBuilder.HasAnnotation("ProductVersion", "9.0.13");
 
             modelBuilder.Entity("PersistantData", b =>
                 {
-                    b.Property<string>("SessionId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("DataJson")
@@ -29,11 +30,17 @@ namespace KarismaKiosk.Migrations.PersistantDataDatabase
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("SessionId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.HasKey("SessionId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("SessionId", "Type");
 
                     b.ToTable("PersistantData");
                 });

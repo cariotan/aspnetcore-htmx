@@ -1,6 +1,6 @@
 public class PersistantData
 {
-	[Key]
+	public Guid Id { get; set; }
 	public required string SessionId { get; set; }
 	public required DateTime DateCreated { get; set; }
 	public required string Type { get; set; }

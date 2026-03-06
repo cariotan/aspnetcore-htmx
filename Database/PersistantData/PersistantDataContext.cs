@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 
 /*
-dotnet ef migrations add AddedDateCreated -c PersistantDataContext -o Migrations/PersistantDataDatabase
+dotnet ef migrations add InitialMigration -c PersistantDataContext -o Migrations/PersistantDataDatabase
 dotnet ef database update -c PersistantDataContext
 */
 
@@ -19,8 +19,17 @@ public class PersistantDataContext : DbContext
 
 		}
 
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			modelBuilder
+			.Entity<PersistantData>()
+			.HasIndex(x => new { x.SessionId, x.Type });
+		}
+
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
-			optionsBuilder.AddInterceptors(sqlitePragmaInterceptor).UseSqlite(connectionString);
+			optionsBuilder
+			.AddInterceptors(sqlitePragmaInterceptor)
+			.UseSqlite(connectionString);
 		}
 }
