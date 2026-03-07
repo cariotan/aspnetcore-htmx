@@ -1,4 +1,6 @@
-public class UnhandledError
+namespace ErrorDatabase;
+
+public class Error
 {
 	public Guid Id { get; set; }
 	public string? Message { get; set; }

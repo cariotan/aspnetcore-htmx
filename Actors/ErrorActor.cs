@@ -2,6 +2,8 @@ using Akka.Actor;
 using Akka.Event;
 using Akka.Hosting;
 using Microsoft.AspNetCore.SignalR;
+using ErrorDatabase;
+using Microsoft.EntityFrameworkCore;
 
 public class ErrorActor : ReceiveActor
 {
@@ -21,21 +23,31 @@ public class ErrorActor : ReceiveActor
 			ErrorContext errorContext;
 			{
 				errorContext = scope.ServiceProvider.GetRequiredService<ErrorContext>();
+
+				if(errorContext.Database.GetPendingMigrations().Any())
+				{
+					errorContext.Database.Migrate();
+				}
 			}
 
 			try
 			{
-				UnhandledError unhandledError = new()
+				ErrorDatabase.Error error = new()
 				{
 					Message = msg.Message,
 					Exception = msg.Exception?.ToString(),
 					DateCreated = DateTime.Now
 				};
 
-				errorContext.UnhandledErrors.Add(unhandledError);
+				if(msg.Id.HasValue)
+				{
+					error.Id = msg.Id.Value;
+				}
+
+				errorContext.UnhandledErrors.Add(error);
 				errorContext.SaveChanges();
 
-				brain.Tell(new SendDiscordException(unhandledError.Message));
+				brain.Tell(new SendDiscordException(error.Message));
 			}
 			catch(Exception e)
 			{
@@ -45,6 +57,6 @@ public class ErrorActor : ReceiveActor
 	}
 }
 
-public record Error_NewError(string Message, Exception? Exception = null) : IErrorCommand;
+public record Error_NewError(string Message, Exception? Exception = null, Guid? Id = null) : IErrorCommand;
 
 public interface IErrorCommand;

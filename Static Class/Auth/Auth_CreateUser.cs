@@ -20,7 +20,7 @@ static partial class StaticMethods
 
 		if (!result.Succeeded)
 		{
-			return new Error(result.Errors.First().Description);
+			return new Utilities.Error(result.Errors.First().Description);
 		}
 		
 		// Setup database name for dbUser and add claim.

@@ -23,7 +23,8 @@ namespace ASP.NET_Core_HTMX.Migrations.ErrorDatabase
                     Source = table.Column<string>(type: "TEXT", nullable: true),
                     Exception = table.Column<string>(type: "TEXT", nullable: true),
                     AdditionalInformation = table.Column<string>(type: "TEXT", nullable: true),
-                    UserId = table.Column<string>(type: "TEXT", nullable: true)
+                    UserId = table.Column<string>(type: "TEXT", nullable: true),
+                    Handled = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {

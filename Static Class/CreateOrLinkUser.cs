@@ -27,7 +27,7 @@ static partial class StaticMethods
 			var result = await userManager.AddLoginAsync(dbUser, new(provider, providerId, providerFriendlyName));
 			if (!result.Succeeded)
 			{
-				return new Error(result.Errors.First().Description);
+				return new Utilities.Error(result.Errors.First().Description);
 			}
 
 			return dbUser;
@@ -37,7 +37,7 @@ static partial class StaticMethods
 			var result = await Auth_CreateUser(email, userManager);
 			if (result.IsNotSuccessful)
 			{
-				return new Error(result.ErrorMessage.ToString());
+				return new Utilities.Error(result.ErrorMessage.ToString());
 			}
 			dbUser = result.Value;
 		}
@@ -47,7 +47,7 @@ static partial class StaticMethods
 			if (!result.Succeeded)
 			{
 				await userManager.DeleteAsync(dbUser);
-				return new Error(result.Errors.First().Description);
+				return new Utilities.Error(result.Errors.First().Description);
 			}
 		}
 

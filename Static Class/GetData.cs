@@ -21,13 +21,13 @@ static partial class StaticMethods
 				var error = ErrorCodes["GEN001"];
 				SendDiscordException sendDiscordException = new(new Exception(error));
 				brain.Tell(sendDiscordException);
-				return new Error(error);
+				return new Utilities.Error(error);
 			}
 		}
 
 		if(response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
 		{
-			return new Error(ErrorCodes["GEN002"]);
+			return new Utilities.Error(ErrorCodes["GEN002"]);
 		}
 
 		var data = await response.Content.ReadAsStringAsync();
@@ -54,7 +54,7 @@ static partial class StaticMethods
 							var firstMessage = firstProp.Value.FirstOrDefault()?.ToString();
 							if(!string.IsNullOrEmpty(firstMessage))
 							{
-								return new Error(firstMessage);
+								return new Utilities.Error(firstMessage);
 							}
 						}
 					}
@@ -65,10 +65,10 @@ static partial class StaticMethods
 				}
 
 				// If parsing failed or no nested errors, treat detail as the message
-				return new Error(detailText);
+				return new Utilities.Error(detailText);
 			}
 
-			return new Error(data);
+			return new Utilities.Error(data);
 		}
 
 		return data;
