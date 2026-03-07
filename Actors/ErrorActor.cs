@@ -15,7 +15,7 @@ public class ErrorActor : ReceiveActor
 	{
 		this.serviceScopeFactory = serviceScopeFactory;
 
-		Receive<Error_NewUnhandledError>(msg =>
+		Receive<Error_NewError>(msg =>
 		{
 			using var scope = serviceScopeFactory.CreateScope();
 			ErrorContext errorContext;
@@ -45,6 +45,6 @@ public class ErrorActor : ReceiveActor
 	}
 }
 
-public record Error_NewUnhandledError(string Message, Exception? Exception = null) : IErrorCommand;
+public record Error_NewError(string Message, Exception? Exception = null) : IErrorCommand;
 
 public interface IErrorCommand;
