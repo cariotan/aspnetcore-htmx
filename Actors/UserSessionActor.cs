@@ -28,7 +28,7 @@ public class UserSessionActor : ReceiveActor
 	{
 		using var scope = serviceScopeFactory.CreateScope();
 		using PersistantDataContext persistantDataContext = scope.ServiceProvider.GetRequiredService<PersistantDataContext>();
-		var dbPersistantData = persistantDataContext.PersistantData.FirstOrDefault(x => x.SessionId == sessionId);
+		var dbPersistantData = persistantDataContext.PersistantData.FirstOrDefault(x => x.Key == sessionId);
 		if(dbPersistantData is not null)
 		{
 			persistantDataContext.PersistantData.Remove(dbPersistantData);
@@ -59,12 +59,12 @@ public class UserSessionActor : ReceiveActor
 
 		var jsonData = JsonConvert.SerializeObject(msg.DataToPersist);
 
-		PersistantData? dbPersistantData = persistantDataContext.PersistantData.FirstOrDefault(x => x.SessionId == msg.SessionId);
+		PersistantData? dbPersistantData = persistantDataContext.PersistantData.FirstOrDefault(x => x.Key == msg.SessionId);
 		if(dbPersistantData is null)
 		{
 			dbPersistantData = new()
 			{
-				SessionId = msg.SessionId,
+				Key = msg.SessionId,
 				DateCreated = DateTime.Now,
 				Type = msg.Type,
 				DataJson = jsonData
@@ -86,7 +86,7 @@ public class UserSessionActor : ReceiveActor
 		using PersistantDataContext persistantDataContext = scope.ServiceProvider.GetRequiredService<PersistantDataContext>();
 
 		var dbPersistantData = persistantDataContext.PersistantData.FirstOrDefault(x =>
-			x.SessionId == msg.SessionId &&
+			x.Key == msg.SessionId &&
 			x.Type == msg.Type
 		);
 

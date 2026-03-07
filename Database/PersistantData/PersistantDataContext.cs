@@ -23,7 +23,7 @@ public class PersistantDataContext : DbContext
 		{
 			modelBuilder
 			.Entity<PersistantData>()
-			.HasIndex(x => new { x.SessionId, x.Type });
+			.HasIndex(x => new { x.Key, x.Type });
 		}
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -11,7 +11,7 @@ using PersistantDataDatabase;
 namespace ASP.NET_Core_HTMX.Migrations.PersistantDataDatabase
 {
     [DbContext(typeof(PersistantDataContext))]
-    [Migration("20260306100343_InitialMigration")]
+    [Migration("20260307050445_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -33,7 +33,7 @@ namespace ASP.NET_Core_HTMX.Migrations.PersistantDataDatabase
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("SessionId")
+                    b.Property<string>("Key")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -43,7 +43,7 @@ namespace ASP.NET_Core_HTMX.Migrations.PersistantDataDatabase
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SessionId", "Type");
+                    b.HasIndex("Key", "Type");
 
                     b.ToTable("PersistantData");
                 });

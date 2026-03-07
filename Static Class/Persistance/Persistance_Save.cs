@@ -13,7 +13,7 @@ static partial class StaticMethods
 		var json = JsonConvert.SerializeObject(data);
 
 		var dbPersistantData = persistantDataContext.PersistantData.FirstOrDefault(x =>
-			x.SessionId == sessionId &&
+			x.Key == sessionId &&
 			x.Type == type
 		);
 
@@ -22,7 +22,7 @@ static partial class StaticMethods
 			dbPersistantData = new PersistantData
 			{
 				DateCreated = DateTime.Now,
-				SessionId = sessionId,
+				Key = sessionId,
 				Type = type,
 				DataJson = json,
 			};

@@ -121,7 +121,7 @@ public class HtmxController : Controller
 
 		ViewData["show_error_modal"] = error;
 
-		return Ok();
+		return NoContent();
 	}
 
 	protected bool IsHTMXRequest()

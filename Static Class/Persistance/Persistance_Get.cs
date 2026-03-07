@@ -10,7 +10,7 @@ static partial class StaticMethods
 	)
 	{
 		var dbPersistantData = persistantDataContext.PersistantData.FirstOrDefault(x =>
-			x.SessionId == sessionId &&
+			x.Key == sessionId &&
 			x.Type == type
 		);
 

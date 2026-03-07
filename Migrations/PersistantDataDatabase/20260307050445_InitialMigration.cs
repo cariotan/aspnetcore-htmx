@@ -16,7 +16,7 @@ namespace ASP.NET_Core_HTMX.Migrations.PersistantDataDatabase
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    SessionId = table.Column<string>(type: "TEXT", nullable: false),
+                    Key = table.Column<string>(type: "TEXT", nullable: false),
                     DateCreated = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Type = table.Column<string>(type: "TEXT", nullable: false),
                     DataJson = table.Column<string>(type: "TEXT", nullable: false)
@@ -27,9 +27,9 @@ namespace ASP.NET_Core_HTMX.Migrations.PersistantDataDatabase
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_PersistantData_SessionId_Type",
+                name: "IX_PersistantData_Key_Type",
                 table: "PersistantData",
-                columns: new[] { "SessionId", "Type" });
+                columns: new[] { "Key", "Type" });
         }
 
         /// <inheritdoc />
