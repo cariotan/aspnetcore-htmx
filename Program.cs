@@ -68,7 +68,15 @@ builder.Services.AddSession(options =>
 	options.Cookie.IsEssential = true;
 });
 
+builder.Services.AddResponseCompression(options =>
+{
+ options.EnableForHttps = true;
+});
+
 var app = builder.Build();
+
+#warning Most of the time, depending on your hosting environment, you might want to turn this off.
+app.UseResponseCompression();
 
 if (app.Environment.IsDevelopment())
 {
