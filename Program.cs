@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using Microsoft.AspNetCore.SignalR;
 using ErrorDatabase;
+using Microsoft.AspNetCore.ResponseCompression;
 
 _ = Environment_GetDatabasePath();
 
@@ -71,6 +72,7 @@ builder.Services.AddSession(options =>
 builder.Services.AddResponseCompression(options =>
 {
  options.EnableForHttps = true;
+	options.Providers.Add<GzipCompressionProvider>();
 });
 
 var app = builder.Build();
