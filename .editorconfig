@@ -11,3 +11,4 @@ dotnet_diagnostic.CA1050.severity = none
 dotnet_diagnostic.IDE0017.severity = none
 dotnet_diagnostic.IDE0044.severity = none
 dotnet_diagnostic.CS1998.severity = none
+csharp_space_after_keywords_in_control_flow_statements = false
