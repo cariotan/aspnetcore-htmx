@@ -139,6 +139,7 @@ var isDebug = true;
 </head>
 
 <body
+	hx-history='false'
 	x-data
 	x-init=
 	'
@@ -158,7 +159,17 @@ var isDebug = true;
 			})
 		}
 	'
-	hx-history='false'
+	x-on:submit.window=
+	'
+		let removeAll = document.querySelectorAll(".field-validation-error")
+		setTimeout(() =>
+		{
+			removeAll.forEach(element =>
+			{
+				element.remove()
+			})
+		}, 100)
+	'
 	class='@(isDebug ? "debug-on" : "")'
 >
 	<div id='wrapper'>
