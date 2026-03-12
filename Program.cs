@@ -75,6 +75,12 @@ builder.Services.AddResponseCompression(options =>
 	options.Providers.Add<GzipCompressionProvider>();
 });
 
+builder.Services.AddControllersWithViews()
+.AddJsonOptions(options =>
+{
+ options.JsonSerializerOptions.PropertyNamingPolicy = null;
+});
+
 var app = builder.Build();
 
 #warning Most of the time, depending on your hosting environment, you might want to turn this off.
