@@ -7,7 +7,7 @@ public class HtmxRequestAttribute : ActionFilterAttribute
 	{
 		if(!context.HttpContext.Request.Headers.ContainsKey("HX-Request"))
 		{
-			context.Result = new RedirectToActionResult("Index", "Home", new { errorMessage = "Invalid request." });
+			context.Result = new RedirectToActionResult("Index", "Home", new { errorMessage = "Missing HTMX header." });
 		}
 	}
 }
