@@ -124,7 +124,7 @@ public class HtmxController : Controller
 		return NoContent();
 	}
 
-	protected bool IsHTMXRequest()
+	protected bool IsHxRequest()
 	{
 		return Request.Headers.ContainsKey("HX-Request");
 	}
