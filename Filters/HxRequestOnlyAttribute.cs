@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-public class HtmxRequestAttribute : ActionFilterAttribute
+public class HxRequestOnlyAttribute : ActionFilterAttribute
 {
 	public override void OnActionExecuting(ActionExecutingContext context)
 	{
