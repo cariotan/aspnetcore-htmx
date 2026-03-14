@@ -2,7 +2,6 @@ using System.Collections;
 using System.Reflection.PortableExecutable;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Scalar.AspNetCore;
 using Microsoft.AspNetCore.SignalR;
 using ErrorDatabase;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -22,17 +21,16 @@ foreach (var key in keys)
 	}
 }
 
-Directory.CreateDirectory(Environment_GetDatabasePath());
+{
+	Directory.CreateDirectory(Environment_GetDatabasePath());
+	IdentityContext identityContext = new();
+	identityContext.Database.Migrate();
 
-IdentityContext identityContext = new();
-identityContext.Database.Migrate();
-
-ErrorContext errorContext = new();
-errorContext.Database.Migrate();
+	ErrorContext errorContext = new();
+	errorContext.Database.Migrate();
+}
 
 var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddDbContext<ErrorContext>();
 
 builder.Services.AddControllersWithViews(x =>
 {
@@ -41,16 +39,15 @@ builder.Services.AddControllersWithViews(x =>
 	x.Filters.Add<CustomExceptionFilter>();
 });
 
-builder.Services.SetupServices_AddSwagger();
-// builder.Services.AddOpenApi();
-builder.Services.AddHttpClient();
-builder.Services.AddSignalR();
-builder.Services.SetupServices_AddIdentity();
-builder.Services.SetupServices_AddAkka();
+builder.Services.AddDbContext<ErrorContext>();
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
-builder.SetupServices_AddSerilog();
 builder.Services.AddCors();
+builder.Services.SetupServices_AddSwagger();
+builder.Services.SetupServices_AddIdentity();
+builder.Services.SetupServices_AddAkka();
+builder.SetupServices_AddSerilog();
+builder.Services.AddHttpClient();
 
 builder.Services.AddSignalR(options =>
 {
@@ -61,13 +58,7 @@ builder.Services.AddSignalR(options =>
 	#endif
 });
 
-builder.Services.AddDistributedMemoryCache();
-
-builder.Services.AddSession(options =>
-{
-	options.Cookie.HttpOnly = true;
-	options.Cookie.IsEssential = true;
-});
+builder.Services.AddScoped<IViewRenderService, ViewRenderService>();
 
 builder.Services.AddResponseCompression(options =>
 {
@@ -99,11 +90,6 @@ if (app.Environment.IsDevelopment())
 		c.RoutePrefix = "swagger"; // Swagger UI at /swagger
 		c.ConfigObject.PersistAuthorization = true;
 	});
-	// app.MapOpenApi();
-	// app.MapScalarApiReference(options => options
-	// 	.AddPreferredSecuritySchemes(JwtBearerDefaults.AuthenticationScheme)
-	// 	 .AddHttpAuthentication("Bearer", _ => { })
-	// 	.WithPersistentAuthentication());
 }
 
 if (!app.Environment.IsDevelopment())
@@ -115,30 +101,22 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
-app.UseCors(x => x
-	.WithOrigins(builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [])
-	.AllowAnyMethod()
-	.AllowAnyHeader()
-	.AllowCredentials());
-
 app.UseRouting();
-
+app.UseCors(x => x
+.WithOrigins(builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [])
+.AllowAnyMethod()
+.AllowAnyHeader()
+.AllowCredentials());
 app.UseAuthorization();
-
-app.UseSession();
-
 app.MapControllerRoute(
 	name: "v1-primary",
 	pattern: "{controller=Home}/{action=Index}/{id?}",
 	defaults: new { area = "V1" }
 );
-
 app.MapControllerRoute(
 	name: "v1-primary-area",
 	pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
 );
-
 app.MapHub<SessionHub>($"/{nameof(SessionHub)}");
 
 app.Run();
