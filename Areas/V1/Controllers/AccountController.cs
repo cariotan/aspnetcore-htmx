@@ -31,7 +31,7 @@ public class AccountController(
 			return View(registerModel);
 		}
 		
-		var area = GetDefaultArea();
+		var area = GetDefaultArea(endpointDataSource);
 
 		ApplicationUser dbUser;
 		{
@@ -58,22 +58,6 @@ public class AccountController(
 		else
 		{
 			return RedirectToAction("Index", "Home");
-		}
-		
-		string GetDefaultArea()
-		{
-			// Find the endpoint with the specific route name metadata
-			var endpoint = endpointDataSource.Endpoints
-				.OfType<RouteEndpoint>()
-				.FirstOrDefault(e => e.Metadata.GetMetadata<IRouteNameMetadata>()?.RouteName == "default");
-
-			// Access the 'area' from the route pattern's default values
-			if (endpoint?.RoutePattern.Defaults.TryGetValue("area", out var areaName) == true)
-			{
-				return areaName?.ToString() ?? "V1";
-			}
-
-			return "V1";
 		}
 	}
 

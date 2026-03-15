@@ -35,7 +35,7 @@ static partial class StaticMethods
 		}
 
 		{
-			var result = await Auth_CreateUser(email, userManager, area);
+			var result = await Auth_CreateUser(email, userManager, area: area);
 			if (result.IsNotSuccessful)
 			{
 				return new Utilities.Error(result.ErrorMessage.ToString());

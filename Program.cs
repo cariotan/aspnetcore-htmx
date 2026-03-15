@@ -66,7 +66,10 @@ builder.Services.AddResponseCompression(options =>
 	options.Providers.Add<GzipCompressionProvider>();
 });
 
-builder.Services.AddControllersWithViews()
+builder.Services.AddControllersWithViews(options =>
+{
+ options.Filters.Add(new AreaClaimRedirectAttribute());
+})
 .AddJsonOptions(options =>
 {
  options.JsonSerializerOptions.PropertyNamingPolicy = null;
@@ -111,7 +114,12 @@ app.UseAuthorization();
 app.MapControllerRoute(
 	name: "default",
 	pattern: "{controller=Home}/{action=Index}",
-	defaults: new { area = "V1" }
+	defaults: new { Area = "V1" }
+);
+app.MapControllerRoute(
+	name: "V2",
+	pattern: "V2/{controller=Home}/{action=Index}",
+	defaults: new { Area = "V2" }
 );
 app.MapHub<SessionHub>($"/{nameof(SessionHub)}");
 
