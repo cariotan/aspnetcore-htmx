@@ -7,7 +7,8 @@ using System.Security.Claims;
 public class AccountController(
 	ILogger<AccountController> logger,
 	UserManager<ApplicationUser> userManager,
-	SignInManager<ApplicationUser> signInManager
+	SignInManager<ApplicationUser> signInManager,
+	EndpointDataSource endpointDataSource
 ) : HtmxController
 {
 	[AllowAnonymous]
@@ -29,13 +30,16 @@ public class AccountController(
 		{
 			return View(registerModel);
 		}
+		
+		var area = GetDefaultArea();
 
 		ApplicationUser dbUser;
 		{
 			var result = await Auth_CreateUser(
-				registerModel.Email,
-				userManager,
-				registerModel.Password
+				email: registerModel.Email,
+				userManager: userManager,
+				password: registerModel.Password,
+				area: area
 			);
 			if(result.IsNotSuccessful)
 			{
@@ -54,6 +58,22 @@ public class AccountController(
 		else
 		{
 			return RedirectToAction("Index", "Home");
+		}
+		
+		string GetDefaultArea()
+		{
+			// Find the endpoint with the specific route name metadata
+			var endpoint = endpointDataSource.Endpoints
+				.OfType<RouteEndpoint>()
+				.FirstOrDefault(e => e.Metadata.GetMetadata<IRouteNameMetadata>()?.RouteName == "default");
+
+			// Access the 'area' from the route pattern's default values
+			if (endpoint?.RoutePattern.Defaults.TryGetValue("area", out var areaName) == true)
+			{
+				return areaName?.ToString() ?? "V1";
+			}
+
+			return "V1";
 		}
 	}
 

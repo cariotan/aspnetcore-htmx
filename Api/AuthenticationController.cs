@@ -10,7 +10,10 @@ namespace Api;
 
 [Route("Api/[controller]")]
 [ApiController]
-public class AuthenticationController(UserManager<ApplicationUser> userManager, IdentityContext identityContext) : ControllerBase
+public class AuthenticationController(
+	UserManager<ApplicationUser> userManager,
+	IdentityContext identityContext
+) : ControllerBase
 {
 	static string DummyHash;
 	static ApplicationUser DummyUser;
@@ -19,7 +22,8 @@ public class AuthenticationController(UserManager<ApplicationUser> userManager, 
 	{
 		DummyUser = new ApplicationUser("dummy@example.com", DateTime.Now)
 		{
-			DatabaseName = "dummy"
+			DatabaseName = "dummy",
+			Area = "",
 		};
 
 		DummyHash = new PasswordHasher<ApplicationUser>().HashPassword(DummyUser, "DummyPassword!123");

@@ -8,7 +8,8 @@ static partial class StaticMethods
 		string providerId,
 		string provider,
 		string providerFriendlyName,
-		UserManager<ApplicationUser> userManager
+		UserManager<ApplicationUser> userManager,
+		string? area = null
 	)
 	{
 		var dbUser = await userManager.FindByLoginAsync(provider, providerId);
@@ -34,7 +35,7 @@ static partial class StaticMethods
 		}
 
 		{
-			var result = await Auth_CreateUser(email, userManager);
+			var result = await Auth_CreateUser(email, userManager, area);
 			if (result.IsNotSuccessful)
 			{
 				return new Utilities.Error(result.ErrorMessage.ToString());

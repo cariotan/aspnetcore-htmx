@@ -6,14 +6,16 @@ static partial class StaticMethods
 	public static async Task<Result<ApplicationUser>> Auth_CreateUser(
 		string email,
 		UserManager<ApplicationUser> userManager,
-		string? password = null
+		string? password = null,
+		string? area = null
 	)
 	{
 		email = email.Trim();
 
 		ApplicationUser newUser = new(email, DateTime.Now)
 		{
-			DatabaseName = "" // Will be set after the user is created.
+			DatabaseName = "", // Will be set after the user is created.
+			Area = area ?? "V1",
 		};
 
 		var result = password is not null ? await userManager.CreateAsync(newUser, password) : await userManager.CreateAsync(newUser);
@@ -26,8 +28,14 @@ static partial class StaticMethods
 		// Setup database name for dbUser and add claim.
 		{
 			newUser.DatabaseName = ConvertToSafeFileNameString(newUser.Email + "_" + newUser.Id);
-			Claim claim = new("database_name", newUser.DatabaseName);
-			await userManager.AddClaimAsync(newUser, claim);
+
+			var claims = new List<Claim>
+			{
+				new("database_name", newUser.DatabaseName),
+				new("area", newUser.Area)
+			};
+			await userManager.AddClaimsAsync(newUser, claims);
+
 			await userManager.UpdateAsync(newUser);
 			Js("database_name:" + " " + newUser.DatabaseName);
 		}

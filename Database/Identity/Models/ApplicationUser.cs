@@ -4,6 +4,7 @@ public class ApplicationUser : IdentityUser
 {
 	public DateTime DateCreated { get; set; }
 	public required string DatabaseName { get; set; }
+	public required string Area { get; set; }
 
 	public ApplicationUser()
 	{

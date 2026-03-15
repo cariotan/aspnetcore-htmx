@@ -109,13 +109,9 @@ app.UseCors(x => x
 .AllowCredentials());
 app.UseAuthorization();
 app.MapControllerRoute(
-	name: "v1-primary",
-	pattern: "{controller=Home}/{action=Index}/{id?}",
+	name: "default",
+	pattern: "{controller=Home}/{action=Index}",
 	defaults: new { area = "V1" }
-);
-app.MapControllerRoute(
-	name: "v1-primary-area",
-	pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
 );
 app.MapHub<SessionHub>($"/{nameof(SessionHub)}");
 

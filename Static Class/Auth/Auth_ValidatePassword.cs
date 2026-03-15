@@ -10,7 +10,8 @@ static partial class StaticMethods
 	{
 		ApplicationUser dummyUser = new("dummy@example.com", DateTime.Now)
 		{
-			DatabaseName = "dummy"
+			DatabaseName = "dummy",
+			Area = "",
 		};
 
 		return (await passwordValidator.ValidateAsync(userManager, dummyUser, password)).Succeeded;
